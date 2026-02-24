@@ -1,0 +1,62 @@
+/* style.css */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+
+:root {
+    --nj-gold: #ffd700;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    scroll-behavior: smooth;
+}
+
+.text-stroke {
+    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.5);
+    color: transparent;
+}
+
+.filter-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.7rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+.filter-btn.active {
+    background-color: var(--nj-gold);
+    color: black;
+    border-color: var(--nj-gold);
+}
+
+.js-reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.8s ease-out;
+}
+
+.js-reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+@keyframes slow-zoom {
+    from { transform: scale(1); }
+    to { transform: scale(1.1); }
+}
+
+.animate-slow-zoom {
+    animation: slow-zoom 20s infinite alternate linear;
+}
+
+.mos-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.3s ease;
+}
+
+.mos-card:hover {
+    border-color: var(--nj-gold);
+    background: rgba(255, 215, 0, 0.02);
+}
