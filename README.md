@@ -29,5 +29,4 @@ A small static web app with pages for careers, eligibility, and a central landin
 - Email: `jaydenazore918@gmail.com`
 - Phone: `(862)462-0446`
 
-## Notes
-Keep this README updated as you complete features so it remains the source of truth for project status.
+
