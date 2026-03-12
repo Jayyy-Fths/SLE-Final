@@ -1,9 +1,38 @@
 let allCareers = [];
 let favoriteMOS = JSON.parse(localStorage.getItem('favoriteMOS') || '[]');
+let achievements = JSON.parse(localStorage.getItem('achievements') || '[]');
 
 function saveFavorites() {
     localStorage.setItem('favoriteMOS', JSON.stringify(favoriteMOS.slice(0, 5)));
 }
+
+function saveAchievements() {
+    localStorage.setItem('achievements', JSON.stringify(achievements));
+}
+
+function awardAchievement(id, title, description) {
+    if (achievements.some(a => a.id === id)) return; // only once
+    achievements.push({ id, title, description, unlockedAt: new Date().toISOString() });
+    saveAchievements();
+    renderAchievements();
+}
+
+function renderAchievements() {
+    const container = document.getElementById('achievement-list');
+    if (!container) return;
+    if (!achievements.length) {
+        container.innerHTML = '<div class="col-span-3 text-gray-400 text-center">No achievements yet. Start exploring to unlock badges!</div>';
+        return;
+    }
+    container.innerHTML = achievements.map(a => `
+        <div class="bg-black p-4 rounded-xl border border-white/10">
+            <p class="text-[#ffd700] text-xs uppercase font-black tracking-widest">${a.title}</p>
+            <p class="text-gray-300 text-sm mt-2">${a.description}</p>
+            <p class="text-gray-500 text-[10px] mt-3">Unlocked: ${new Date(a.unlockedAt).toLocaleDateString()}</p>
+        </div>
+    `).join('');
+}
+
 
 function toggleFavorite(mos, title) {
     const index = favoriteMOS.findIndex(item => item.mos === mos);
@@ -18,6 +47,7 @@ function toggleFavorite(mos, title) {
         favoriteMOS.splice(index, 1);
     }
     saveFavorites();
+    awardAchievement('favorite-star', 'Top 5 Star', 'Saved a MOS to your top 5 favorites.');
     updateFavoritesUI();
     updateCardFavorites();
 }
@@ -54,6 +84,53 @@ function updateCardFavorites() {
     });
 }
 
+function populateMosDropdown(data) {
+    const dropdown = document.getElementById('mos-dropdown');
+    if (!dropdown) return;
+    dropdown.innerHTML = '<option value="">Choose MOS</option>';
+
+    data.forEach(m => {
+        const opt = document.createElement('option');
+        opt.value = m.mos;
+        opt.innerText = `${m.mos} - ${m.title}`;
+        dropdown.appendChild(opt);
+    });
+
+    dropdown.addEventListener('change', (e) => {
+        showMosDetails(e.target.value);
+    });
+}
+
+function showMosDetails(mos) {
+    const selected = allCareers.find(m => m.mos === mos);
+    const container = document.getElementById('mos-details');
+    const content = document.getElementById('mos-details-content');
+    if (!selected || !container || !content) {
+        if(container) container.classList.add('hidden');
+        return;
+    }
+
+    container.classList.remove('hidden');
+    content.innerHTML = `
+        <p><strong>MOS:</strong> ${selected.mos} - ${selected.title}</p>
+        <p><strong>Description:</strong> ${selected.desc}</p>
+        <p><strong>ASVAB:</strong> ${selected.asvab}</p>
+        <p><strong>Training:</strong> ${selected.training}</p>
+        <p><strong>Category:</strong> ${selected.cat}</p>
+        <p class="text-xs text-gray-400 mt-2">Click the MOS card to mark as favorite once selected.</p>
+    `;
+}
+
+function setViewMode(mode) {
+    const search = document.getElementById('mos-search');
+    const value = search?.value || '';
+    const filtered = allCareers.filter(m => m.title.toLowerCase().includes(value.toLowerCase()) || m.mos.toLowerCase().includes(value.toLowerCase()));
+    if (mode === 'list') {
+        document.getElementById('career-grid').classList.remove('gap-6');
+    }
+    renderCareers(filtered);
+}
+
 async function initPortal() {
     try {
         const response = await fetch('careers.json');
@@ -63,6 +140,7 @@ async function initPortal() {
         updateFavoritesUI();
         updateCardFavorites();
         renderCallbackList();
+        renderAchievements();
         lucide.createIcons();
     } catch (err) {
         console.error("Failed to load MOS data", err);
@@ -71,26 +149,41 @@ async function initPortal() {
 
 function renderCareers(data) {
     const grid = document.getElementById('career-grid');
-    grid.innerHTML = data.map(m => `
-        <div class="bg-zinc-900 p-8 border border-white/5 rounded-xl group hover:border-[#ffd700]/50 transition-all cursor-default relative" data-category="${m.cat}" data-mos="${m.mos}">
-            <div class="recommended-label hidden">Recommended</div>
-            <button class="favorite-btn absolute top-4 right-4 bg-black/80 border border-white/20 rounded-full w-8 h-8 flex items-center justify-center" data-mos="${m.mos}" onclick="toggleFavorite('${m.mos}','${m.title}')" title="Add to favorites">
-                <i data-lucide="star" class="w-4 h-4 text-white"></i>
-            </button>
-            <div class="flex justify-between items-start mb-4">
-                <span class="text-[#ffd700] font-mono text-xs font-bold uppercase tracking-widest">MOS ${m.mos}</span>
-                ${m.bonus ? '<span class="bg-[#ffd700] text-black text-[8px] font-black px-2 py-0.5 rounded-full">BONUS</span>' : ''}
+    const viewMode = document.getElementById('view-mode') ? document.getElementById('view-mode').value : 'cards';
+
+    if (viewMode === 'list') {
+        grid.innerHTML = data.map(m => `
+            <div class="bg-zinc-900 p-4 border border-white/5 rounded-xl flex justify-between items-center gap-4" data-category="${m.cat}" data-mos="${m.mos}">
+                <div>
+                    <h3 class="text-sm font-black uppercase">${m.mos} - ${m.title}</h3>
+                    <p class="text-gray-400 text-xs">${m.desc}</p>
+                    <p class="text-gray-300 text-[11px]">ASVAB: ${m.asvab} • Training: ${m.training}</p>
+                </div>
+                <button class="bg-[#ffd700] text-black px-3 py-2 text-xs font-black uppercase" onclick="showMosDetails('${m.mos}')">View</button>
             </div>
-            <h3 class="text-xl font-black uppercase mb-2 group-hover:text-[#ffd700] transition-colors">${m.title}</h3>
-            <p class="text-gray-400 text-sm leading-relaxed">${m.desc}</p>
-            <p class="text-gray-400 text-xs mt-4">
-                <strong class="text-[#ffd700]">ASVAB Requirement:</strong> ${m.asvab}
-            </p>
-            <p class="text-gray-400 text-xs mt-2">
-                <strong class="text-[#ffd700]">Training Length:</strong> ${m.training}
-            </p>
-        </div>
-    `).join('');
+        `).join('');
+    } else {
+        grid.innerHTML = data.map(m => `
+            <div class="bg-zinc-900 p-8 border border-white/5 rounded-xl group hover:border-[#ffd700]/50 transition-all cursor-default relative" data-category="${m.cat}" data-mos="${m.mos}">
+                <div class="recommended-label hidden">Recommended</div>
+                <button class="favorite-btn absolute top-4 right-4 bg-black/80 border border-white/20 rounded-full w-8 h-8 flex items-center justify-center" data-mos="${m.mos}" onclick="toggleFavorite('${m.mos}','${m.title}')" title="Add to favorites">
+                    <i data-lucide="star" class="w-4 h-4 text-white"></i>
+                </button>
+                <div class="flex justify-between items-start mb-4">
+                    <span class="text-[#ffd700] font-mono text-xs font-bold uppercase tracking-widest">MOS ${m.mos}</span>
+                    ${m.bonus ? '<span class="bg-[#ffd700] text-black text-[8px] font-black px-2 py-0.5 rounded-full">BONUS</span>' : ''}
+                </div>
+                <h3 class="text-xl font-black uppercase mb-2 group-hover:text-[#ffd700] transition-colors">${m.title}</h3>
+                <p class="text-gray-400 text-sm leading-relaxed">${m.desc}</p>
+                <p class="text-gray-400 text-xs mt-4">
+                    <strong class="text-[#ffd700]">ASVAB Requirement:</strong> ${m.asvab}
+                </p>
+                <p class="text-gray-400 text-xs mt-2">
+                    <strong class="text-[#ffd700]">Training Length:</strong> ${m.training}
+                </p>
+            </div>
+        `).join('');
+    }
     applyAfqtRecommendations();
     updateFavoritesUI();
 }
@@ -129,7 +222,66 @@ function populateSelectors(data) {
             } else { detailDiv.style.opacity = "0"; }
         });
     });
+
+    populateMosDropdown(data);
+
+    const viewModeSelect = document.getElementById('view-mode');
+    if (viewModeSelect) {
+        viewModeSelect.addEventListener('change', (e) => {
+            setViewMode(e.target.value);
+        });
+    }
+
+    const sortBtn = document.getElementById('sort-mos');
+    if (sortBtn) {
+        sortBtn.addEventListener('click', () => {
+            const sorted = [...allCareers].sort((a,b) => {
+                const getNum = s => Number(s.match(/\d+/)?.[0] || 0);
+                return getNum(a.asvab || '') - getNum(b.asvab || '');
+            });
+            renderCareers(sorted);
+        });
+    }
+
+    const recommendedBtn = document.getElementById('show-recommended');
+    if (recommendedBtn) {
+        recommendedBtn.addEventListener('click', () => {
+            const recCats = afqtRecommendedCategories || [];
+            const recommended = allCareers.filter(m => recCats.includes(m.cat));
+            if (recommended.length === 0) {
+                alert('No recommendations yet; run ASVAB calculator first.');
+            } else {
+                renderCareers(recommended);
+            }
+        });
+    }
+
+    const scoreMatchBtn = document.getElementById('score-match');
+    if (scoreMatchBtn) {
+        scoreMatchBtn.addEventListener('click', () => {
+            const weights = {
+                combat: Number(document.getElementById('weight-combat').value || 3),
+                intel: Number(document.getElementById('weight-intel').value || 3),
+                medical: Number(document.getElementById('weight-medical').value || 3),
+                engineer: Number(document.getElementById('weight-engineer').value || 3)
+            };
+            const results = allCareers.map(m => {
+                const base = weights[m.cat] || 1;
+                const raw = Number((m.asvab.match(/\d+/) || [31])[0]);
+                const asvabFactor = Math.min(5, Math.round((raw / 110) * 5));
+                const score = Math.round(base * 6 + asvabFactor * 4);
+                return { ...m, score };
+            }).sort((a,b) => b.score - a.score).slice(0, 5);
+
+            document.getElementById('match-results').innerHTML = `Top MOS Matches:<br>` + results.map(r =>
+                `<div class="border border-white/15 p-2 rounded mt-2"><strong>${r.mos}</strong> ${r.title} - Score ${r.score}</div>`
+            ).join('');
+            renderCareers(results);
+            awardAchievement('matchmaker', 'Matchmaker', 'Computed MOS match score based on your interest weights.');
+        });
+    }
 }
+
 
 let currentQ = 0;
 let quizScores = { combat:0, intel:0, medical:0, engineer:0, aviation:0 };
@@ -243,6 +395,7 @@ function calculateAsvab() {
 
     document.getElementById('asvab-result').innerHTML = feedback;
 
+    awardAchievement('asvab-hero', 'ASVAB Hero', 'Calculated your ASVAB score and got MOS recommendations.');
     applyAfqtRecommendations();
 }
 
@@ -282,6 +435,8 @@ function calculateTuition() {
         <p class="text-green-400">NJ SMART tuition waiver assumes remaining amount up to $${outOfPocket.toLocaleString()}.</p>
         <p class="text-xs text-gray-400 mt-2">Actual financial aid and scholarship value may vary.</p>
     `;
+
+    awardAchievement('finance-expert', 'Finance Expert', 'Calculated tuition and GI Bill savings estimate.');
 }
 
 function scheduleCallback() {
@@ -307,8 +462,60 @@ function scheduleCallback() {
     document.getElementById('callback-phone').value = '';
     document.getElementById('callback-datetime').value = '';
 
+    awardAchievement('callback-scheduler', 'Recruiter Connection', 'Scheduled your first callback with a recruiter.');
     renderCallbackList();
+    projectCareerPath();
 }
+
+function projectCareerPath() {
+    const years = Number(document.getElementById('career-years').value || 0);
+    const category = document.getElementById('career-category').value;
+    const out = document.getElementById('career-path-output');
+    if (!out) return;
+
+    if (!years || years < 1) {
+        out.innerHTML = '<p class="text-red-400">Enter a valid year between 1 and 20.</p>';
+        return;
+    }
+
+    const base = {
+        combat: 2600,
+        intel: 2800,
+        medical: 2750,
+        engineer: 2900,
+        aviation: 3000,
+        logistics: 2650,
+        specialty: 3100
+    };
+
+    const promotion = {
+        low: 0.045,
+        mid: 0.055,
+        high: 0.065
+    };
+
+    let factor = promotion.low;
+    if (category === 'intel' || category === 'specialty') factor = promotion.high;
+    else if (category === 'engineer' || category === 'aviation') factor = promotion.mid;
+
+    const schedule = [];
+    let currentPay = base[category] || 2600;
+    for (let y = 1; y <= years; y++) {
+        currentPay = currentPay * (1 + factor);
+        schedule.push({ year: y, pay: Math.round(currentPay) });
+    }
+
+    out.innerHTML = `
+        <p class="text-gray-200"><strong>${years}-year projection for ${category.toUpperCase()} track:</strong></p>
+        <ul class="mt-3 text-gray-300 text-xs space-y-1">
+            ${schedule.map(s => `<li>Year ${s.year}: approx $${s.pay}/month</li>`).join('')}
+        </ul>
+        <p class="mt-3 text-gray-400 text-xs">Estimation based on predicted raise rates and does not include MOS-specific special pay, bonuses, or state-level incentives.</p>
+    `;
+
+    awardAchievement('long-game', 'The Long Game', 'Projected your career path and long-term earnings for selected MOS category.');
+}
+
 
 function formatTimeDiff(ms) {
     const total = Math.abs(ms);
