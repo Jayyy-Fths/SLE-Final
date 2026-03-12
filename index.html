@@ -383,6 +383,31 @@
         </div>
     </section>
 
+    <section id="callback" class="py-24 bg-zinc-950">
+        <div class="max-w-4xl mx-auto px-6 text-center">
+            <h2 class="text-5xl font-black uppercase mb-6">Book a Recruiter Callback</h2>
+            <p class="text-gray-300 mb-6">Pick a date/time and we’ll send a note to the recruiter queue. It saves in your browser for later review.</p>
+            <div class="grid md:grid-cols-3 gap-4 text-left mb-4">
+                <label class="text-gray-300">Full Name
+                    <input id="callback-name" type="text" class="input-field mt-2" placeholder="Jane Doe">
+                </label>
+                <label class="text-gray-300">Phone
+                    <input id="callback-phone" type="tel" class="input-field mt-2" placeholder="(555) 123-4567">
+                </label>
+                <label class="text-gray-300">Date/Time
+                    <input id="callback-datetime" type="datetime-local" class="input-field mt-2">
+                </label>
+            </div>
+            <button onclick="scheduleCallback()" class="bg-[#ffd700] text-black px-6 py-3 font-black uppercase rounded hover:bg-white transition-all">Schedule Callback</button>
+            <p id="callback-feedback" class="text-green-400 text-sm mt-4"></p>
+            <div class="mt-4 flex flex-wrap gap-2 justify-center">
+                <button onclick="clearCallbacks()" class="bg-red-500 text-white px-4 py-2 rounded uppercase text-xs font-black hover:bg-red-600">Clear All</button>
+                <button onclick="exportCallbacks()" class="bg-blue-500 text-white px-4 py-2 rounded uppercase text-xs font-black hover:bg-blue-600">Export CSV</button>
+            </div>
+            <div id="callback-schedule-list" class="mt-6 bg-zinc-900 p-4 rounded-lg border border-white/10 text-left text-sm text-gray-300"></div>
+        </div>
+    </section>
+
     <section id="contact" class="py-24 bg-black">
         <div class="max-w-4xl mx-auto px-6 text-center">
             <h2 id="contact-heading" class="text-5xl font-black uppercase mb-6">Start Your <span class="text-[#ffd700]">Inquiry</span></h2>

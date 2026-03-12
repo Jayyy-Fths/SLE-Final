@@ -62,6 +62,7 @@ async function initPortal() {
         populateSelectors(allCareers);
         updateFavoritesUI();
         updateCardFavorites();
+        renderCallbackList();
         lucide.createIcons();
     } catch (err) {
         console.error("Failed to load MOS data", err);
@@ -282,6 +283,89 @@ function calculateTuition() {
         <p class="text-xs text-gray-400 mt-2">Actual financial aid and scholarship value may vary.</p>
     `;
 }
+
+function scheduleCallback() {
+    const name = document.getElementById('callback-name').value.trim();
+    const phone = document.getElementById('callback-phone').value.trim();
+    const datetime = document.getElementById('callback-datetime').value;
+    const feedback = document.getElementById('callback-feedback');
+
+    if (!name || !phone || !datetime) {
+        feedback.className = 'text-red-400 text-sm mt-4';
+        feedback.innerText = 'Please fill out all fields before scheduling.';
+        return;
+    }
+
+    const callbacks = JSON.parse(localStorage.getItem('recruiterCallbacks') || '[]');
+    callbacks.push({ name, phone, datetime, created: new Date().toISOString() });
+    localStorage.setItem('recruiterCallbacks', JSON.stringify(callbacks));
+
+    feedback.className = 'text-green-400 text-sm mt-4';
+    feedback.innerText = `Callback scheduled for ${new Date(datetime).toLocaleString()}. Recruiter will follow up soon.`;
+
+    document.getElementById('callback-name').value = '';
+    document.getElementById('callback-phone').value = '';
+    document.getElementById('callback-datetime').value = '';
+
+    renderCallbackList();
+}
+
+function renderCallbackList() {
+    const list = JSON.parse(localStorage.getItem('recruiterCallbacks') || '[]');
+    const container = document.getElementById('callback-schedule-list');
+    if (!container) return;
+
+    if(list.length === 0) {
+        container.innerHTML = '<p class="text-gray-400 text-sm">No callbacks scheduled yet.</p>';
+        return;
+    }
+
+    container.innerHTML = list.map((item, index) => `
+        <div class="border-b border-white/10 py-2 flex justify-between items-start gap-3">
+            <div>
+                <p><strong>${item.name}</strong> &#8226; ${item.phone}</p>
+                <p class="text-sm text-gray-300">${new Date(item.datetime).toLocaleString()} (requested at ${new Date(item.created).toLocaleString()})</p>
+            </div>
+            <button onclick="deleteCallback(${index})" class="bg-red-500 text-white px-2 py-1 rounded text-xs uppercase">Delete</button>
+        </div>
+    `).join('');
+}
+
+function deleteCallback(index) {
+    const callbacks = JSON.parse(localStorage.getItem('recruiterCallbacks') || '[]');
+    if (index < 0 || index >= callbacks.length) return;
+    callbacks.splice(index, 1);
+    localStorage.setItem('recruiterCallbacks', JSON.stringify(callbacks));
+    renderCallbackList();
+}
+
+function clearCallbacks() {
+    if (confirm('Clear all scheduled callbacks?')) {
+        localStorage.removeItem('recruiterCallbacks');
+        renderCallbackList();
+    }
+}
+
+function exportCallbacks() {
+    const callbacks = JSON.parse(localStorage.getItem('recruiterCallbacks') || '[]');
+    if (!callbacks.length) {
+        alert('No callbacks to export');
+        return;
+    }
+    const csv = ['Name,Phone,DateTime,RequestedAt', ...callbacks.map(c => {
+        const safe = x => '"' + String(x).replace(/"/g, '""') + '"';
+        return `${safe(c.name)},${safe(c.phone)},${safe(c.datetime)},${safe(c.created)}`;
+    })].join('\n');
+
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'recruiter-callbacks.csv';
+    a.click();
+    URL.revokeObjectURL(url);
+}
+
 
 const i18n = {
     en: {
