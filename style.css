@@ -1,13 +1,22 @@
 /* style.css */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Poppins:wght@300;400;500;700&display=swap');
 
 :root {
     --nj-gold: #ffd700;
 }
 
 body {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Poppins', 'Inter', sans-serif;
     scroll-behavior: smooth;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Inter', 'Poppins', sans-serif;
+    font-weight: 700;
+}
+
+p, a, button, input, label {
+    font-family: 'Poppins', 'Inter', sans-serif;
 }
 
 .text-stroke {
