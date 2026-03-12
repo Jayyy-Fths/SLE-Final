@@ -310,6 +310,15 @@ function scheduleCallback() {
     renderCallbackList();
 }
 
+function formatTimeDiff(ms) {
+    const total = Math.abs(ms);
+    const minutes = Math.floor(total / 60000);
+    const hours = Math.floor(minutes / 60);
+    const mins = minutes % 60;
+    if (hours > 0) return `${hours}h ${mins}m`;
+    return `${mins}m`;
+}
+
 function renderCallbackList() {
     const list = JSON.parse(localStorage.getItem('recruiterCallbacks') || '[]');
     const container = document.getElementById('callback-schedule-list');
@@ -320,15 +329,34 @@ function renderCallbackList() {
         return;
     }
 
-    container.innerHTML = list.map((item, index) => `
+    const now = new Date();
+    const sorted = [...list].sort((a, b) => new Date(a.datetime) - new Date(b.datetime));
+    const next = sorted[0];
+    const nextDiff = new Date(next.datetime) - now;
+    const nextStatus = nextDiff >= 0 ? `in ${formatTimeDiff(nextDiff)}` : `${formatTimeDiff(nextDiff)} ago`;
+
+    const summary = `
+        <div class="mb-4 p-3 bg-zinc-900 border border-white/10 rounded text-xs text-gray-300">
+            <p><strong>Total callbacks:</strong> ${list.length}</p>
+            <p><strong>Next scheduled:</strong> ${new Date(next.datetime).toLocaleString()} (${nextStatus})</p>
+        </div>
+    `;
+
+    container.innerHTML = summary + sorted.map((item, index) => {
+        const delta = new Date(item.datetime) - now;
+        const scheduled = delta >= 0 ? `in ${formatTimeDiff(delta)}` : `${formatTimeDiff(delta)} ago`;
+        const requested = Math.abs(new Date(item.created) - now);
+        return `
         <div class="border-b border-white/10 py-2 flex justify-between items-start gap-3">
             <div>
                 <p><strong>${item.name}</strong> &#8226; ${item.phone}</p>
-                <p class="text-sm text-gray-300">${new Date(item.datetime).toLocaleString()} (requested at ${new Date(item.created).toLocaleString()})</p>
+                <p class="text-sm text-gray-300">${new Date(item.datetime).toLocaleString()} (scheduled ${scheduled})</p>
+                <p class="text-xs text-gray-400">Requested ${formatTimeDiff(requested)} ago</p>
             </div>
-            <button onclick="deleteCallback(${index})" class="bg-red-500 text-white px-2 py-1 rounded text-xs uppercase">Delete</button>
+            <button onclick="deleteCallback(${list.indexOf(item)})" class="bg-red-500 text-white px-2 py-1 rounded text-xs uppercase">Delete</button>
         </div>
-    `).join('');
+    `;
+    }).join('');
 }
 
 function deleteCallback(index) {
