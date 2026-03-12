@@ -148,5 +148,7 @@
   { "mos": "94R", "title": "Avionic Systems Repair", "cat": "aviation", "desc": "Maintain aircraft survival and electronic systems.", "training": "19 Weeks", "asvab": "102 EL", "bonus": false },
   { "mos": "94S", "title": "Patriot System Repair", "cat": "combat", "desc": "Repair the electronics of the Patriot missile system.", "training": "52 Weeks", "asvab": "102 EL", "bonus": true },
   { "mos": "94T", "title": "Short Range Air Defense Repair", "cat": "combat", "desc": "Maintain mobile air defense weapon electronics.", "training": "15 Weeks", "asvab": "102 EL", "bonus": false },
-  { "mos": "94Y", "title": "Automatic Test System", "cat": "engineer", "desc": "Operate complex automated testing equipment.", "training": "25 Weeks", "asvab": "102 EL", "bonus": false }
+  { "mos": "94Y", "title": "Automatic Test System", "cat": "engineer", "desc": "Operate complex automated testing equipment.", "training": "25 Weeks", "asvab": "102 EL", "bonus": false },
+  { "mos": "31W", "title": "Specialty Weapon Systems", "cat": "specialty", "desc": "Maintain specialty weapons packages and high-value systems.", "training": "12 Weeks", "asvab": "98 ST / 102 GT", "bonus": true },
+  { "mos": "35Q", "title": "Cryptologic Network Warfare", "cat": "specialty", "desc": "Lead digital intercept and network operations in the cyber domain.", "training": "45 Weeks", "asvab": "112 GT / 105 EL", "bonus": true }
 ]

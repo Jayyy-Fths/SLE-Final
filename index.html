@@ -19,13 +19,31 @@
                 <span class="text-xl font-black italic tracking-tighter uppercase">NJ National Guard</span>
             </div>
             <div class="hidden md:flex items-center gap-8 text-xs font-bold uppercase tracking-widest">
+                <a href="#overview" class="hover:text-[#ffd700]">Overview</a>
                 <a href="#quiz" class="hover:text-[#ffd700]">Mission Quiz</a>
                 <a href="#careers" class="hover:text-[#ffd700]">Careers</a>
+                <a href="#compare" class="hover:text-[#ffd700]">Compare</a>
                 <a href="#split-training" class="hover:text-[#ffd700]">Split Option</a>
-                <a href="#contact" class="bg-[#ffd700] text-black px-6 py-3 font-black hover:bg-white transition-all">Apply Now</a>
+                <a href="#faq" class="hover:text-[#ffd700]">FAQ</a>
+                <button id="language-toggle" class="bg-[#ff8c00] text-black px-4 py-2 font-black hover:bg-[#ffd700] transition-all">ES</button>
+                <a href="#" id="open-apply-modal" class="apply-text bg-[#ffd700] text-black px-6 py-3 font-black hover:bg-white transition-all">Apply Now</a>
             </div>
+            <button id="menu-toggle" class="md:hidden text-[#ffd700] font-bold">Menu</button>
         </div>
     </nav>
+
+    <div id="mobile-menu" class="hidden fixed inset-x-0 top-20 bg-black/95 z-40 px-6 py-4 border-t border-white/10">
+        <div class="flex flex-col gap-3 text-sm uppercase tracking-widest">
+            <a href="#overview" class="hover:text-[#ffd700]">Overview</a>
+            <a href="#quiz" class="hover:text-[#ffd700]">Mission Quiz</a>
+            <a href="#careers" class="hover:text-[#ffd700]">Careers</a>
+            <a href="#compare" class="hover:text-[#ffd700]">Compare</a>
+            <a href="#split-training" class="hover:text-[#ffd700]">Split Option</a>
+            <a href="#faq" class="hover:text-[#ffd700]">FAQ</a>
+            <button id="language-toggle-mobile" class="bg-[#ff8c00] text-black px-4 py-2 font-black hover:bg-[#ffd700] transition-all">ES</button>
+            <a href="#" id="open-apply-modal-mobile" class="apply-text hover:text-[#ffd700]">Apply Now</a>
+        </div>
+    </div>
 
     <header class="relative h-screen flex items-center justify-center overflow-hidden">
         <div class="absolute inset-0 z-0">
@@ -35,25 +53,65 @@
         </div>
         <div class="relative z-10 text-center px-6">
             <div class="inline-block px-4 py-1 border border-[#ffd700]/30 rounded-full bg-black/50 backdrop-blur-sm mb-6">
-                <span class="text-[#ffd700] text-[10px] font-bold tracking-[0.4em] uppercase">Always Ready • Always There</span>
+                <span id="hero-top-tag" class="text-[#ffd700] text-[10px] font-bold tracking-[0.4em] uppercase">Always Ready • Always There</span>
             </div>
             <h1 class="text-6xl md:text-8xl font-black mb-8 tracking-tighter leading-[0.85]">
                 OWN YOUR <br><span class="text-[#ffd700]">FUTURE.</span>
             </h1>
-            <p class="text-gray-400 max-w-xl mx-auto mb-10 text-lg">Join the NJ National Guard. Get 100% Tuition Waiver, specialized training, and a $20,000 bonus.</p>
+            <p id="hero-subtitle" class="text-gray-300 max-w-xl mx-auto mb-10 text-lg">Join the NJ National Guard and keep your civilian life while gaining leadership training, student benefits, and professional skills that last a lifetime.</p>
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
                 <a href="#quiz" class="bg-[#ffd700] text-black px-10 py-5 font-black hover:bg-white transition-all uppercase">Find Your Mission</a>
                 <a href="#careers" class="border border-white/20 backdrop-blur-md px-10 py-5 font-black hover:bg-white hover:text-black transition-all uppercase">Browse MOS List</a>
             </div>
+            <div class="mt-12 flex flex-wrap justify-center gap-4 text-xs uppercase tracking-widest">
+                <span class="badge"><i data-lucide="award" class="w-4 h-4"></i> 100% Tuition Waiver</span>
+                <span class="badge"><i data-lucide="dollar-sign" class="w-4 h-4"></i> $20K Bonus Qualifications</span>
+                <span class="badge"><i data-lucide="users" class="w-4 h-4"></i> Part-time service, full-time benefits</span>
+            </div>
         </div>
     </header>
 
-    <section id="quiz" class="py-24 bg-zinc-950">
+    <section id="overview" class="py-20 bg-zinc-950">
+        <div class="max-w-6xl mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center">
+            <div>
+                <span class="text-[#ffd700] uppercase font-black tracking-wider text-[11px]">Why NJ Guard</span>
+                <h2 id="overview-heading" class="text-4xl md:text-5xl font-black uppercase mt-4 mb-6">One Program, Multiple Futures</h2>
+                <p class="text-gray-300 leading-relaxed mb-8">The New Jersey National Guard pairs military discipline with civilian career growth. Keep your hometown roots and access national-level training, pay, and educational assistance.</p>
+                <div class="grid sm:grid-cols-2 gap-4">
+                    <article class="info-card">
+                        <i data-lucide="map-pin" class="w-5 h-5 text-[#ffd700]"></i>
+                        <h3 class="font-black uppercase">Local Support</h3>
+                        <p class="text-gray-400 text-sm">Serve close to home with 12 drills each year and two weeks annual training.</p>
+                    </article>
+                    <article class="info-card">
+                        <i data-lucide="book-open" class="w-5 h-5 text-[#ffd700]"></i>
+                        <h3 class="font-black uppercase">Education</h3>
+                        <p class="text-gray-400 text-sm">Access tuition waiver, scholarships, and transfer credits at NJ colleges.</p>
+                    </article>
+                    <article class="info-card">
+                        <i data-lucide="cpu" class="w-5 h-5 text-[#ffd700]"></i>
+                        <h3 class="font-black uppercase">Career Training</h3>
+                        <p class="text-gray-400 text-sm">Choose from 150+ MOS, from cyber warfare to combat medicine.</p>
+                    </article>
+                    <article class="info-card">
+                        <i data-lucide="heart-pulse" class="w-5 h-5 text-[#ffd700]"></i>
+                        <h3 class="font-black uppercase">Benefits</h3>
+                        <p class="text-gray-400 text-sm">Health, retirement, VA benefits, and leadership credentials.</p>
+                    </article>
+                </div>
+            </div>
+            <div class="text-center">
+                <img src="https://images.unsplash.com/photo-1546961325-1d8a0255f7b3?auto=format&fit=crop&q=80" class="w-full rounded-3xl shadow-xl" alt="Guard training" />
+            </div>
+        </div>
+    </section>
+
+    <section id="quiz" class="py-24 bg-zinc-900">
         <div class="max-w-3xl mx-auto px-6 text-center">
             <div id="quiz-container" class="bg-zinc-900 p-12 rounded-3xl border border-white/5 relative">
                 <div id="quiz-start">
                     <i data-lucide="compass" class="w-12 h-12 text-[#ffd700] mx-auto mb-6"></i>
-                    <h2 class="text-4xl font-black uppercase mb-4">Mission Match Quiz</h2>
+                    <h2 id="quiz-heading" class="text-4xl font-black uppercase mb-4">Mission Match Quiz</h2>
                     <p class="text-gray-400 mb-8">Not sure which path is yours? Answer 4 questions to find your ideal career category.</p>
                     <button onclick="startQuiz()" class="bg-[#ffd700] text-black px-8 py-4 font-black uppercase">Start Quiz</button>
                 </div>
@@ -76,7 +134,7 @@
         <div class="max-w-7xl mx-auto px-6">
             <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
                 <div class="js-reveal">
-                    <h2 class="text-5xl font-black tracking-tighter uppercase mb-4">MOS Explorer</h2>
+                    <h2 id="careers-heading" class="text-5xl font-black tracking-tighter uppercase mb-4">MOS Explorer</h2>
                     <p class="text-gray-400">Search the 150+ career paths available in New Jersey.</p>
                 </div>
                 <div class="flex flex-wrap gap-2 js-reveal">
@@ -85,20 +143,29 @@
                     <button class="filter-btn" data-filter="intel">Intel</button>
                     <button class="filter-btn" data-filter="medical">Medical</button>
                     <button class="filter-btn" data-filter="engineer">Engineer</button>
+                    <button class="filter-btn" data-filter="aviation">Aviation</button>
+                    <button class="filter-btn" data-filter="logistics">Logistics</button>
                 </div>
             </div>
-            
+
+            <div class="mb-6 text-sm text-gray-400">
+                Tip: Use the search bar, filter categories and compare two MOS to pick a plan that matches your interest and ASVAB strengths.
+            </div>
+            <div class="mb-6 p-5 bg-zinc-900 border border-white/10 rounded-xl">
+                <h3 class="font-black uppercase text-sm mb-2">Your Top 5 MOS Picks</h3>
+                <p class="text-gray-400 text-xs mb-3">Mark your favorites and they persist in local storage.</p>
+                <div id="favorite-list" class="grid gap-2"></div>
+            </div>
             <input type="text" id="mos-search" placeholder="Search MOS Code or Title..." 
                    class="w-full bg-zinc-900 border border-white/10 p-5 rounded mb-12 focus:border-[#ffd700] outline-none transition-all font-bold uppercase tracking-widest text-sm">
 
-            <div id="career-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                </div>
+            <div id="career-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
         </div>
     </section>
 
     <section id="compare" class="py-24 bg-zinc-900">
         <div class="max-w-7xl mx-auto px-6">
-            <h2 class="text-4xl font-black uppercase mb-12 text-center js-reveal">Side-by-Side <span class="text-[#ffd700]">Comparison</span></h2>
+            <h2 id="compare-heading" class="text-4xl font-black uppercase mb-12 text-center js-reveal">Side-by-Side <span class="text-[#ffd700]">Comparison</span></h2>
             <div class="grid md:grid-cols-2 gap-8">
                 <div class="bg-black p-8 rounded-2xl border border-white/5 js-reveal">
                     <select id="compare-1" class="w-full bg-zinc-900 p-4 border border-[#ffd700]/50 mb-6 font-bold uppercase tracking-widest text-sm outline-none">
@@ -121,7 +188,7 @@
             <div class="grid lg:grid-cols-2 gap-16 items-center">
                 <div class="js-reveal">
                     <span class="bg-black text-[#ffd700] px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em]">High School Juniors</span>
-                    <h2 class="text-5xl font-black tracking-tighter mt-4 mb-6 uppercase">The Split Option</h2>
+                    <h2 id="split-heading" class="text-5xl font-black tracking-tighter mt-4 mb-6 uppercase">The Split Option</h2>
                     <p class="text-zinc-600 text-lg mb-8">Enlist at 17, go to Basic Training over the summer, and return for your Senior year. Graduate already a Soldier with time-in-service toward your pay and promotions.</p>
                     <div class="space-y-4 font-bold text-sm uppercase tracking-wider">
                         <div class="flex items-center gap-4"><i data-lucide="check-circle" class="text-green-600"></i> Summer After Junior Year: Basic Training</div>
@@ -150,40 +217,222 @@
         </div>
     </section>
 
-    <section id="roadmap" class="py-24 bg-zinc-950 border-t-4 border-[#ffd700] hidden">
-        <div class="max-w-4xl mx-auto px-6">
-            <h2 class="text-5xl font-black uppercase mb-12 text-center">Your <span class="text-[#ffd700]">Mission Plan</span></h2>
-            <div class="space-y-6">
-                <div class="bg-zinc-900 p-8 rounded-xl border-l-4 border-[#ffd700]">
-                    <h4 class="font-black uppercase mb-2">1. Required Documentation</h4>
-                    <p class="text-gray-400 text-sm">Bring your Birth Certificate, Social Security Card, and HS Transcripts to your first meeting.</p>
+    <section id="faq" class="py-24 bg-zinc-950">
+        <div class="max-w-5xl mx-auto px-6">
+            <h2 id="faq-heading" class="text-5xl font-black uppercase text-center mb-10">Frequently Asked Questions</h2>
+            <div class="space-y-4">
+                <details class="faq-item bg-zinc-900 p-6 rounded-xl border border-white/10">
+                    <summary class="font-black uppercase cursor-pointer">What are the minimum enlistment requirements?</summary>
+                    <p class="mt-3 text-gray-300 text-sm">Be 17+ with parental consent (or 18+), pass ASVAB, pass MEPS medical, and have a high school diploma or GED.</p>
+                </details>
+                <details class="faq-item bg-zinc-900 p-6 rounded-xl border border-white/10">
+                    <summary class="font-black uppercase cursor-pointer">How does the split option affect college?</summary>
+                    <p class="mt-3 text-gray-300 text-sm">It lets students attend summer basic training after junior year and then complete senior year while drilling monthly.</p>
+                </details>
+                <details class="faq-item bg-zinc-900 p-6 rounded-xl border border-white/10">
+                    <summary class="font-black uppercase cursor-pointer">Can I choose my MOS? </summary>
+                    <p class="mt-3 text-gray-300 text-sm">Your preferred MOS depends on ASVAB, physical fitness, medical, and unit needs. We help match you to the best fit.</p>
+                </details>
+                <details class="faq-item bg-zinc-900 p-6 rounded-xl border border-white/10">
+                    <summary class="font-black uppercase cursor-pointer">What education benefits are included?</summary>
+                    <p class="mt-3 text-gray-300 text-sm">NJ SMART Tuition Waiver, GI Bill, TA for civilian school, and career training certifications are included in many enlistment plans.</p>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <section id="asvab-guide" class="py-24 bg-zinc-900">
+        <div class="max-w-7xl mx-auto px-6">
+            <h2 class="text-5xl font-black uppercase text-center mb-10">ASVAB & MOS Qualification Guide</h2>
+            <div class="grid md:grid-cols-3 gap-6">
+                <article class="bg-zinc-800 p-6 rounded-2xl border border-white/10">
+                    <h3 class="text-xl font-black uppercase mb-3">General ASVAB Score</h3>
+                    <p class="text-gray-300 text-sm mb-3">The minimum AFQT for NJ Army Guard is generally 31. Some advanced MOS require 60+.</p>
+                    <ul class="text-gray-400 text-xs space-y-2">
+                        <li>31-49: Combat & Logistics careers</li>
+                        <li>50-69: Engineer and Aviation entry points</li>
+                        <li>70+: Cyber, Intelligence, and Special Operations paths</li>
+                    </ul>
+                </article>
+                <article class="bg-zinc-800 p-6 rounded-2xl border border-white/10">
+                    <h3 class="text-xl font-black uppercase mb-3">Key Subscores</h3>
+                    <p class="text-gray-300 text-sm mb-3">Major MOS categories depend on these subtests.</p>
+                    <ul class="text-gray-400 text-xs space-y-2">
+                        <li><strong>GT</strong>: General Technical (Intelligence, Cyber)</li>
+                        <li><strong>CO</strong>: Combat Ops (Infantry, Armor)</li>
+                        <li><strong>ST</strong>: Skilled Technical (Medical, Logistical)</li>
+                        <li><strong>MM</strong>: Mechanical Maintenance</li>
+                        <li><strong>EL</strong>: Electronics</li>
+                    </ul>
+                </article>
+                <article class="bg-zinc-800 p-6 rounded-2xl border border-white/10">
+                    <h3 class="text-xl font-black uppercase mb-3">How to improve grades</h3>
+                    <p class="text-gray-300 text-sm mb-3">Show this to your recruiter for MOS counseling.</p>
+                    <ul class="text-gray-400 text-xs space-y-2">
+                        <li>Practice the ASVAB practice tests weekly</li>
+                        <li>Use military study guides for targeted subscores</li>
+                        <li>Retest after 30 days with practice-based prep</li>
+                    </ul>
+                </article>
+            </div>
+            <div class="mt-10 bg-zinc-800 p-5 rounded-xl border border-white/10 text-gray-300">
+                <p class="text-sm">To qualify for a specific MOS, check the entry lines in each card and ask your recruiter to verify your current ASVAB subscore match. If you need an MOS with a unique lower score profile, prioritize options in <strong>combat/logistics</strong>, then work toward technical and intelligence scores.</p>
+                <p class="text-sm mt-2"><strong>ASVAB waiver</strong>: Some MOS have waiver paths for limited ASVAB shortfalls; ask your recruiter about waiver eligibility and local unit needs.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="benefits-packages" class="py-24 bg-black">
+        <div class="max-w-7xl mx-auto px-6">
+            <h2 class="text-5xl font-black uppercase text-center mb-10">Real Benefit Packages by Rank</h2>
+            <p class="text-gray-400 text-center mb-8">Sample compensation and education value for New Jersey Guardsmen at different pay grades.</p>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm border border-white/10 rounded-xl">
+                    <thead class="bg-zinc-900 text-gray-300 uppercase tracking-widest">
+                        <tr>
+                            <th class="p-4">Rank</th>
+                            <th class="p-4">Monthly Base Pay</th>
+                            <th class="p-4">Drill Pay (Monthly)</th>
+                            <th class="p-4">Annual Bonus Potential</th>
+                            <th class="p-4">Education Benefits</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="border-t border-white/10">
+                            <td class="p-4">E-1 / E-2</td>
+                            <td class="p-4">$1,917 - $2,103</td>
+                            <td class="p-4">$172 - $189</td>
+                            <td class="p-4">$0 - $7,500</td>
+                            <td class="p-4">NJ SMART + up to $25k GI Bill</td>
+                        </tr>
+                        <tr class="border-t border-white/10">
+                            <td class="p-4">E-4</td>
+                            <td class="p-4">$2,660+</td>
+                            <td class="p-4">$220+</td>
+                            <td class="p-4">$5,000 - $20,000</td>
+                            <td class="p-4">NJ SMART + $30k GI Bill</td>
+                        </tr>
+                        <tr class="border-t border-white/10">
+                            <td class="p-4">E-6</td>
+                            <td class="p-4">$3,500+</td>
+                            <td class="p-4">$280+</td>
+                            <td class="p-4">$15,000 - $30,000</td>
+                            <td class="p-4">NJ SMART + $40k GI Bill</td>
+                        </tr>
+                        <tr class="border-t border-white/10">
+                            <td class="p-4">O-1</td>
+                            <td class="p-4">$4,300+</td>
+                            <td class="p-4">$345+</td>
+                            <td class="p-4">$25,000+</td>
+                            <td class="p-4">NJ SMART + $40k GI Bill + TA</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="mt-6 text-gray-300 text-xs">Note: these values are estimates; actual pay and benefits depend on duty station, years of service, and MOS bonuses.</div>
+        </div>
+    </section>
+
+    <section id="asvab-calculator" class="py-24 bg-zinc-950">
+        <div class="max-w-7xl mx-auto px-6">
+            <h2 class="text-5xl font-black uppercase text-center mb-10">Interactive ASVAB Score Calculator</h2>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="bg-zinc-900 p-6 rounded-xl border border-white/10">
+                    <p class="text-gray-300 text-sm mb-4">Input your raw subtest scores to estimate your AFQT and MOS category fit.</p>
+                    <div class="space-y-3 text-gray-300 text-sm">
+                        <label>GT (General Technical): <input id="asvab-gt" type="number" min="1" max="150" class="input-field"></label>
+                        <label>CO (Combat Operations): <input id="asvab-co" type="number" min="1" max="150" class="input-field"></label>
+                        <label>ST (Science/Technical): <input id="asvab-st" type="number" min="1" max="150" class="input-field"></label>
+                        <label>MM (Mechanical): <input id="asvab-mm" type="number" min="1" max="150" class="input-field"></label>
+                        <label>EL (Electronics): <input id="asvab-el" type="number" min="1" max="150" class="input-field"></label>
+                        <label>AR (Arithmetic): <input id="asvab-ar" type="number" min="1" max="150" class="input-field"></label>
+                        <label>WK (Word Knowledge): <input id="asvab-wk" type="number" min="1" max="150" class="input-field"></label>
+                        <label>PC (Paragraph Comprehension): <input id="asvab-pc" type="number" min="1" max="150" class="input-field"></label>
+                    </div>
+                    <button onclick="calculateAsvab()" class="mt-4 bg-[#ffd700] text-black px-5 py-3 font-black uppercase rounded hover:bg-white transition-all">Calculate</button>
                 </div>
-                <div class="bg-zinc-900 p-8 rounded-xl border-l-4 border-white">
-                    <h4 class="font-black uppercase mb-2">2. ASVAB Focus Area</h4>
-                    <p class="text-gray-400 text-sm mb-4">Focus your studies on these subtests based on your interests:</p>
-                    <div id="asvab-focus" class="flex gap-2"></div>
-                </div>
-                <div class="bg-zinc-900 p-8 rounded-xl border-l-4 border-zinc-700">
-                    <h4 class="font-black uppercase mb-2">3. NJ MEPS Location</h4>
-                    <p class="text-gray-400 text-sm">Your physical screening and official oath will take place at <strong>Fort Dix, NJ</strong>.</p>
+                <div class="bg-zinc-900 p-6 rounded-xl border border-white/10">
+                    <h3 class="text-xl font-black uppercase mb-3">Result</h3>
+                    <div id="asvab-result" class="text-gray-300 text-sm">Enter at least GT and AR + 2 other relevant subscores and hit calculate.</div>
                 </div>
             </div>
         </div>
     </section>
 
+    <section id="tuition-calculator" class="py-24 bg-zinc-900">
+        <div class="max-w-7xl mx-auto px-6">
+            <h2 class="text-5xl font-black uppercase text-center mb-10">NJ Tuition + GI Bill Calculator</h2>
+            <div class="grid md:grid-cols-3 gap-6 mb-6">
+                <label class="block text-gray-300">School (NJ only)
+                    <select id="tuition-school" class="input-field mt-2">
+                        <option value="rutgers">Rutgers University</option>
+                        <option value="njit">NJIT</option>
+                        <option value="rowan">Rowan University</option>
+                        <option value="suny" disabled>Out-of-state (not eligible)</option>
+                    </select>
+                </label>
+                <label class="block text-gray-300">Credit Hours
+                    <input id="tuition-credits" type="number" min="1" max="21" value="12" class="input-field mt-2">
+                </label>
+                <label class="block text-gray-300">GI Bill multiplier
+                    <input id="gi-bill-percent" type="number" min="0" max="100" value="50" class="input-field mt-2">
+                </label>
+            </div>
+            <button onclick="calculateTuition()" class="bg-[#ffd700] text-black px-6 py-3 font-black uppercase rounded hover:bg-white transition-all">Estimate Tuition</button>
+            <div id="tuition-result" class="mt-6 text-gray-300 text-sm">Enter details and click calculate.</div>
+        </div>
+    </section>
+
     <section id="contact" class="py-24 bg-black">
         <div class="max-w-4xl mx-auto px-6 text-center">
-            <h2 class="text-5xl font-black uppercase mb-6">Start Your <span class="text-[#ffd700]">Inquiry</span></h2>
+            <h2 id="contact-heading" class="text-5xl font-black uppercase mb-6">Start Your <span class="text-[#ffd700]">Inquiry</span></h2>
             <p class="text-gray-400 mb-12">No commitment. Just a conversation with an NJ Recruiter about your goals.</p>
             <form class="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
                 <input type="text" placeholder="First Name" class="bg-zinc-900 p-4 border border-white/10 rounded focus:border-[#ffd700] outline-none">
                 <input type="text" placeholder="Last Name" class="bg-zinc-900 p-4 border border-white/10 rounded focus:border-[#ffd700] outline-none">
                 <input type="email" placeholder="Email" class="bg-zinc-900 p-4 border border-white/10 rounded focus:border-[#ffd700] outline-none md:col-span-2">
+                <input type="tel" placeholder="Phone" class="bg-zinc-900 p-4 border border-white/10 rounded focus:border-[#ffd700] outline-none md:col-span-2">
+                <textarea placeholder="How can we help you?" rows="4" class="bg-zinc-900 p-4 border border-white/10 rounded focus:border-[#ffd700] outline-none md:col-span-2"></textarea>
                 <button class="bg-[#ffd700] text-black font-black py-5 uppercase tracking-widest md:col-span-2 hover:bg-white transition-all">Submit Inquiry</button>
             </form>
+            <p class="text-gray-500 text-xs mt-4">Your data is secure. We will not share your contact information.</p>
         </div>
     </section>
 
+    <footer class="bg-zinc-950 text-gray-400 text-sm py-8">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
+            <p>&copy; 2026 NJ National Guard | Citizen Soldier Portal. All rights reserved.</p>
+            <p>Built for routing, training, and recruiting support.</p>
+        </div>
+    </footer>
+
+    <div id="apply-modal" class="hidden fixed inset-0 z-50 bg-black/70 flex items-center justify-center px-4">
+        <div class="bg-zinc-900 rounded-2xl p-8 max-w-lg w-full border border-white/20">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-2xl font-black uppercase">Contact a Recruiter</h3>
+                <button id="close-apply-modal" class="text-[#ffd700] font-black">Close</button>
+            </div>
+            <p class="text-gray-300 text-sm mb-4">Send a direct message to the NJ National Guard recruiting team.</p>
+            <form id="apply-modal-form" class="space-y-3">
+                <input type="text" id="modal-name" placeholder="Name" class="input-field" required>
+                <input type="email" id="modal-email" placeholder="Email" class="input-field" required>
+                <textarea id="modal-message" placeholder="Message" rows="4" class="input-field" required></textarea>
+                <button type="submit" class="bg-[#ffd700] text-black px-6 py-3 font-black uppercase rounded hover:bg-white transition-all">Send to Recruiter</button>
+            </form>
+            <p id="modal-feedback" class="text-green-400 text-sm hidden">Message queued (demo mode)</p>
+        </div>
+    </div>
+
     <script src="script.js"></script>
+    <script>
+        document.getElementById('menu-toggle').addEventListener('click', function(){
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+
+        const faqItems = document.querySelectorAll('.faq-item summary');
+        faqItems.forEach(el => el.addEventListener('click', () => {
+            faqItems.forEach(o=> { if(o!==el) o.parentElement.removeAttribute('open'); });
+        }));
+    </script>
 </body>
 </html>
