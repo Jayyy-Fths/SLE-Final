@@ -1,48 +1,60 @@
-/* style.css */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Poppins:wght@300;400;500;700&display=swap');
+/* NJ Guard Portal Styles - Enhanced for MOS Modal */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Poppins:wght@300;400;500;700;900&display=swap');
 
 :root {
     --nj-gold: #ffd700;
+    --nj-orange: #ff8c00;
+}
+
+* {
+    box-sizing: border-box;
 }
 
 body {
     font-family: 'Poppins', 'Inter', sans-serif;
     scroll-behavior: smooth;
+    line-height: 1.6;
 }
 
 h1, h2, h3, h4, h5, h6 {
-    font-family: 'Inter', 'Poppins', sans-serif;
-    font-weight: 700;
-}
-
-p, a, button, input, label {
-    font-family: 'Poppins', 'Inter', sans-serif;
-}
-
-.text-stroke {
-    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.5);
-    color: transparent;
-}
-
-.filter-btn {
-    padding: 0.5rem 1rem;
-    font-size: 0.7rem;
+    font-family: 'Inter', sans-serif;
     font-weight: 900;
-    text-transform: uppercase;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    transition: all 0.3s ease;
+    letter-spacing: -0.02em;
 }
 
-.filter-btn.active {
-    background-color: var(--nj-gold);
-    color: black;
-    border-color: var(--nj-gold);
+p, a, button, input, label, select, textarea {
+    font-family: 'Poppins', sans-serif;
 }
 
+/* Navbar Scrolled */
+#navbar.scrolled {
+    backdrop-filter: blur(20px);
+}
+
+/* Animations */
+@keyframes slow-zoom {
+    0% { transform: scale(1); }
+    100% { transform: scale(1.1); }
+}
+
+.animate-slow-zoom {
+    animation: slow-zoom 25s ease-in-out infinite alternate;
+}
+
+@keyframes fade-in {
+    from { opacity: 0; transform: scale(0.95) translateY(20px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.animate-fade-in {
+    animation: fade-in 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Reveal on scroll */
 .js-reveal {
     opacity: 0;
-    transform: translateY(20px);
-    transition: all 0.8s ease-out;
+    transform: translateY(40px);
+    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .js-reveal.active {
@@ -50,57 +62,212 @@ p, a, button, input, label {
     transform: translateY(0);
 }
 
-@keyframes slow-zoom {
-    from { transform: scale(1); }
-    to { transform: scale(1.1); }
-}
-
-.animate-slow-zoom {
-    animation: slow-zoom 20s infinite alternate linear;
-}
-
-.mos-card {
+/* Filter Buttons */
+.filter-btn {
+    padding: 0.5rem 1.25rem;
+    font-size: 0.75rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border: 1px solid rgba(255, 255, 255, 0.15);
     background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 999px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.filter-btn:hover {
+    border-color: var(--nj-gold);
+    background: rgba(255, 215, 0, 0.1);
+    color: var(--nj-gold);
+}
+
+.filter-btn.active {
+    background: var(--nj-gold);
+    color: black;
+    border-color: var(--nj-gold);
+    box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.3);
+}
+
+/* Input Fields */
+.input-field, select.input-field, textarea.input-field {
+    width: 100%;
+    padding: 1rem;
+    background: rgba(17, 24, 39, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #e5e7eb;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.input-field:focus, .input-field:focus-within {
+    outline: none;
+    border-color: var(--nj-gold);
+    box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.15), 0 0 0 1px var(--nj-gold);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+/* MOS Cards */
+.mos-card {
+    background: linear-gradient(145deg, rgba(31, 41, 55, 0.9), rgba(17, 24, 39, 0.9));
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    padding: 2rem;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    backdrop-filter: blur(20px);
+    overflow: hidden;
+}
+
+.mos-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--nj-gold), var(--nj-orange), var(--nj-gold));
+    transform: scaleX(0);
+    transition: transform 0.4s ease;
+}
+
+.mos-card:hover {
+    transform: translateY(-8px);
+    border-color: var(--nj-gold);
+    box-shadow: 0 25px 50px -12px rgba(255, 215, 0, 0.25);
+    background: linear-gradient(145deg, rgba(55, 65, 81, 0.95), rgba(31, 41, 55, 0.95));
+}
+
+.mos-card:hover::before {
+    transform: scaleX(1);
+}
+
+.mos-card .favorite-btn {
+    opacity: 0;
+    transform: scale(0.8) translateY(-4px);
     transition: all 0.3s ease;
 }
 
-.input-field {
-    width: 100%;
-    padding: 0.5rem;
-    background: #111827;
-    border: 1px solid rgba(255,255,255,0.15);
-    color: #e5e7eb;
-    border-radius: 0.5rem;
-    margin-top: 0.25rem;
-    outline: none;
+.mos-card:hover .favorite-btn {
+    opacity: 1;
+    transform: scale(1) translateY(0);
 }
 
-.input-field:focus {
-    border-color: #ffd700;
-    box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2);
-}
-
+/* Recommended */
 .recommended {
     border-color: #00ffcc !important;
-    box-shadow: 0 0 0 4px rgba(0, 255, 204, 0.2);
+    box-shadow: 0 0 0 4px rgba(0, 255, 204, 0.2), 0 20px 40px -10px rgba(0, 255, 204, 0.15) !important;
 }
 
 .recommended-label {
     position: absolute;
-    top: 12px;
-    right: 12px;
-    background: #00ffcc;
-    color: #000;
-    font-size: 0.65rem;
-    padding: 3px 8px;
-    border-radius: 999px;
+    top: 1rem;
+    right: 1rem;
+    background: linear-gradient(135deg, #00ffcc, #00ccaa);
+    color: black;
+    font-size: 0.7rem;
     font-weight: 900;
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
     text-transform: uppercase;
+    letter-spacing: 0.05em;
+    box-shadow: 0 4px 12px rgba(0, 255, 204, 0.3);
 }
 
+/* MODALS - Enhanced */
+#mos-modal, #apply-modal {
+    animation: fade-in 0.3s ease-out;
+}
 
-.mos-card:hover {
+#mos-modal .bg-zinc-900\/95 {
+    background: rgba(24, 27, 34, 0.98);
+    backdrop-filter: blur(40px);
+}
+
+#mos-modal h2 {
+    background: linear-gradient(135deg, white, #f0f0f0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Badges */
+.badge {
+    background: rgba(255, 215, 0, 0.15);
+    color: var(--nj-gold);
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+/* Info Cards */
+.info-card {
+    padding: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    transition: all 0.3s ease;
+    cursor: default;
+}
+
+.info-card:hover {
+    border-color: rgba(255, 215, 0, 0.3);
+    background: rgba(255, 215, 0, 0.03);
+}
+
+/* FAQ */
+.faq-item {
+    transition: all 0.3s ease;
+}
+
+.faq-item[open] {
+    background: rgba(255, 215, 0, 0.05);
     border-color: var(--nj-gold);
-    background: rgba(255, 215, 0, 0.02);
+}
+
+/* Utilities */
+.tracking-widest { letter-spacing: 0.1em; }
+.tracking-tight { letter-spacing: -0.05em; }
+
+/* Mobile Optimizations */
+@media (max-width: 768px) {
+    .mos-card {
+        padding: 1.5rem 1rem;
+    }
+    
+    #career-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .filter-btn {
+        padding: 0.75rem 1rem;
+        font-size: 0.8rem;
+    }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(17, 24, 39, 0.5);
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(var(--nj-gold), var(--nj-orange));
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--nj-gold);
 }
