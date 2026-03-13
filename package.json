@@ -1,0 +1,23 @@
+{
+  "name": "sle-final",
+  "version": "1.0.0",
+  "description": "NJ National Guard Citizen Soldier Portal",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve .",
+    "dev": "npx serve . --listen 3000"
+  },
+  "dependencies": {
+    "convex": "^1.33.0"
+  },
+  "devDependencies": {
+    "serve": "^14.2.1"
+  },
+  "keywords": [
+    "military",
+    "recruiting",
+    "portal"
+  ],
+  "author": "Jayyy-Fths",
+  "license": "MIT"
+}

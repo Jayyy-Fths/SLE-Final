@@ -3,7 +3,7 @@ let favoriteMOS = [];
 let achievements = [];
 let callbacks = [];
 
-const convex = new ConvexHttpClient("https://your-convex-url.convex.cloud"); // Replace with your Convex URL
+const convex = new ConvexHttpClient("https://keen-condor-8.convex.cloud/gas");
 
 async function loadFavorites() {
     favoriteMOS = await convex.query("getFavorites");
