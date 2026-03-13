@@ -1,20 +1,42 @@
 let allCareers = [];
-let favoriteMOS = JSON.parse(localStorage.getItem('favoriteMOS') || '[]');
-let achievements = JSON.parse(localStorage.getItem('achievements') || '[]');
+let favoriteMOS = [];
+let achievements = [];
+let callbacks = [];
 
-function saveFavorites() {
-    localStorage.setItem('favoriteMOS', JSON.stringify(favoriteMOS.slice(0, 5)));
+const convex = new ConvexHttpClient("https://your-convex-url.convex.cloud"); // Replace with your Convex URL
+
+async function loadFavorites() {
+    favoriteMOS = await convex.query("getFavorites");
 }
 
-function saveAchievements() {
-    localStorage.setItem('achievements', JSON.stringify(achievements));
+async function loadAchievements() {
+    achievements = await convex.query("getAchievements");
 }
 
-function awardAchievement(id, title, description) {
-    if (achievements.some(a => a.id === id)) return; // only once
-    achievements.push({ id, title, description, unlockedAt: new Date().toISOString() });
-    saveAchievements();
+async function loadCallbacks() {
+    callbacks = await convex.query("getCallbacks");
+}
+
+async function saveFavorites() {
+    // No need to save locally, Convex handles it
+}
+
+async function saveAchievements() {
+    // No need to save locally
+}
+
+async function awardAchievement(id, title, description) {
+    await convex.mutation("awardAchievement", { id, title, description });
+    await loadAchievements();
     renderAchievements();
+}
+
+async function toggleFavorite(mos, title) {
+    await convex.mutation("toggleFavorite", { mos, title });
+    await loadFavorites();
+    updateFavoritesUI();
+    updateCardFavorites();
+    awardAchievement('favorite-star', 'Top 5 Star', 'Saved a MOS to your top 5 favorites.');
 }
 
 function renderAchievements() {
@@ -133,8 +155,10 @@ function setViewMode(mode) {
 
 async function initPortal() {
     try {
-        const response = await fetch('careers.json');
-        allCareers = await response.json();
+        allCareers = await convex.query("getCareers");
+        await loadFavorites();
+        await loadAchievements();
+        await loadCallbacks();
         renderCareers(allCareers);
         populateSelectors(allCareers);
         updateFavoritesUI();
@@ -143,7 +167,7 @@ async function initPortal() {
         renderAchievements();
         lucide.createIcons();
     } catch (err) {
-        console.error("Failed to load MOS data", err);
+        console.error("Failed to load data", err);
     }
 }
 
@@ -439,7 +463,7 @@ function calculateTuition() {
     awardAchievement('finance-expert', 'Finance Expert', 'Calculated tuition and GI Bill savings estimate.');
 }
 
-function scheduleCallback() {
+async function scheduleCallback() {
     const name = document.getElementById('callback-name').value.trim();
     const phone = document.getElementById('callback-phone').value.trim();
     const datetime = document.getElementById('callback-datetime').value;
@@ -451,9 +475,7 @@ function scheduleCallback() {
         return;
     }
 
-    const callbacks = JSON.parse(localStorage.getItem('recruiterCallbacks') || '[]');
-    callbacks.push({ name, phone, datetime, created: new Date().toISOString() });
-    localStorage.setItem('recruiterCallbacks', JSON.stringify(callbacks));
+    await convex.mutation("addCallback", { name, phone, datetime });
 
     feedback.className = 'text-green-400 text-sm mt-4';
     feedback.innerText = `Callback scheduled for ${new Date(datetime).toLocaleString()}. Recruiter will follow up soon.`;
@@ -462,7 +484,8 @@ function scheduleCallback() {
     document.getElementById('callback-phone').value = '';
     document.getElementById('callback-datetime').value = '';
 
-    awardAchievement('callback-scheduler', 'Recruiter Connection', 'Scheduled your first callback with a recruiter.');
+    await awardAchievement('callback-scheduler', 'Recruiter Connection', 'Scheduled your first callback with a recruiter.');
+    await loadCallbacks();
     renderCallbackList();
     projectCareerPath();
 }
@@ -527,7 +550,7 @@ function formatTimeDiff(ms) {
 }
 
 function renderCallbackList() {
-    const list = JSON.parse(localStorage.getItem('recruiterCallbacks') || '[]');
+    const list = callbacks;
     const container = document.getElementById('callback-schedule-list');
     if (!container) return;
 
@@ -689,5 +712,33 @@ window.addEventListener('scroll', () => {
     if(window.scrollY > 50) nav.classList.add('scrolled', 'bg-black/95', 'py-3');
     else nav.classList.remove('scrolled', 'bg-black/95', 'py-3');
 });
+
+async function submitInquiry() {
+    const firstName = document.getElementById('inquiry-first-name').value.trim();
+    const lastName = document.getElementById('inquiry-last-name').value.trim();
+    const email = document.getElementById('inquiry-email').value.trim();
+    const phone = document.getElementById('inquiry-phone').value.trim();
+    const message = document.getElementById('inquiry-message').value.trim();
+
+    if (!firstName || !lastName || !email || !phone || !message) {
+        alert('Please fill out all fields.');
+        return;
+    }
+
+    await convex.mutation("addInquiry", { firstName, lastName, email, phone, message });
+
+    alert('Inquiry submitted successfully! A recruiter will contact you soon.');
+
+    // Clear form
+    document.getElementById('inquiry-first-name').value = '';
+    document.getElementById('inquiry-last-name').value = '';
+    document.getElementById('inquiry-email').value = '';
+    document.getElementById('inquiry-phone').value = '';
+    document.getElementById('inquiry-message').value = '';
+
+    await awardAchievement('inquiry-submitter', 'Inquiry Submitted', 'Submitted your first inquiry to recruiters.');
+}
+
+document.getElementById('submit-inquiry').addEventListener('click', submitInquiry);
 
 initPortal();

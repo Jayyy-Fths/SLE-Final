@@ -6,6 +6,7 @@
     <title>NJ National Guard | Citizen Soldier Portal</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/convex@latest/dist/browser.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="bg-black text-white selection:bg-[#ffd700] selection:text-black">
@@ -477,13 +478,13 @@
         <div class="max-w-4xl mx-auto px-6 text-center">
             <h2 id="contact-heading" class="text-5xl font-black uppercase mb-6">Start Your <span class="text-[#ffd700]">Inquiry</span></h2>
             <p class="text-gray-400 mb-12">No commitment. Just a conversation with an NJ Recruiter about your goals.</p>
-            <form class="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
-                <input type="text" placeholder="First Name" class="bg-zinc-900 p-4 border border-white/10 rounded focus:border-[#ffd700] outline-none">
-                <input type="text" placeholder="Last Name" class="bg-zinc-900 p-4 border border-white/10 rounded focus:border-[#ffd700] outline-none">
-                <input type="email" placeholder="Email" class="bg-zinc-900 p-4 border border-white/10 rounded focus:border-[#ffd700] outline-none md:col-span-2">
-                <input type="tel" placeholder="Phone" class="bg-zinc-900 p-4 border border-white/10 rounded focus:border-[#ffd700] outline-none md:col-span-2">
-                <textarea placeholder="How can we help you?" rows="4" class="bg-zinc-900 p-4 border border-white/10 rounded focus:border-[#ffd700] outline-none md:col-span-2"></textarea>
-                <button class="bg-[#ffd700] text-black font-black py-5 uppercase tracking-widest md:col-span-2 hover:bg-white transition-all">Submit Inquiry</button>
+            <form id="inquiry-form" class="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
+                <input type="text" id="inquiry-first-name" placeholder="First Name" class="bg-zinc-900 p-4 border border-white/10 rounded focus:border-[#ffd700] outline-none">
+                <input type="text" id="inquiry-last-name" placeholder="Last Name" class="bg-zinc-900 p-4 border border-white/10 rounded focus:border-[#ffd700] outline-none">
+                <input type="email" id="inquiry-email" placeholder="Email" class="bg-zinc-900 p-4 border border-white/10 rounded focus:border-[#ffd700] outline-none md:col-span-2">
+                <input type="tel" id="inquiry-phone" placeholder="Phone" class="bg-zinc-900 p-4 border border-white/10 rounded focus:border-[#ffd700] outline-none md:col-span-2">
+                <textarea id="inquiry-message" placeholder="How can we help you?" rows="4" class="bg-zinc-900 p-4 border border-white/10 rounded focus:border-[#ffd700] outline-none md:col-span-2"></textarea>
+                <button type="button" id="submit-inquiry" class="bg-[#ffd700] text-black font-black py-5 uppercase tracking-widest md:col-span-2 hover:bg-white transition-all">Submit Inquiry</button>
             </form>
             <p class="text-gray-500 text-xs mt-4">Your data is secure. We will not share your contact information.</p>
         </div>
