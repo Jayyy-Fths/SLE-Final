@@ -23,11 +23,14 @@
                 <a href="#overview" class="hover:text-[#ffd700]">Overview</a>
                 <a href="#quiz" class="hover:text-[#ffd700]">Mission Quiz</a>
                 <a href="#careers" class="hover:text-[#ffd700]">Careers</a>
-                <a href="#compare" class="hover:text-[#ffd700]">Compare</a>
+                <a href="#armories" class="hover:text-[#ffd700]">🗺️ Armories</a>
                 <a href="#split-training" class="hover:text-[#ffd700]">Split Option</a>
                 <a href="#faq" class="hover:text-[#ffd700]">FAQ</a>
-                <button id="language-toggle" class="bg-[#ff8c00] text-black px-4 py-2 font-black hover:bg-[#ffd700] transition-all">ES</button>
-                <a href="#" id="open-apply-modal" class="apply-text bg-[#ffd700] text-black px-6 py-3 font-black hover:bg-white transition-all">Apply Now</a>
+                <button id="theme-toggle" class="favorite-btn p-2 hover:rotate-180" title="Toggle Theme">
+                    <i data-lucide="sun" class="w-5 h-5"></i>
+                </button>
+                <button id="language-toggle" class="bg-[#ff8c00] text-black px-4 py-2 font-black rounded-lg hover:bg-[#ffd700] transition-all">ES</button>
+                <a href="#" id="open-apply-modal" class="bg-[#ffd700] text-black px-6 py-3 font-black uppercase rounded-lg hover:bg-white shadow-lg hover:shadow-xl transition-all">Apply Now</a>
             </div>
             <button id="menu-toggle" class="md:hidden text-[#ffd700] font-bold">Menu</button>
         </div>
@@ -73,7 +76,7 @@
         </div>
     </header>
 
-    <section id="overview" class="py-20 bg-zinc-950">
+<section id="overview" class="py-20 bg-zinc-950">
         <div class="max-w-6xl mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center">
             <div>
                 <span class="text-[#ffd700] uppercase font-black tracking-wider text-[11px]">Why NJ Guard</span>
@@ -105,6 +108,48 @@
             <div class="text-center">
                 <img src="nuckles.jpg" class="w-full rounded-3xl shadow-xl" alt="Guard training"
                      onerror="this.style.display='none';">
+            </div>
+        </div>
+    </section>
+
+    <!-- NEW: NJANG ARMORIES MAP SECTION -->
+    <section id="armories" class="py-24 bg-gradient-to-br from-zinc-900 via-black to-zinc-950">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <span class="text-[#ffd700] text-lg font-bold uppercase tracking-[0.3em]">Find Your Unit</span>
+                <h2 class="text-5xl md:text-6xl font-black uppercase mt-6 mb-6 bg-gradient-to-r from-white via-gray-200 to-white bg-clip-text text-transparent">NJANG Armories Near You</h2>
+                <p class="text-xl text-gray-400 max-w-2xl mx-auto mb-12 leading-relaxed">Interactive map with 12+ New Jersey Army National Guard armories. Click pins for recruiter contact, drill times, and directions.</p>
+            </div>
+            
+            <div id="armories-map" class="w-full h-[70vh] rounded-3xl border-2 border-white/10 shadow-2xl relative overflow-hidden">
+                <div class="absolute top-6 left-6 bg-black/80 backdrop-blur-xl p-4 rounded-2xl border border-white/20 text-sm z-10">
+                    <div class="flex items-center gap-2 mb-2">
+                        <div class="w-3 h-3 bg-[#ffd700] rounded-full"></div>
+                        <span class="font-bold uppercase tracking-wide">NJANG Locations</span>
+                    </div>
+                    <div class="space-y-1 text-gray-300">
+                        <div><i data-lucide="map-pin" class="w-4 h-4 inline mr-1"></i> <strong>${armories.length}</strong> Armories</div>
+                        <div><i data-lucide="phone" class="w-4 h-4 inline mr-1"></i> Click pins for recruiter info</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-16 grid md:grid-cols-2 gap-8">
+                <div class="bg-zinc-900/50 backdrop-blur-xl p-8 rounded-3xl border border-white/10">
+                    <h3 class="text-2xl font-black uppercase mb-6 flex items-center gap-3">
+                        <i data-lucide="calendar" class="w-8 h-8"></i> Drill Weekend Schedule
+                    </h3>
+                    <div id="drill-list" class="space-y-3 text-sm">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+                <div class="space-y-6">
+                    <div class="bg-gradient-to-r from-[#ffd700]/10 to-orange-500/10 border border-[#ffd700]/30 p-6 rounded-2xl">
+                        <h4 class="font-black uppercase text-lg mb-3">💡 Pro Tip</h4>
+                        <p class="text-gray-300 leading-relaxed">Most NJ Guard units drill one weekend per month (Saturday 0730-1730) plus 2 weeks annual training. Contact your local recruiter for exact schedule.</p>
+                    </div>
+                    <a href="#contact" class="block w-full bg-[#ffd700] text-black font-black py-5 uppercase rounded-2xl text-center hover:bg-white transition-all shadow-lg text-lg">Find My Recruiter →</a>
+                </div>
             </div>
         </div>
     </section>
