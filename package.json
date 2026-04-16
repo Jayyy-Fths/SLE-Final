@@ -7,9 +7,7 @@
     "start": "npx serve .",
     "dev": "npx serve . --listen 3000"
   },
-  "dependencies": {
-    "convex": "^1.33.0"
-  },
+  "dependencies": {},
   "devDependencies": {
     "serve": "^14.2.1"
   },

@@ -10,7 +10,6 @@ let activeCategory = 'all';
 let currentSort = 'title-asc';
 let currentSearch = '';
 
-const convex = new ConvexHttpClient("https://keen-condor-8.convex.cloud/gas");
 const FALLBACK_CAREERS_URL = './careers.json';
 const FALLBACK_ARMORIES_URL = './armories.json';
 
@@ -177,20 +176,13 @@ const quizQuestions = [
 // ========================================
 
 async function loadCareersWithFallback() {
-  try {
-    // Try Convex first
-    allCareers = await convex.query("getCareers");
-  } catch (err) {
-    console.warn('Convex careers failed, using JSON fallback:', err);
-  }
-  
-  // Always load from JSON as primary data source for demo
+  // Load from JSON as primary data source
   try {
     const response = await fetch(FALLBACK_CAREERS_URL);
     allCareers = await response.json();
     console.log(`✅ Loaded ${allCareers.length} careers from JSON`);
   } catch (err) {
-    console.warn('JSON fallback failed:', err);
+    console.warn('JSON load failed:', err);
     allCareers = [];
   }
 }
@@ -546,9 +538,9 @@ async function toggleFavorite(mos, title) {
   }
 
   try {
-    await convex.mutation('toggleFavorite', { mos, title: favoriteTitle });
+    // Convex removed - using local storage only
   } catch (e) {
-    console.warn('Favorite mutation unavailable, using local storage fallback.', e);
+    console.warn('Using local storage fallback.', e);
   }
 
   saveFavorites();
@@ -695,14 +687,9 @@ async function loadFavorites() {
   }
 
   try {
-    const serverFavorites = await convex.query('getFavorites');
-    if (Array.isArray(serverFavorites)) {
-      serverFavorites.forEach(item => {
-        if (!favoriteMOS.some(f => f.mos === item.mos)) favoriteMOS.push(item);
-      });
-    }
+    // Convex removed - using local storage only
   } catch (e) {
-    console.warn('Favorites backend unavailable, continuing with local favorites');
+    console.warn('Using local storage only');
   }
 
   saveFavorites();
@@ -890,13 +877,8 @@ async function initPortal() {
     
     try {
       // Send to Convex
-      await convex.mutation('addInquiry', {
-        firstName,
-        lastName,
-        email,
-        phone,
-        message
-      });
+      // Simulate sending inquiry (Convex removed)
+      console.log('Inquiry submitted:', { firstName, lastName, email, phone, message });
       
       // Show success
       if (feedback) {
@@ -916,7 +898,7 @@ async function initPortal() {
       }, 1900);
       
     } catch (error) {
-      console.error('Failed to send inquiry:', error);
+      console.error('Failed to submit inquiry:', error);
       if (feedback) {
         feedback.classList.remove('hidden');
         feedback.innerText = '❌ Failed to send message. Please try again.';
