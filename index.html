@@ -3,15 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Explore careers, armories, and mission paths with the New Jersey National Guard Citizen Soldier Portal.">
+    <meta name="theme-color" content="#000000">
     <title>NJ National Guard | Citizen Soldier Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/convex@latest/dist/browser.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="bg-black text-white selection:bg-[#ffd700] selection:text-black">
+    <a href="#overview" class="skip-link">Skip to main content</a>
+    <div id="toast-notification" class="toast toast-success" role="status" aria-live="polite"></div>
 
-    <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 py-6 px-6">
+    <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 py-6 px-6" role="navigation" aria-label="Main navigation">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <div class="flex items-center gap-2">
                 <div class="w-8 h-8 bg-[#ffd700] rotate-45 flex items-center justify-center">
@@ -20,32 +26,32 @@
                 <span class="text-xl font-black italic tracking-tighter uppercase">NJ National Guard</span>
             </div>
             <div class="hidden md:flex items-center gap-8 text-xs font-bold uppercase tracking-widest">
-                <a href="#overview" class="hover:text-[#ffd700]">Overview</a>
-                <a href="#quiz" class="hover:text-[#ffd700]">Mission Quiz</a>
-                <a href="#careers" class="hover:text-[#ffd700]">Careers</a>
-                <a href="#armories" class="hover:text-[#ffd700]">🗺️ Armories</a>
-                <a href="#split-training" class="hover:text-[#ffd700]">Split Option</a>
-                <a href="#faq" class="hover:text-[#ffd700]">FAQ</a>
-                <button id="theme-toggle" class="favorite-btn p-2 hover:rotate-180" title="Toggle Theme">
+                <a href="#overview" class="hover:text-[#ffd700]" data-i18n="nav.overview">Overview</a>
+                <a href="#quiz" class="hover:text-[#ffd700]" data-i18n="nav.quiz">Mission Quiz</a>
+                <a href="#careers" class="hover:text-[#ffd700]" data-i18n="nav.careers">Careers</a>
+                <a href="#armories" class="hover:text-[#ffd700]" data-i18n="nav.armories">🗺️ Armories</a>
+                <a href="#split-training" class="hover:text-[#ffd700]" data-i18n="nav.split">Split Option</a>
+                <a href="#faq" class="hover:text-[#ffd700]" data-i18n="nav.faq">FAQ</a>
+                <button id="theme-toggle" class="favorite-btn p-2 hover:rotate-180" title="Toggle Theme" aria-pressed="false" aria-label="Toggle light and dark theme">
                     <i data-lucide="sun" class="w-5 h-5"></i>
                 </button>
-                <button id="language-toggle" class="bg-[#ff8c00] text-black px-4 py-2 font-black rounded-lg hover:bg-[#ffd700] transition-all">ES</button>
-                <a href="#" id="open-apply-modal" class="bg-[#ffd700] text-black px-6 py-3 font-black uppercase rounded-lg hover:bg-white shadow-lg hover:shadow-xl transition-all">Apply Now</a>
+                <button id="language-toggle" class="bg-[#ff8c00] text-black px-4 py-2 font-black rounded-lg hover:bg-[#ffd700] transition-all" aria-label="Switch language">ES</button>
+                <a href="#" id="open-apply-modal" class="bg-[#ffd700] text-black px-6 py-3 font-black uppercase rounded-lg hover:bg-white shadow-lg hover:shadow-xl transition-all" aria-label="Open the recruiter contact form" data-i18n="apply.applyNow">Apply Now</a>
             </div>
-            <button id="menu-toggle" class="md:hidden text-[#ffd700] font-bold">Menu</button>
+            <button id="menu-toggle" class="md:hidden text-[#ffd700] font-bold" aria-controls="mobile-menu" aria-expanded="false" aria-label="Open mobile menu">Menu</button>
         </div>
     </nav>
 
-    <div id="mobile-menu" class="hidden fixed inset-x-0 top-20 bg-black/95 z-40 px-6 py-4 border-t border-white/10">
+    <div id="mobile-menu" class="hidden fixed inset-x-0 top-20 bg-black/95 z-40 px-6 py-4 border-t border-white/10" aria-hidden="true">
         <div class="flex flex-col gap-3 text-sm uppercase tracking-widest">
-            <a href="#overview" class="hover:text-[#ffd700]">Overview</a>
-            <a href="#quiz" class="hover:text-[#ffd700]">Mission Quiz</a>
-            <a href="#careers" class="hover:text-[#ffd700]">Careers</a>
+            <a href="#overview" class="hover:text-[#ffd700]" data-i18n="nav.overview">Overview</a>
+            <a href="#quiz" class="hover:text-[#ffd700]" data-i18n="nav.quiz">Mission Quiz</a>
+            <a href="#careers" class="hover:text-[#ffd700]" data-i18n="nav.careers">Careers</a>
             <a href="#compare" class="hover:text-[#ffd700]">Compare</a>
-            <a href="#split-training" class="hover:text-[#ffd700]">Split Option</a>
-            <a href="#faq" class="hover:text-[#ffd700]">FAQ</a>
-            <button id="language-toggle-mobile" class="bg-[#ff8c00] text-black px-4 py-2 font-black hover:bg-[#ffd700] transition-all">ES</button>
-            <a href="#" id="open-apply-modal-mobile" class="apply-text hover:text-[#ffd700]">Apply Now</a>
+            <a href="#split-training" class="hover:text-[#ffd700]" data-i18n="nav.split">Split Option</a>
+            <a href="#faq" class="hover:text-[#ffd700]" data-i18n="nav.faq">FAQ</a>
+            <button id="language-toggle-mobile" class="bg-[#ff8c00] text-black px-4 py-2 font-black hover:bg-[#ffd700] transition-all" aria-label="Switch language">ES</button>
+            <a href="#" id="open-apply-modal-mobile" class="apply-text hover:text-[#ffd700]" aria-label="Open the recruiter contact form" data-i18n="apply.applyNow">Apply Now</a>
         </div>
     </div>
 
@@ -56,64 +62,62 @@
                  onerror="this.src='https://images.unsplash.com/photo-1564507592333-c9164ea0e6ce?auto=format&fit=crop&q=80';">
             <div class="absolute inset-0 bg-gradient-to-b from-black/80 via-transparent to-black"></div>
         </div>
-        <div class="relative z-10 text-center px-6">
+        <div class="relative z-10 text-center px-6" data-reveal>
             <div class="inline-block px-4 py-1 border border-[#ffd700]/30 rounded-full bg-black/50 backdrop-blur-sm mb-6">
-                <span id="hero-top-tag" class="text-[#ffd700] text-[10px] font-bold tracking-[0.4em] uppercase">Always Ready • Always There</span>
+                <span id="hero-top-tag" class="text-[#ffd700] text-[10px] font-bold tracking-[0.4em] uppercase" data-i18n="hero.topTag">Always Ready • Always There</span>
             </div>
-            <h1 class="text-6xl md:text-8xl font-black mb-8 tracking-tighter leading-[0.85]">
-                OWN YOUR <br><span class="text-[#ffd700]">FUTURE.</span>
-            </h1>
-            <p id="hero-subtitle" class="text-gray-300 max-w-xl mx-auto mb-10 text-lg">Join the NJ National Guard and keep your civilian life while gaining leadership training, student benefits, and professional skills that last a lifetime.</p>
+            <h1 id="hero-heading" class="text-6xl md:text-8xl font-black mb-8 tracking-tighter leading-[0.85]" data-i18n-html="hero.heading">OWN YOUR <br><span class="text-[#ffd700]">FUTURE.</span></h1>
+            <p id="hero-subtitle" class="text-gray-300 max-w-xl mx-auto mb-10 text-lg" data-i18n="hero.subtitle">Join the NJ National Guard and keep your civilian life while gaining leadership training, student benefits, and professional skills that last a lifetime.</p>
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <a href="#quiz" class="bg-[#ffd700] text-black px-10 py-5 font-black hover:bg-white transition-all uppercase">Find Your Mission</a>
-                <a href="#careers" class="border border-white/20 backdrop-blur-md px-10 py-5 font-black hover:bg-white hover:text-black transition-all uppercase">Browse MOS List</a>
+                <a href="#quiz" class="bg-[#ffd700] text-black px-10 py-5 font-black hover:bg-white transition-all uppercase" data-i18n="hero.cta1">Find Your Mission</a>
+                <a href="#careers" class="border border-white/20 backdrop-blur-md px-10 py-5 font-black hover:bg-white hover:text-black transition-all uppercase" data-i18n="hero.cta2">Browse MOS List</a>
             </div>
             <div class="mt-12 flex flex-wrap justify-center gap-4 text-xs uppercase tracking-widest">
-                <span class="badge"><i data-lucide="award" class="w-4 h-4"></i> 100% Tuition Waiver</span>
-                <span class="badge"><i data-lucide="dollar-sign" class="w-4 h-4"></i> $20K Bonus Qualifications</span>
-                <span class="badge"><i data-lucide="users" class="w-4 h-4"></i> Part-time service, full-time benefits</span>
+                <span class="badge" data-i18n="hero.badge1"><i data-lucide="award" class="w-4 h-4"></i> 100% Tuition Waiver</span>
+                <span class="badge" data-i18n="hero.badge2"><i data-lucide="dollar-sign" class="w-4 h-4"></i> $20K Bonus Qualifications</span>
+                <span class="badge" data-i18n="hero.badge3"><i data-lucide="users" class="w-4 h-4"></i> Part-time service, full-time benefits</span>
             </div>
         </div>
     </header>
 
-<section id="overview" class="py-20 bg-zinc-950">
+<section id="overview" class="py-20 bg-zinc-950" data-reveal>
         <div class="max-w-6xl mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center">
             <div>
                 <span class="text-[#ffd700] uppercase font-black tracking-wider text-[11px]">Why NJ Guard</span>
-                <h2 id="overview-heading" class="text-4xl md:text-5xl font-black uppercase mt-4 mb-6">One Program, Multiple Futures</h2>
-                <p class="text-gray-300 leading-relaxed mb-8">The New Jersey National Guard pairs military discipline with civilian career growth. Keep your hometown roots and access national-level training, pay, and educational assistance.</p>
+                <h2 id="overview-heading" class="text-4xl md:text-5xl font-black uppercase mt-4 mb-6" data-i18n="overview.heading">One Program, Multiple Futures</h2>
+                <p id="overview-copy" class="text-gray-300 leading-relaxed mb-8" data-i18n="overview.copy">The New Jersey National Guard pairs military discipline with civilian career growth. Keep your hometown roots and access national-level training, pay, and educational assistance.</p>
                 <div class="grid sm:grid-cols-2 gap-4">
-                    <article class="info-card">
+                    <article class="info-card" data-reveal>
                         <i data-lucide="map-pin" class="w-5 h-5 text-[#ffd700]"></i>
                         <h3 class="font-black uppercase">Local Support</h3>
-                        <p class="text-gray-400 text-sm">Serve close to home with 12 drills each year and two weeks annual training.</p>
+                        <p class="text-gray-400 text-sm" data-i18n="overview.card1">Serve close to home with 12 drills each year and two weeks annual training.</p>
                     </article>
-                    <article class="info-card">
+                    <article class="info-card" data-reveal>
                         <i data-lucide="book-open" class="w-5 h-5 text-[#ffd700]"></i>
                         <h3 class="font-black uppercase">Education</h3>
-                        <p class="text-gray-400 text-sm">Access tuition waiver, scholarships, and transfer credits at NJ colleges.</p>
+                        <p class="text-gray-400 text-sm" data-i18n="overview.card2">Access tuition waiver, scholarships, and transfer credits at NJ colleges.</p>
                     </article>
-                    <article class="info-card">
+                    <article class="info-card" data-reveal>
                         <i data-lucide="cpu" class="w-5 h-5 text-[#ffd700]"></i>
                         <h3 class="font-black uppercase">Career Training</h3>
-                        <p class="text-gray-400 text-sm">Choose from 150+ MOS, from cyber warfare to combat medicine.</p>
+                        <p class="text-gray-400 text-sm" data-i18n="overview.card3">Choose from 150+ MOS, from cyber warfare to combat medicine.</p>
                     </article>
-                    <article class="info-card">
+                    <article class="info-card" data-reveal>
                         <i data-lucide="heart-pulse" class="w-5 h-5 text-[#ffd700]"></i>
                         <h3 class="font-black uppercase">Benefits</h3>
-                        <p class="text-gray-400 text-sm">Health, retirement, VA benefits, and leadership credentials.</p>
+                        <p class="text-gray-400 text-sm" data-i18n="overview.card4">Health, retirement, VA benefits, and leadership credentials.</p>
                     </article>
                 </div>
             </div>
-            <div class="text-center">
-                <img src="nuckles.jpg" class="w-full rounded-3xl shadow-xl" alt="Guard training"
+            <div class="text-center" data-reveal>
+                <img src="nuckles.jpg" loading="lazy" class="w-full rounded-3xl shadow-xl" alt="Guard training"
                      onerror="this.style.display='none';">
             </div>
         </div>
     </section>
 
     <!-- NEW: NJANG ARMORIES MAP SECTION -->
-    <section id="armories" class="py-24 bg-gradient-to-br from-zinc-900 via-black to-zinc-950">
+    <section id="armories" class="py-24 bg-gradient-to-br from-zinc-900 via-black to-zinc-950" data-reveal>
         <div class="max-w-7xl mx-auto px-6">
             <div class="text-center mb-16">
                 <span class="text-[#ffd700] text-lg font-bold uppercase tracking-[0.3em]">Find Your Unit</span>
@@ -128,7 +132,7 @@
                         <span class="font-bold uppercase tracking-wide">NJANG Locations</span>
                     </div>
                     <div class="space-y-1 text-gray-300">
-                        <div><i data-lucide="map-pin" class="w-4 h-4 inline mr-1"></i> <strong>${armories.length}</strong> Armories</div>
+                        <div><i data-lucide="map-pin" class="w-4 h-4 inline mr-1"></i> <strong id="armory-count">0</strong> Armories</div>
                         <div><i data-lucide="phone" class="w-4 h-4 inline mr-1"></i> Click pins for recruiter info</div>
                     </div>
                 </div>
@@ -154,7 +158,7 @@
         </div>
     </section>
 
-    <section id="quiz" class="py-24 bg-zinc-900">
+    <section id="quiz" class="py-24 bg-zinc-900" data-reveal>
         <div class="max-w-3xl mx-auto px-6 text-center">
             <div id="quiz-container" class="bg-zinc-900 p-12 rounded-3xl border border-white/5">
                 <div id="quiz-start">
@@ -178,12 +182,12 @@
         </div>
     </section>
 
-    <section id="careers" class="py-24 bg-black">
+    <section id="careers" class="py-24 bg-black" data-reveal>
         <div class="max-w-7xl mx-auto px-6">
             <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
                 <div>
-                    <h2 id="careers-heading" class="text-5xl font-black tracking-tighter uppercase mb-4">MOS Explorer</h2>
-                    <p class="text-gray-400">Click any MOS card to view full details. Use filters and search above.</p>
+                    <h2 id="careers-heading" class="text-5xl font-black tracking-tighter uppercase mb-4" data-i18n="career.heading">MOS Explorer</h2>
+                    <p class="text-gray-400" data-i18n="career.description">Click any MOS card to view full details. Use filters and search above.</p>
                 </div>
                 <div class="flex flex-wrap gap-2">
                     <button class="filter-btn active" data-filter="all">All</button>
@@ -196,26 +200,39 @@
                 </div>
             </div>
 
-            <div class="mb-6 grid md:grid-cols-3 gap-4">
-                <div class="col-span-2">
+            <div class="mb-6 grid md:grid-cols-4 gap-4 items-end">
+                <div class="md:col-span-2">
                     <label class="text-gray-300 text-xs uppercase tracking-wider block mb-1">Quick Select</label>
-                    <select id="mos-dropdown" class="input-field w-full"></select>
+                    <select id="mos-dropdown" class="input-field w-full" data-i18n-placeholder="career.selectPlaceholder"></select>
                 </div>
                 <div>
-                    <label class="text-gray-300 text-xs uppercase tracking-wider block mb-1">View</label>
+                    <label class="text-gray-300 text-xs uppercase tracking-wider block mb-1" data-i18n="career.viewLabel">View</label>
                     <select id="view-mode" class="input-field w-full">
                         <option value="cards">Grid</option>
                         <option value="list">List</option>
                     </select>
                 </div>
+                <div>
+                    <label class="text-gray-300 text-xs uppercase tracking-wider block mb-1" data-i18n="career.sortLabel">Sort</label>
+                    <select id="sort-mode" class="input-field w-full">
+                        <option value="title-asc">Title A–Z</option>
+                        <option value="title-desc">Title Z–A</option>
+                        <option value="asvab-asc">ASVAB Low → High</option>
+                        <option value="asvab-desc">ASVAB High → Low</option>
+                        <option value="training">Training Length</option>
+                    </select>
+                </div>
             </div>
 
             <div class="mb-8 p-6 bg-zinc-900/50 border border-white/10 rounded-xl">
-                <h3 class="font-black uppercase text-sm mb-3">Your Top 5 Favorites</h3>
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                    <h3 class="font-black uppercase text-sm" data-i18n="career.favorites">Your Top 5 Favorites</h3>
+                    <span id="career-count" class="text-gray-400 text-xs uppercase tracking-wider">0 / 0</span>
+                </div>
                 <div id="favorite-list" class="grid gap-2 min-h-[80px]"></div>
             </div>
 
-            <input type="text" id="mos-search" placeholder="🔍 Search MOS Code or Job Title (150+ careers)..." 
+            <input type="text" id="mos-search" data-i18n-placeholder="career.searchPlaceholder" placeholder="🔍 Search MOS Code or Job Title (150+ careers)..." 
                    class="w-full bg-zinc-900 border border-white/20 p-5 rounded-xl mb-12 focus:border-[#ffd700] focus:ring-2 focus:ring-[#ffd700]/30 outline-none transition-all font-bold uppercase tracking-wider text-lg">
 
             <div id="career-grid" class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
@@ -225,24 +242,29 @@
 <!-- TRUNCATED HTML for brevity - rest of sections unchanged until modals -->
 
     <!-- Apply Modal (existing) -->
-    <div id="apply-modal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div id="apply-modal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="apply-modal-title" aria-describedby="apply-modal-desc">
         <div class="bg-zinc-900/95 rounded-3xl p-8 max-w-md w-full border border-white/20 shadow-2xl">
             <div class="flex justify-between items-center mb-6">
-                <h3 class="text-2xl font-black uppercase tracking-tight">Contact Recruiter</h3>
-                <button id="close-apply-modal" class="text-2xl hover:text-[#ffd700] transition-colors">&times;</button>
+                <div>
+                    <h3 id="apply-modal-title" class="text-2xl font-black uppercase tracking-tight" data-i18n="modal.contactTitle">Contact Recruiter</h3>
+                    <p id="apply-modal-desc" class="text-gray-400 text-sm mt-2" data-i18n="modal.contactDesc">Send your information and our recruiting team will follow up promptly.</p>
+                </div>
+                <button id="close-apply-modal" class="text-2xl hover:text-[#ffd700] transition-colors" aria-label="Close contact form">&times;</button>
             </div>
             <form id="apply-modal-form" class="space-y-4">
-                <input type="text" id="modal-name" placeholder="Full Name *" class="input-field" required>
+                <input type="text" id="modal-firstname" placeholder="First Name *" class="input-field" required>
+                <input type="text" id="modal-lastname" placeholder="Last Name *" class="input-field" required>
+                <input type="email" id="modal-email" placeholder="Email *" class="input-field" required>
                 <input type="tel" id="modal-phone" placeholder="Phone *" class="input-field" required>
                 <textarea id="modal-message" placeholder="Tell us about your goals..." rows="3" class="input-field" required></textarea>
                 <button type="submit" class="w-full bg-[#ffd700] text-black font-black py-4 uppercase rounded-xl hover:bg-white shadow-lg transition-all">Send Message</button>
             </form>
-            <p id="modal-feedback" class="text-green-400 text-sm mt-4 hidden text-center font-medium">✅ Message sent to recruiting team!</p>
+            <p id="modal-feedback" class="text-green-400 text-sm mt-4 hidden text-center font-medium" role="status" aria-live="polite">✅ Message sent to recruiting team!</p>
         </div>
     </div>
 
     <!-- NEW MOS POPUP MODAL -->
-    <div id="mos-modal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
+    <div id="mos-modal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in" role="dialog" aria-modal="true" aria-labelledby="mos-modal-title" aria-describedby="mos-modal-desc">
         <div class="bg-zinc-900/95 backdrop-blur-xl rounded-3xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto border border-white/20 shadow-2xl">
             <div class="flex justify-between items-start mb-6">
                 <div>
@@ -274,7 +296,7 @@
             </div>
             
             <div class="flex flex-wrap gap-3 pt-4 border-t border-white/10">
-                <button onclick="toggleFavorite(currentMosModal, document.getElementById('mos-modal-title').innerText.split(' - ')[1])" 
+                <button onclick="toggleFavorite(currentMosModal)" 
                         class="bg-[#ffd700] text-black px-6 py-3 font-black uppercase rounded-xl hover:bg-white transition-all flex items-center gap-2">
                     <i data-lucide="star" class="w-4 h-4"></i> Add to Favorites
                 </button>
@@ -288,7 +310,12 @@
     <script>
         // Basic handlers
         document.getElementById('menu-toggle')?.addEventListener('click', () => {
-            document.getElementById('mobile-menu').classList.toggle('hidden');
+            const menu = document.getElementById('mobile-menu');
+            const button = document.getElementById('menu-toggle');
+            if (!menu || !button) return;
+            const isHidden = menu.classList.toggle('hidden');
+            menu.setAttribute('aria-hidden', String(isHidden));
+            button.setAttribute('aria-expanded', String(!isHidden));
         });
 
         document.getElementById('open-apply-modal')?.addEventListener('click', (e) => {
@@ -299,6 +326,14 @@
         document.getElementById('open-apply-modal-mobile')?.addEventListener('click', (e) => {
             e.preventDefault();
             document.getElementById('apply-modal').classList.remove('hidden');
+        });
+
+        document.getElementById('language-toggle')?.addEventListener('click', () => {
+            toggleLanguage();
+        });
+
+        document.getElementById('language-toggle-mobile')?.addEventListener('click', () => {
+            toggleLanguage();
         });
 
         document.getElementById('close-apply-modal')?.addEventListener('click', () => {
@@ -327,6 +362,7 @@
         // Navbar scroll effect
         window.addEventListener('scroll', () => {
             const nav = document.getElementById('navbar');
+            if (!nav) return;
             if (window.scrollY > 100) {
                 nav.classList.add('bg-black/95', 'backdrop-blur-md', 'shadow-lg');
             } else {

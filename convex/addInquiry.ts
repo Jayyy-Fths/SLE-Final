@@ -14,5 +14,10 @@ export const addInquiry = mutation({
       message: args.message,
       created: new Date().toISOString(),
     });
+
+    // TODO: Set up email notifications to send inquiry details to the site owner
+    // Use Convex email integration: https://docs.convex.dev/production/integrations/email
+    // Example: await sendEmail({ to: "owner@example.com", subject: "New Inquiry", text: ... });
+    console.log("New inquiry received:", args); // For development, check Convex dashboard for inquiries
   },
 });
