@@ -15,6 +15,7 @@
 <body class="bg-black text-white selection:bg-[#ffd700] selection:text-black">
     <a href="#overview" class="skip-link">Skip to main content</a>
     <div id="toast-notification" class="toast toast-success" role="status" aria-live="polite"></div>
+    <div id="scroll-progress" class="fixed top-0 left-0 h-1 bg-[#ffd700] z-50 w-0 transition-all duration-300"></div>
 
     <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 py-6 px-6" role="navigation" aria-label="Main navigation">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
@@ -295,7 +296,7 @@
             </div>
             
             <div class="flex flex-wrap gap-3 pt-4 border-t border-white/10">
-                <button onclick="toggleFavorite(currentMosModal)" 
+                <button type="button" onclick="toggleFavorite(event,currentMosModal)" 
                         class="bg-[#ffd700] text-black px-6 py-3 font-black uppercase rounded-xl hover:bg-white transition-all flex items-center gap-2">
                     <i data-lucide="star" class="w-4 h-4"></i> Add to Favorites
                 </button>

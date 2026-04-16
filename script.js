@@ -66,7 +66,7 @@ const languageStrings = {
       sentMessage: '✅ Message sent to recruiting team!'
     },
     toast: {
-      languageSwitched: '🌐 Español activado',
+      languageSwitched: '🌐 English activated',
       darkMode: '🌙 Dark mode enabled',
       lightMode: '☀️ Light mode enabled',
       noResults: 'No matches found. Try broadening your search.'
@@ -124,7 +124,7 @@ const languageStrings = {
       sentMessage: '✅ ¡Mensaje enviado al equipo de reclutamiento!'
     },
     toast: {
-      languageSwitched: '🌐 English activated',
+      languageSwitched: '🌐 Español activado',
       darkMode: '🌙 Modo oscuro activado',
       lightMode: '☀️ Modo claro activado',
       noResults: 'No hay coincidencias. Intenta ampliar tu búsqueda.'
@@ -333,24 +333,9 @@ function initThemeToggle() {
       document.body.classList.toggle('light-theme', !isDarkMode);
       localStorage.setItem('darkMode', isDarkMode);
       setThemeIcon(toggle);
-      showToast(isDarkMode ? languageStrings[currentLanguage].toast.darkMode : languageStrings[currentLanguage].toast.darkMode, 'info');
+      showToast(isDarkMode ? languageStrings[currentLanguage].toast.darkMode : languageStrings[currentLanguage].toast.lightMode, 'info');
     });
   }
-}
-
-function setThemeIcon(toggle) {
-  if (!toggle) return;
-  const icon = toggle.querySelector('i');
-  if (icon) {
-    icon.dataset.lucide = isDarkMode ? 'sun' : 'moon';
-    lucide.createIcons();
-  }
-  toggle.setAttribute('aria-pressed', String(!isDarkMode));
-}
-
-function loadLanguagePreference() {
-  const stored = localStorage.getItem('pageLanguage');
-  return stored === 'es' ? 'es' : 'en';
 }
 
 function setLanguage(lang) {
@@ -523,12 +508,21 @@ function initLeafletMap() {
 // CORE MOS FUNCTIONS (from previous)
 // ========================================
 
-async function toggleFavorite(mos, title) {
+async function toggleFavorite(eventOrMos, mos, title) {
+  if (eventOrMos && eventOrMos.stopPropagation) {
+    eventOrMos.stopPropagation();
+  }
+
+  if (typeof eventOrMos === 'string') {
+    title = mos;
+    mos = eventOrMos;
+  }
+
   if (!mos) return;
 
-  const selected = allCareers.find(m => m.mos === mos);
+  const selected = allCareers.find(m => String(m.mos) === String(mos));
   const favoriteTitle = title || selected?.title || mos;
-  const existingIndex = favoriteMOS.findIndex(item => item.mos === mos);
+  const existingIndex = favoriteMOS.findIndex(item => String(item.mos) === String(mos));
   const isAdding = existingIndex === -1;
 
   if (isAdding) {
@@ -614,7 +608,7 @@ function renderCareers(data) {
       const colors = categoryColor(m.cat);
       return `
       <div class="mos-card group relative" data-mos="${m.mos}" data-reveal="true" onclick="openMosModal('${m.mos}')">
-        <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite('${m.mos}','${m.title}')">
+        <button type="button" class="favorite-btn" onclick="toggleFavorite(event,'${m.mos}','${m.title}')">
           <i data-lucide="star" class="w-5 h-5"></i>
         </button>
         <div class="mb-4">
@@ -710,7 +704,7 @@ function updateFavoritesUI() {
         <h4 class="font-black uppercase tracking-tight">${entry.mos}</h4>
         <p class="text-gray-400 text-sm">${entry.title}</p>
       </div>
-      <button onclick="toggleFavorite('${entry.mos}','${entry.title}')" class="text-[#ffd700] hover:text-white">Remove</button>
+      <button type="button" onclick="toggleFavorite(event,'${entry.mos}','${entry.title}')" class="text-[#ffd700] hover:text-white">Remove</button>
     </div>
   `).join('');
 }
@@ -724,7 +718,7 @@ function updateCardFavorites() {
       button.classList.toggle('text-[#ffd700]', isFav);
       button.classList.toggle('text-white', !isFav);
       const icon = button.querySelector('i');
-      if (icon) icon.dataset['feather'] = 'star';
+      if (icon) icon.dataset.lucide = 'star';
     }
     card.classList.toggle('border-[#ffd700]', isFav);
   });
@@ -854,9 +848,6 @@ async function initPortal() {
     currentSearch = e.target.value;
     filterAndRenderCareers();
   }, 200));
-
-  document.getElementById('language-toggle')?.addEventListener('click', toggleLanguage);
-  document.getElementById('language-toggle-mobile')?.addEventListener('click', toggleLanguage);
 
   document.getElementById('apply-modal-form')?.addEventListener('submit', async (e) => {
     e.preventDefault();

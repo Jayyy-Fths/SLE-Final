@@ -3,6 +3,7 @@
 ## Previous Tasks:
 ✅ MOS Popup + Debug Fixes  
 ✅ Core Portal Functional
+✅ Fixed theme toggle duplicate listeners + added missing scroll progress bar
 
 ## New Features **COMPLETE**:
 - [x] **armories.json** - 12 NJANG locations (Morristown, Sea Girt, Trenton, etc.)
