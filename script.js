@@ -338,6 +338,14 @@ function initThemeToggle() {
   }
 }
 
+function loadLanguagePreference() {
+  const stored = localStorage.getItem('pageLanguage');
+  if (stored === 'en' || stored === 'es') {
+    return stored;
+  }
+  return 'en';
+}
+
 function setLanguage(lang) {
   currentLanguage = lang;
   localStorage.setItem('pageLanguage', lang);
