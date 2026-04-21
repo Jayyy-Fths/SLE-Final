@@ -438,7 +438,7 @@ function initThemeToggle() {
     toggle.addEventListener('click', () => {
       isDarkMode = !isDarkMode;
       document.body.classList.toggle('light-theme', !isDarkMode);
-      localStorage.setItem('darkMode', isDarkMode);
+      safeStorageSet('darkMode', String(isDarkMode));
       setThemeIcon(toggle);
       showToast(isDarkMode ? languageStrings[currentLanguage].toast.darkMode : languageStrings[currentLanguage].toast.lightMode, 'info');
     });
@@ -1027,6 +1027,159 @@ function renderDrillList() {
 
   const countEl = document.getElementById('armory-count');
   if (countEl) countEl.innerText = armories.length;
+}
+
+function toRadians(value) {
+  return (value * Math.PI) / 180;
+}
+
+function haversineMiles([lat1, lon1], [lat2, lon2]) {
+  const earthMiles = 3958.8;
+  const dLat = toRadians(lat2 - lat1);
+  const dLon = toRadians(lon2 - lon1);
+  const a = Math.sin(dLat / 2) ** 2
+    + Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) * Math.sin(dLon / 2) ** 2;
+  return earthMiles * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
+}
+
+function initZipArmoryFinder() {
+  const input = document.getElementById('zip-search');
+  const button = document.getElementById('zip-find-btn');
+  const output = document.getElementById('nearest-armories');
+  const feedback = document.getElementById('zip-feedback');
+  if (!input || !button || !output || !feedback) return;
+
+  const findNearest = () => {
+    const zip = input.value.trim();
+    const origin = NJ_ZIP_COORDS[zip];
+    if (!origin) {
+      feedback.textContent = 'ZIP not in quick lookup yet. Try: 07102, 08608, 08002, 08201.';
+      output.innerHTML = '';
+      return;
+    }
+
+    const nearest = armories
+      .map(armory => ({
+        ...armory,
+        distance: haversineMiles(origin, [armory.lat, armory.lng])
+      }))
+      .sort((a, b) => a.distance - b.distance)
+      .slice(0, 3);
+
+    feedback.textContent = `Top ${nearest.length} nearest armories for ${zip}`;
+    output.innerHTML = nearest.map(armory => `
+      <article class="armory-nearest-card">
+        <h4>${armory.name}</h4>
+        <p>${armory.address}</p>
+        <div class="text-xs text-gray-400 mt-2">${armory.distance.toFixed(1)} miles away</div>
+        <a href="tel:${armory.phone}" class="text-[#ffd700] text-sm font-bold">Call ${armory.phone}</a>
+      </article>
+    `).join('');
+  };
+
+  button.addEventListener('click', findNearest);
+  input.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      findNearest();
+    }
+  });
+}
+
+function initApplyFormDraft() {
+  const form = document.getElementById('apply-modal-form');
+  if (!form) return;
+
+  const fields = ['modal-firstname', 'modal-lastname', 'modal-email', 'modal-phone', 'modal-message'];
+  const savedDraft = (() => {
+    try {
+      return JSON.parse(safeStorageGet(APPLY_FORM_DRAFT_KEY) || '{}');
+    } catch {
+      return {};
+    }
+  })();
+
+  fields.forEach(id => {
+    const input = document.getElementById(id);
+    if (!input) return;
+    if (savedDraft[id]) input.value = savedDraft[id];
+    input.addEventListener('input', () => {
+      const draft = {};
+      fields.forEach(fieldId => {
+        const field = document.getElementById(fieldId);
+        if (field?.value) draft[fieldId] = field.value;
+      });
+      safeStorageSet(APPLY_FORM_DRAFT_KEY, JSON.stringify(draft));
+    });
+  });
+}
+
+function formatCurrency(value) {
+  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(value);
+}
+
+function initBenefitsCalculator() {
+  const calcBtn = document.getElementById('calculate-benefits');
+  if (!calcBtn) return;
+
+  const calculate = () => {
+    const tuition = Number.parseFloat(document.getElementById('calc-tuition')?.value || 0);
+    const years = Number.parseFloat(document.getElementById('calc-years')?.value || 0);
+    const monthlyDrill = Number.parseFloat(document.getElementById('calc-drill')?.value || 0);
+    const bonus = Number.parseFloat(document.getElementById('calc-bonus')?.value || 0);
+
+    const tuitionValue = Math.max(0, tuition * years);
+    const drillValue = Math.max(0, monthlyDrill * 12);
+    const totalValue = tuitionValue + drillValue + Math.max(0, bonus);
+
+    const outTuition = document.getElementById('calc-out-tuition');
+    const outDrill = document.getElementById('calc-out-drill');
+    const outBonus = document.getElementById('calc-out-bonus');
+    const outTotal = document.getElementById('calc-out-total');
+    if (outTuition) outTuition.textContent = formatCurrency(tuitionValue);
+    if (outDrill) outDrill.textContent = formatCurrency(drillValue);
+    if (outBonus) outBonus.textContent = formatCurrency(bonus);
+    if (outTotal) outTotal.textContent = formatCurrency(totalValue);
+  };
+
+  calcBtn.addEventListener('click', calculate);
+  calculate();
+}
+
+function initEligibilityCheck() {
+  const wrapper = document.getElementById('eligibility-questions');
+  if (!wrapper) return;
+
+  const answers = {};
+  const updateResult = () => {
+    const result = document.getElementById('eligibility-result');
+    if (!result) return;
+    const values = Object.values(answers);
+    if (values.length < 3) {
+      result.classList.add('hidden');
+      return;
+    }
+    const passed = values.every(value => value === 'yes');
+    result.classList.remove('hidden');
+    result.classList.toggle('border-green-400', passed);
+    result.classList.toggle('border-orange-400', !passed);
+    result.innerHTML = passed
+      ? '<h3 class="text-green-300 font-black uppercase mb-2">Likely Eligible</h3><p class="text-gray-200">Great start. You look ready for a recruiter conversation and next-step screening.</p>'
+      : '<h3 class="text-orange-300 font-black uppercase mb-2">Needs Recruiter Review</h3><p class="text-gray-200">You may still have options. Talk to a recruiter for waivers, timing, and pathway guidance.</p>';
+  };
+
+  wrapper.querySelectorAll('.eligibility-question').forEach(question => {
+    const key = question.dataset.key;
+    const buttons = question.querySelectorAll('.eligibility-btn');
+    buttons.forEach(button => {
+      button.addEventListener('click', () => {
+        buttons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+        answers[key] = button.dataset.value;
+        updateResult();
+      });
+    });
+  });
 }
 
 function toRadians(value) {
