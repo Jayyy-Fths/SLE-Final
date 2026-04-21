@@ -1060,4 +1060,4 @@ window.addEventListener('load', initPortal);
 window.addEventListener('resize', () => {
   const canvas = document.getElementById('particles-canvas');
   if (canvas) canvas.__particleSystem?.resize();
-});
+})
