@@ -80,6 +80,15 @@
         </div>
     </header>
 
+    <section id="trust-metrics" class="py-10 bg-black/80 border-y border-white/10" data-reveal>
+        <div class="max-w-6xl mx-auto px-6 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="metric-card"><strong>150+</strong><span>MOS Career Paths</span></div>
+            <div class="metric-card"><strong>12+</strong><span>NJ Armory Locations</span></div>
+            <div class="metric-card"><strong>1 Weekend</strong><span>Per Month Service Rhythm</span></div>
+            <div class="metric-card"><strong>24h</strong><span>Target Recruiter Follow-up</span></div>
+        </div>
+    </section>
+
 <section id="overview" class="py-20 bg-zinc-950" data-reveal>
         <div class="max-w-6xl mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center">
             <div>
@@ -123,6 +132,14 @@
                 <span class="text-[#ffd700] text-lg font-bold uppercase tracking-[0.3em]">Find Your Unit</span>
                 <h2 class="text-5xl md:text-6xl font-black uppercase mt-6 mb-6 bg-gradient-to-r from-white via-gray-200 to-white bg-clip-text text-transparent">NJANG Armories Near You</h2>
                 <p class="text-xl text-gray-400 max-w-2xl mx-auto mb-12 leading-relaxed">Interactive map with 12+ New Jersey Army National Guard armories. Click pins for recruiter contact, drill times, and directions.</p>
+                <div class="max-w-xl mx-auto bg-zinc-900/70 border border-white/10 rounded-2xl p-4">
+                    <label for="zip-search" class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Find nearest armories by ZIP</label>
+                    <div class="flex gap-2">
+                        <input id="zip-search" type="text" maxlength="5" inputmode="numeric" placeholder="e.g. 07102" class="input-field flex-1 !py-3">
+                        <button id="zip-find-btn" class="bg-[#ffd700] text-black font-black px-5 rounded-xl uppercase text-xs">Find</button>
+                    </div>
+                    <div id="zip-feedback" class="text-xs text-gray-400 mt-2"></div>
+                </div>
             </div>
             
             <div id="armories-map" class="w-full h-[70vh] rounded-3xl border-2 border-white/10 shadow-2xl relative overflow-hidden">
@@ -154,6 +171,51 @@
                     </div>
                     <a href="#contact" class="block w-full bg-[#ffd700] text-black font-black py-5 uppercase rounded-2xl text-center hover:bg-white transition-all shadow-lg text-lg">Find My Recruiter →</a>
                 </div>
+            </div>
+            <div id="nearest-armories" class="mt-8 grid md:grid-cols-3 gap-4"></div>
+        </div>
+    </section>
+
+    <section id="enlistment-path" class="py-20 bg-black" data-reveal>
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-12">
+                <span class="text-[#ffd700] uppercase tracking-[0.3em] text-xs font-black">Roadmap</span>
+                <h2 class="text-4xl md:text-5xl font-black uppercase mt-4">Your Path to Enlistment</h2>
+                <p class="text-gray-400 mt-4 max-w-2xl mx-auto">See exactly what happens next, from first recruiter conversation to initial training.</p>
+            </div>
+            <div class="grid md:grid-cols-5 gap-4">
+                <article class="path-step"><span class="path-number">1</span><h3>Talk to Recruiter</h3><p>Get your questions answered and pick the right path.</p></article>
+                <article class="path-step"><span class="path-number">2</span><h3>Practice ASVAB</h3><p>Take a diagnostic and get MOS options that fit your scores.</p></article>
+                <article class="path-step"><span class="path-number">3</span><h3>Medical + MEPS</h3><p>Complete physical and qualification screening.</p></article>
+                <article class="path-step"><span class="path-number">4</span><h3>Choose MOS</h3><p>Select a role aligned to your goals and civilian interests.</p></article>
+                <article class="path-step"><span class="path-number">5</span><h3>Ship to Training</h3><p>Begin Basic and AIT with a clear mission and support team.</p></article>
+            </div>
+        </div>
+    </section>
+
+    <section id="benefits-calculator" class="py-24 bg-zinc-900" data-reveal>
+        <div class="max-w-6xl mx-auto px-6 grid lg:grid-cols-2 gap-10 items-start">
+            <div>
+                <span class="text-[#ffd700] uppercase tracking-[0.3em] text-xs font-black">Estimate Value</span>
+                <h2 class="text-4xl md:text-5xl font-black uppercase mt-4 mb-4">Benefits Calculator</h2>
+                <p class="text-gray-400 mb-8">Get a fast estimate of your potential tuition savings, annual drill pay, and enlistment bonus value.</p>
+                <div class="space-y-4">
+                    <label class="block"><span class="text-xs uppercase tracking-widest text-gray-400">Tuition Cost Per Year ($)</span><input id="calc-tuition" type="number" min="0" value="12000" class="input-field w-full mt-2"></label>
+                    <label class="block"><span class="text-xs uppercase tracking-widest text-gray-400">Years in School</span><input id="calc-years" type="number" min="1" max="8" value="4" class="input-field w-full mt-2"></label>
+                    <label class="block"><span class="text-xs uppercase tracking-widest text-gray-400">Estimated Monthly Drill Pay ($)</span><input id="calc-drill" type="number" min="0" value="450" class="input-field w-full mt-2"></label>
+                    <label class="block"><span class="text-xs uppercase tracking-widest text-gray-400">Bonus Eligible?</span><select id="calc-bonus" class="input-field w-full mt-2"><option value="0">No</option><option value="20000">Yes ($20,000)</option></select></label>
+                    <button id="calculate-benefits" class="bg-[#ffd700] text-black px-8 py-4 font-black uppercase rounded-xl hover:bg-white transition-all">Calculate My Estimate</button>
+                </div>
+            </div>
+            <div class="bg-black/50 border border-white/10 rounded-3xl p-8">
+                <h3 class="text-2xl font-black uppercase mb-6">Your Estimate</h3>
+                <div class="space-y-4">
+                    <div class="calc-row"><span>Tuition Savings</span><strong id="calc-out-tuition">$0</strong></div>
+                    <div class="calc-row"><span>Annual Drill Pay</span><strong id="calc-out-drill">$0</strong></div>
+                    <div class="calc-row"><span>Bonus Value</span><strong id="calc-out-bonus">$0</strong></div>
+                    <div class="calc-total"><span>Total Potential Value</span><strong id="calc-out-total">$0</strong></div>
+                </div>
+                <p class="text-xs text-gray-500 mt-4">Estimate only. Actual benefits vary by eligibility, contract, and policy.</p>
             </div>
         </div>
     </section>

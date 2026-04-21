@@ -350,3 +350,43 @@ h1, h2, h3 { font-family: 'Inter', sans-serif; font-weight: 900; }
     letter-spacing: 0.08em;
     text-transform: uppercase;
 }
+
+.metric-card {
+    border: 1px solid hsl(var(--border));
+    border-radius: 16px;
+    padding: 1rem;
+    text-align: center;
+    background: hsl(var(--glass));
+}
+
+.metric-card strong {
+    display: block;
+    font-size: 1.4rem;
+    font-weight: 900;
+    color: var(--nj-gold);
+}
+
+.metric-card span {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: hsl(var(--text-secondary));
+}
+
+.armory-nearest-card {
+    border: 1px solid hsl(var(--border));
+    border-radius: 16px;
+    padding: 1rem;
+    background: hsl(var(--glass));
+}
+
+.armory-nearest-card h4 {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+}
+
+.armory-nearest-card p {
+    color: hsl(var(--text-secondary));
+    font-size: 0.85rem;
+}

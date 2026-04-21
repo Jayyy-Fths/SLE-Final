@@ -3,6 +3,11 @@ let armories = [];
 let favoriteMOS = [];
 window.currentMosModal = null;
 let isDarkMode = true;
+let allCareers = [];
+let armories = [];
+let favoriteMOS = [];
+window.currentMosModal = null;
+let isDarkMode = true;
 let quizIndex = 0;
 let quizAnswers = [];
 let currentLanguage = 'en';
@@ -10,6 +15,23 @@ let activeCategory = 'all';
 let currentSort = 'title-asc';
 let currentSearch = '';
 
+const FALLBACK_CAREERS_URL = './careers.json';
+const FALLBACK_ARMORIES_URL = './armories.json';
+const SUPPORTED_LANGUAGES = new Set(['en', 'es']);
+const MAX_FAVORITES = 5;
+const APPLY_FORM_DRAFT_KEY = 'applyModalDraftV1';
+const NJ_ZIP_COORDS = {
+  '07030': [40.7440, -74.0324], // Hoboken
+  '07102': [40.7357, -74.1724], // Newark
+  '07302': [40.7215, -74.0471], // Jersey City
+  '07501': [40.9168, -74.1718], // Paterson
+  '08608': [40.2206, -74.7699], // Trenton
+  '07740': [40.3043, -74.0160], // Long Branch
+  '08753': [39.9537, -74.1979], // Toms River
+  '08002': [39.9340, -75.0260], // Cherry Hill
+  '08360': [39.4860, -75.0257], // Vineland
+  '08201': [39.3643, -74.4229] // Atlantic City
+};
 const FALLBACK_CAREERS_URL = './careers.json';
 const FALLBACK_ARMORIES_URL = './armories.json';
 const SUPPORTED_LANGUAGES = new Set(['en', 'es']);
@@ -217,6 +239,50 @@ async function loadArmories() {
     console.warn('Armories load failed:', err);
     armories = [];
   }
+// ========================================
+// CORE DATA LOADERS
+// ========================================
+
+function getStoredJSON(key, fallback = []) {
+  try {
+    const raw = localStorage.getItem(key);
+    if (!raw) return fallback;
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : fallback;
+  } catch (error) {
+    console.warn(`Unable to parse localStorage key "${key}"`, error);
+    return fallback;
+  }
+}
+
+async function loadCareersWithFallback() {
+  try {
+    const response = await fetch(FALLBACK_CAREERS_URL);
+    if (!response.ok) {
+      throw new Error(`Failed careers fetch: ${response.status}`);
+    }
+    const careersData = await response.json();
+    allCareers = Array.isArray(careersData) ? careersData : [];
+    console.log(`✅ Loaded ${allCareers.length} careers from JSON`);
+  } catch (err) {
+    console.warn('JSON load failed:', err);
+    allCareers = [];
+  }
+}
+
+async function loadArmories() {
+  try {
+    const response = await fetch(FALLBACK_ARMORIES_URL);
+    if (!response.ok) {
+      throw new Error(`Failed armories fetch: ${response.status}`);
+    }
+    const armoryData = await response.json();
+    armories = Array.isArray(armoryData) ? armoryData : [];
+    console.log(`🗺️ Loaded ${armories.length} NJANG armories`);
+  } catch (err) {
+    console.warn('Armories load failed:', err);
+    armories = [];
+  }
 }
 
 // ========================================
@@ -339,6 +405,17 @@ function setThemeIcon(toggle) {
   }
   toggle.setAttribute('aria-pressed', String(!isDarkMode));
 }
+
+function initThemeToggle() {
+function setThemeIcon(toggle) {
+  if (!toggle) return;
+  const icon = toggle.querySelector('i');
+  if (icon) {
+    icon.dataset.lucide = isDarkMode ? 'sun' : 'moon';
+    if (window.lucide?.createIcons) window.lucide.createIcons();
+  }
+  toggle.setAttribute('aria-pressed', String(!isDarkMode));
+}
 function setThemeIcon(toggle) {
   if (!toggle) return;
   const icon = toggle.querySelector('i');
@@ -365,6 +442,20 @@ function initThemeToggle() {
       setThemeIcon(toggle);
       showToast(isDarkMode ? languageStrings[currentLanguage].toast.darkMode : languageStrings[currentLanguage].toast.lightMode, 'info');
     });
+  }
+}
+
+function loadLanguagePreference() {
+  const stored = localStorage.getItem('pageLanguage');
+  if (SUPPORTED_LANGUAGES.has(stored)) {
+    return stored;
+  }
+  return 'en';
+}
+
+function setLanguage(lang) {
+  if (!SUPPORTED_LANGUAGES.has(lang)) lang = 'en';
+  currentLanguage = lang;
   }
 }
 
@@ -456,6 +547,13 @@ function observeRevealItems() {
     return;
   }
   const observer = new IntersectionObserver((entries) => {
+function observeRevealItems() {
+  const revealItems = document.querySelectorAll('[data-reveal]:not(.visible)');
+  if (!('IntersectionObserver' in window)) {
+    revealItems.forEach(item => item.classList.add('visible'));
+    return;
+  }
+  const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.classList.add('visible');
@@ -526,6 +624,32 @@ function initArmoriesMap() {
     document.head.appendChild(scriptLink);
   }
 }
+function initArmoriesMap() {
+  const mapContainer = document.getElementById('armories-map');
+  if (!mapContainer || armories.length === 0) return;
+
+  if (window.L) {
+    initLeafletMap();
+    return;
+  }
+
+  if (!document.querySelector('link[data-leaflet-css="true"]')) {
+    const mapLink = document.createElement('link');
+    mapLink.rel = 'stylesheet';
+    mapLink.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+    mapLink.dataset.leafletCss = 'true';
+    document.head.appendChild(mapLink);
+  }
+
+  if (!document.querySelector('script[data-leaflet-js="true"]')) {
+    const scriptLink = document.createElement('script');
+    scriptLink.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+    scriptLink.dataset.leafletJs = 'true';
+    scriptLink.onload = initLeafletMap;
+    scriptLink.onerror = () => console.warn('Leaflet failed to load.');
+    document.head.appendChild(scriptLink);
+  }
+}
 
 function initLeafletMap() {
   const njCenter = [40.0583, -74.4057];
@@ -539,6 +663,13 @@ function initLeafletMap() {
     const popupContent = `
       <div class="armory-popup">
         <h3 class="font-bold text-lg mb-2">${armory.name}</h3>
+        <p class="text-sm mb-1"><strong>📍</strong> ${armory.address}</p>
+        <p class="text-sm mb-1"><strong>📞</strong> <a href="tel:${armory.phone}">${armory.phone}</a></p>
+        <p class="text-sm mb-3"><strong>⏰</strong> ${armory.drill}</p>
+        <p class="text-xs text-gray-600 mb-2">Recruiter: ${armory.recruiter}</p>
+        <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(armory.address)}" target="_blank" rel="noopener noreferrer" class="inline-block bg-[#ffd700] text-black px-4 py-1 rounded font-bold text-sm">Get Directions</a>
+      </div>
+    `;
         <p class="text-sm mb-1"><strong>📍</strong> ${armory.address}</p>
         <p class="text-sm mb-1"><strong>📞</strong> <a href="tel:${armory.phone}">${armory.phone}</a></p>
         <p class="text-sm mb-3"><strong>⏰</strong> ${armory.drill}</p>
@@ -577,6 +708,53 @@ async function toggleFavorite(eventOrMos, mos, title) {
   if (!mos) return;
 
   const selected = allCareers.find(m => String(m.mos) === String(mos));
+  const favoriteTitle = title || selected?.title || mos;
+  const existingIndex = favoriteMOS.findIndex(item => String(item.mos) === String(mos));
+  const isAdding = existingIndex === -1;
+
+  if (isAdding) {
+    if (favoriteMOS.length >= MAX_FAVORITES) {
+      showToast(`Only ${MAX_FAVORITES} favorites allowed. Remove one to add another.`, 'info');
+      return;
+    }
+    favoriteMOS.push({ mos, title: favoriteTitle });
+  } else {
+    favoriteMOS.splice(existingIndex, 1);
+  }
+
+  saveFavorites();
+  updateFavoritesUI();
+  updateCardFavorites();
+  showToast(`⭐ ${favoriteTitle} ${isAdding ? 'added' : 'removed'} from favorites!`, 'success');
+}
+
+function openMosModal(mos) {
+  const selected = allCareers.find(m => m.mos === mos);
+  if (!selected) return;
+
+  const modalTitle = document.getElementById('mos-modal-title');
+  const modalDesc = document.getElementById('mos-modal-desc');
+  const modalAsvab = document.getElementById('mos-modal-asvab');
+  const modalTraining = document.getElementById('mos-modal-training');
+  const modalCategory = document.getElementById('mos-modal-cat');
+  const modalBonus = document.getElementById('mos-modal-bonus');
+  if (modalTitle) modalTitle.innerText = `${selected.mos} - ${selected.title}`;
+  if (modalDesc) modalDesc.innerText = selected.desc;
+  if (modalAsvab) modalAsvab.innerText = selected.asvab;
+  if (modalTraining) modalTraining.innerText = selected.training;
+  if (modalCategory) modalCategory.innerText = selected.cat.toUpperCase();
+  if (modalBonus) modalBonus.classList.toggle('hidden', !selected.bonus);
+
+  window.currentMosModal = selected.mos;
+  document.getElementById('mos-modal')?.classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+  showToast(`📋 Opened ${selected.title}`, 'info');
+}
+
+function closeMosModal() {
+  document.getElementById('mos-modal')?.classList.add('hidden');
+  document.body.style.overflow = '';
+}
   const favoriteTitle = title || selected?.title || mos;
   const existingIndex = favoriteMOS.findIndex(item => String(item.mos) === String(mos));
   const isAdding = existingIndex === -1;
@@ -708,11 +886,34 @@ function sortCareerData(data, sortKey) {
     return match[2].startsWith('month') ? count * 4 : count;
   };
   if (sortKey === 'title-asc') {
+  updateCardFavorites();
+  initTiltCards();
+  if (window.lucide?.createIcons) window.lucide.createIcons();
+  observeRevealItems();
+}
+
+function sortCareerData(data, sortKey) {
+  const sorted = [...data];
+  const toTrainingWeeks = (value = '') => {
+    const normalized = String(value).toLowerCase();
+    const match = normalized.match(/(\d+)\s*(week|month)/);
+    if (!match) return Number.MAX_SAFE_INTEGER;
+    const count = Number.parseInt(match[1], 10);
+    return match[2].startsWith('month') ? count * 4 : count;
+  };
+  if (sortKey === 'title-asc') {
     sorted.sort((a, b) => a.title.localeCompare(b.title));
   } else if (sortKey === 'title-desc') {
     sorted.sort((a, b) => b.title.localeCompare(a.title));
   } else if (sortKey === 'asvab-asc') {
     sorted.sort((a, b) => parseInt(a.asvab, 10) - parseInt(b.asvab, 10));
+  } else if (sortKey === 'asvab-desc') {
+    sorted.sort((a, b) => parseInt(b.asvab, 10) - parseInt(a.asvab, 10));
+  } else if (sortKey === 'training') {
+    sorted.sort((a, b) => toTrainingWeeks(a.training) - toTrainingWeeks(b.training));
+  }
+  return sorted;
+}
   } else if (sortKey === 'asvab-desc') {
     sorted.sort((a, b) => parseInt(b.asvab, 10) - parseInt(a.asvab, 10));
   } else if (sortKey === 'training') {
@@ -738,6 +939,10 @@ function saveFavorites() {
   localStorage.setItem('favoriteMOS', JSON.stringify(favoriteMOS));
 }
 
+async function loadFavorites() {
+  favoriteMOS = getStoredJSON('favoriteMOS', []).slice(0, MAX_FAVORITES);
+  saveFavorites();
+}
 async function loadFavorites() {
   favoriteMOS = getStoredJSON('favoriteMOS', []).slice(0, MAX_FAVORITES);
   saveFavorites();
@@ -822,6 +1027,159 @@ function renderDrillList() {
 
   const countEl = document.getElementById('armory-count');
   if (countEl) countEl.innerText = armories.length;
+}
+
+function toRadians(value) {
+  return (value * Math.PI) / 180;
+}
+
+function haversineMiles([lat1, lon1], [lat2, lon2]) {
+  const earthMiles = 3958.8;
+  const dLat = toRadians(lat2 - lat1);
+  const dLon = toRadians(lon2 - lon1);
+  const a = Math.sin(dLat / 2) ** 2
+    + Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) * Math.sin(dLon / 2) ** 2;
+  return earthMiles * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
+}
+
+function initZipArmoryFinder() {
+  const input = document.getElementById('zip-search');
+  const button = document.getElementById('zip-find-btn');
+  const output = document.getElementById('nearest-armories');
+  const feedback = document.getElementById('zip-feedback');
+  if (!input || !button || !output || !feedback) return;
+
+  const findNearest = () => {
+    const zip = input.value.trim();
+    const origin = NJ_ZIP_COORDS[zip];
+    if (!origin) {
+      feedback.textContent = 'ZIP not in quick lookup yet. Try: 07102, 08608, 08002, 08201.';
+      output.innerHTML = '';
+      return;
+    }
+
+    const nearest = armories
+      .map(armory => ({
+        ...armory,
+        distance: haversineMiles(origin, [armory.lat, armory.lng])
+      }))
+      .sort((a, b) => a.distance - b.distance)
+      .slice(0, 3);
+
+    feedback.textContent = `Top ${nearest.length} nearest armories for ${zip}`;
+    output.innerHTML = nearest.map(armory => `
+      <article class="armory-nearest-card">
+        <h4>${armory.name}</h4>
+        <p>${armory.address}</p>
+        <div class="text-xs text-gray-400 mt-2">${armory.distance.toFixed(1)} miles away</div>
+        <a href="tel:${armory.phone}" class="text-[#ffd700] text-sm font-bold">Call ${armory.phone}</a>
+      </article>
+    `).join('');
+  };
+
+  button.addEventListener('click', findNearest);
+  input.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      findNearest();
+    }
+  });
+}
+
+function initApplyFormDraft() {
+  const form = document.getElementById('apply-modal-form');
+  if (!form) return;
+
+  const fields = ['modal-firstname', 'modal-lastname', 'modal-email', 'modal-phone', 'modal-message'];
+  const savedDraft = (() => {
+    try {
+      return JSON.parse(localStorage.getItem(APPLY_FORM_DRAFT_KEY) || '{}');
+    } catch {
+      return {};
+    }
+  })();
+
+  fields.forEach(id => {
+    const input = document.getElementById(id);
+    if (!input) return;
+    if (savedDraft[id]) input.value = savedDraft[id];
+    input.addEventListener('input', () => {
+      const draft = {};
+      fields.forEach(fieldId => {
+        const field = document.getElementById(fieldId);
+        if (field?.value) draft[fieldId] = field.value;
+      });
+      localStorage.setItem(APPLY_FORM_DRAFT_KEY, JSON.stringify(draft));
+    });
+  });
+}
+
+function formatCurrency(value) {
+  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(value);
+}
+
+function initBenefitsCalculator() {
+  const calcBtn = document.getElementById('calculate-benefits');
+  if (!calcBtn) return;
+
+  const calculate = () => {
+    const tuition = Number.parseFloat(document.getElementById('calc-tuition')?.value || 0);
+    const years = Number.parseFloat(document.getElementById('calc-years')?.value || 0);
+    const monthlyDrill = Number.parseFloat(document.getElementById('calc-drill')?.value || 0);
+    const bonus = Number.parseFloat(document.getElementById('calc-bonus')?.value || 0);
+
+    const tuitionValue = Math.max(0, tuition * years);
+    const drillValue = Math.max(0, monthlyDrill * 12);
+    const totalValue = tuitionValue + drillValue + Math.max(0, bonus);
+
+    const outTuition = document.getElementById('calc-out-tuition');
+    const outDrill = document.getElementById('calc-out-drill');
+    const outBonus = document.getElementById('calc-out-bonus');
+    const outTotal = document.getElementById('calc-out-total');
+    if (outTuition) outTuition.textContent = formatCurrency(tuitionValue);
+    if (outDrill) outDrill.textContent = formatCurrency(drillValue);
+    if (outBonus) outBonus.textContent = formatCurrency(bonus);
+    if (outTotal) outTotal.textContent = formatCurrency(totalValue);
+  };
+
+  calcBtn.addEventListener('click', calculate);
+  calculate();
+}
+
+function initEligibilityCheck() {
+  const wrapper = document.getElementById('eligibility-questions');
+  if (!wrapper) return;
+
+  const answers = {};
+  const updateResult = () => {
+    const result = document.getElementById('eligibility-result');
+    if (!result) return;
+    const values = Object.values(answers);
+    if (values.length < 3) {
+      result.classList.add('hidden');
+      return;
+    }
+    const passed = values.every(value => value === 'yes');
+    result.classList.remove('hidden');
+    result.classList.toggle('border-green-400', passed);
+    result.classList.toggle('border-orange-400', !passed);
+    result.innerHTML = passed
+      ? '<h3 class="text-green-300 font-black uppercase mb-2">Likely Eligible</h3><p class="text-gray-200">Great start. You look ready for a recruiter conversation and next-step screening.</p>'
+      : '<h3 class="text-orange-300 font-black uppercase mb-2">Needs Recruiter Review</h3><p class="text-gray-200">You may still have options. Talk to a recruiter for waivers, timing, and pathway guidance.</p>';
+  };
+
+  wrapper.querySelectorAll('.eligibility-question').forEach(question => {
+    const key = question.dataset.key;
+    const buttons = question.querySelectorAll('.eligibility-btn');
+    buttons.forEach(button => {
+      button.addEventListener('click', () => {
+        buttons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+        answers[key] = button.dataset.value;
+        updateResult();
+      });
+    });
+  });
 }
 
 function formatCurrency(value) {
@@ -955,6 +1313,14 @@ async function initPortal() {
   renderDrillList();
   initThemeToggle();
   initArmoriesMap();
+  initZipArmoryFinder();
+  initApplyFormDraft();
+  initBenefitsCalculator();
+  initEligibilityCheck();
+  initScrollReveal();
+  updateScrollProgress();
+  initThemeToggle();
+  initArmoriesMap();
   initBenefitsCalculator();
   initEligibilityCheck();
   initScrollReveal();
@@ -1005,6 +1371,7 @@ async function initPortal() {
       
       // Clear form
       e.target.reset();
+      localStorage.removeItem(APPLY_FORM_DRAFT_KEY);
       
       // Close modal after delay
       setTimeout(() => {
@@ -1044,6 +1411,9 @@ async function initPortal() {
     updateScrollProgress();
   });
 
+  if (window.lucide?.createIcons) window.lucide.createIcons();
+  console.log('🚀 NJANG Portal Enhanced - Map/Particles/Tilt Ready!');
+}
   if (window.lucide?.createIcons) window.lucide.createIcons();
   console.log('🚀 NJANG Portal Enhanced - Map/Particles/Tilt Ready!');
 }
