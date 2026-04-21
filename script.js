@@ -1,7 +1,7 @@
 let allCareers = [];
 let armories = [];
 let favoriteMOS = [];
-let currentMosModal = null;
+window.currentMosModal = null;
 let isDarkMode = true;
 let quizIndex = 0;
 let quizAnswers = [];
@@ -12,6 +12,8 @@ let currentSearch = '';
 
 const FALLBACK_CAREERS_URL = './careers.json';
 const FALLBACK_ARMORIES_URL = './armories.json';
+const SUPPORTED_LANGUAGES = new Set(['en', 'es']);
+const MAX_FAVORITES = 5;
 
 const languageStrings = {
   en: {
@@ -175,11 +177,26 @@ const quizQuestions = [
 // CORE DATA LOADERS
 // ========================================
 
+function getStoredJSON(key, fallback = []) {
+  try {
+    const raw = localStorage.getItem(key);
+    if (!raw) return fallback;
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : fallback;
+  } catch (error) {
+    console.warn(`Unable to parse localStorage key "${key}"`, error);
+    return fallback;
+  }
+}
+
 async function loadCareersWithFallback() {
-  // Load from JSON as primary data source
   try {
     const response = await fetch(FALLBACK_CAREERS_URL);
-    allCareers = await response.json();
+    if (!response.ok) {
+      throw new Error(`Failed careers fetch: ${response.status}`);
+    }
+    const careersData = await response.json();
+    allCareers = Array.isArray(careersData) ? careersData : [];
     console.log(`✅ Loaded ${allCareers.length} careers from JSON`);
   } catch (err) {
     console.warn('JSON load failed:', err);
@@ -190,7 +207,11 @@ async function loadCareersWithFallback() {
 async function loadArmories() {
   try {
     const response = await fetch(FALLBACK_ARMORIES_URL);
-    armories = await response.json();
+    if (!response.ok) {
+      throw new Error(`Failed armories fetch: ${response.status}`);
+    }
+    const armoryData = await response.json();
+    armories = Array.isArray(armoryData) ? armoryData : [];
     console.log(`🗺️ Loaded ${armories.length} NJANG armories`);
   } catch (err) {
     console.warn('Armories load failed:', err);
@@ -314,7 +335,7 @@ function setThemeIcon(toggle) {
   const icon = toggle.querySelector('i');
   if (icon) {
     icon.dataset.lucide = isDarkMode ? 'sun' : 'moon';
-    lucide.createIcons();
+    if (window.lucide?.createIcons) window.lucide.createIcons();
   }
   toggle.setAttribute('aria-pressed', String(!isDarkMode));
 }
@@ -338,7 +359,16 @@ function initThemeToggle() {
   }
 }
 
+function loadLanguagePreference() {
+  const stored = localStorage.getItem('pageLanguage');
+  if (SUPPORTED_LANGUAGES.has(stored)) {
+    return stored;
+  }
+  return 'en';
+}
+
 function setLanguage(lang) {
+  if (!SUPPORTED_LANGUAGES.has(lang)) lang = 'en';
   currentLanguage = lang;
   localStorage.setItem('pageLanguage', lang);
   document.documentElement.lang = lang;
@@ -410,6 +440,10 @@ function toggleLanguage() {
 
 function observeRevealItems() {
   const revealItems = document.querySelectorAll('[data-reveal]:not(.visible)');
+  if (!('IntersectionObserver' in window)) {
+    revealItems.forEach(item => item.classList.add('visible'));
+    return;
+  }
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -458,17 +492,28 @@ function showToast(message, type = 'success') {
 function initArmoriesMap() {
   const mapContainer = document.getElementById('armories-map');
   if (!mapContainer || armories.length === 0) return;
-  
-  // Leaflet CSS/JS
-  const mapLink = document.createElement('link');
-  mapLink.rel = 'stylesheet';
-  mapLink.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
-  document.head.appendChild(mapLink);
-  
-  const scriptLink = document.createElement('script');
-  scriptLink.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
-  scriptLink.onload = initLeafletMap;
-  document.head.appendChild(scriptLink);
+
+  if (window.L) {
+    initLeafletMap();
+    return;
+  }
+
+  if (!document.querySelector('link[data-leaflet-css="true"]')) {
+    const mapLink = document.createElement('link');
+    mapLink.rel = 'stylesheet';
+    mapLink.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+    mapLink.dataset.leafletCss = 'true';
+    document.head.appendChild(mapLink);
+  }
+
+  if (!document.querySelector('script[data-leaflet-js="true"]')) {
+    const scriptLink = document.createElement('script');
+    scriptLink.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+    scriptLink.dataset.leafletJs = 'true';
+    scriptLink.onload = initLeafletMap;
+    scriptLink.onerror = () => console.warn('Leaflet failed to load.');
+    document.head.appendChild(scriptLink);
+  }
 }
 
 function initLeafletMap() {
@@ -487,7 +532,7 @@ function initLeafletMap() {
         <p class="text-sm mb-1"><strong>📞</strong> <a href="tel:${armory.phone}">${armory.phone}</a></p>
         <p class="text-sm mb-3"><strong>⏰</strong> ${armory.drill}</p>
         <p class="text-xs text-gray-600 mb-2">Recruiter: ${armory.recruiter}</p>
-        <button onclick="showToast('Directions opened!')" class="bg-[#ffd700] text-black px-4 py-1 rounded font-bold text-sm">Get Directions</button>
+        <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(armory.address)}" target="_blank" rel="noopener noreferrer" class="inline-block bg-[#ffd700] text-black px-4 py-1 rounded font-bold text-sm">Get Directions</a>
       </div>
     `;
     
@@ -526,15 +571,13 @@ async function toggleFavorite(eventOrMos, mos, title) {
   const isAdding = existingIndex === -1;
 
   if (isAdding) {
+    if (favoriteMOS.length >= MAX_FAVORITES) {
+      showToast(`Only ${MAX_FAVORITES} favorites allowed. Remove one to add another.`, 'info');
+      return;
+    }
     favoriteMOS.push({ mos, title: favoriteTitle });
   } else {
     favoriteMOS.splice(existingIndex, 1);
-  }
-
-  try {
-    // Convex removed - using local storage only
-  } catch (e) {
-    console.warn('Using local storage fallback.', e);
   }
 
   saveFavorites();
@@ -547,21 +590,27 @@ function openMosModal(mos) {
   const selected = allCareers.find(m => m.mos === mos);
   if (!selected) return;
 
-  document.getElementById('mos-modal-title').innerText = `${selected.mos} - ${selected.title}`;
-  document.getElementById('mos-modal-desc').innerText = selected.desc;
-  document.getElementById('mos-modal-asvab').innerText = selected.asvab;
-  document.getElementById('mos-modal-training').innerText = selected.training;
-  document.getElementById('mos-modal-cat').innerText = selected.cat.toUpperCase();
-  document.getElementById('mos-modal-bonus').classList.toggle('hidden', !selected.bonus);
+  const modalTitle = document.getElementById('mos-modal-title');
+  const modalDesc = document.getElementById('mos-modal-desc');
+  const modalAsvab = document.getElementById('mos-modal-asvab');
+  const modalTraining = document.getElementById('mos-modal-training');
+  const modalCategory = document.getElementById('mos-modal-cat');
+  const modalBonus = document.getElementById('mos-modal-bonus');
+  if (modalTitle) modalTitle.innerText = `${selected.mos} - ${selected.title}`;
+  if (modalDesc) modalDesc.innerText = selected.desc;
+  if (modalAsvab) modalAsvab.innerText = selected.asvab;
+  if (modalTraining) modalTraining.innerText = selected.training;
+  if (modalCategory) modalCategory.innerText = selected.cat.toUpperCase();
+  if (modalBonus) modalBonus.classList.toggle('hidden', !selected.bonus);
 
-  document.getElementById('mos-modal').classList.remove('hidden');
+  window.currentMosModal = selected.mos;
+  document.getElementById('mos-modal')?.classList.remove('hidden');
   document.body.style.overflow = 'hidden';
-  currentMosModal = mos;
   showToast(`📋 Opened ${selected.title}`, 'info');
 }
 
 function closeMosModal() {
-  document.getElementById('mos-modal').classList.add('hidden');
+  document.getElementById('mos-modal')?.classList.add('hidden');
   document.body.style.overflow = '';
 }
 
@@ -634,12 +683,19 @@ function renderCareers(data) {
 
   updateCardFavorites();
   initTiltCards();
-  lucide.createIcons();
+  if (window.lucide?.createIcons) window.lucide.createIcons();
   observeRevealItems();
 }
 
 function sortCareerData(data, sortKey) {
   const sorted = [...data];
+  const toTrainingWeeks = (value = '') => {
+    const normalized = String(value).toLowerCase();
+    const match = normalized.match(/(\d+)\s*(week|month)/);
+    if (!match) return Number.MAX_SAFE_INTEGER;
+    const count = Number.parseInt(match[1], 10);
+    return match[2].startsWith('month') ? count * 4 : count;
+  };
   if (sortKey === 'title-asc') {
     sorted.sort((a, b) => a.title.localeCompare(b.title));
   } else if (sortKey === 'title-desc') {
@@ -649,7 +705,7 @@ function sortCareerData(data, sortKey) {
   } else if (sortKey === 'asvab-desc') {
     sorted.sort((a, b) => parseInt(b.asvab, 10) - parseInt(a.asvab, 10));
   } else if (sortKey === 'training') {
-    sorted.sort((a, b) => a.training.localeCompare(b.training));
+    sorted.sort((a, b) => toTrainingWeeks(a.training) - toTrainingWeeks(b.training));
   }
   return sorted;
 }
@@ -672,20 +728,7 @@ function saveFavorites() {
 }
 
 async function loadFavorites() {
-  favoriteMOS = [];
-  try {
-    const localData = JSON.parse(localStorage.getItem('favoriteMOS') || '[]');
-    if (Array.isArray(localData)) favoriteMOS = localData;
-  } catch (e) {
-    console.warn('Unable to parse favoriteMOS from localStorage', e);
-  }
-
-  try {
-    // Convex removed - using local storage only
-  } catch (e) {
-    console.warn('Using local storage only');
-  }
-
+  favoriteMOS = getStoredJSON('favoriteMOS', []).slice(0, MAX_FAVORITES);
   saveFavorites();
 }
 
@@ -770,6 +813,74 @@ function renderDrillList() {
   if (countEl) countEl.innerText = armories.length;
 }
 
+function formatCurrency(value) {
+  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(value);
+}
+
+function initBenefitsCalculator() {
+  const calcBtn = document.getElementById('calculate-benefits');
+  if (!calcBtn) return;
+
+  const calculate = () => {
+    const tuition = Number.parseFloat(document.getElementById('calc-tuition')?.value || 0);
+    const years = Number.parseFloat(document.getElementById('calc-years')?.value || 0);
+    const monthlyDrill = Number.parseFloat(document.getElementById('calc-drill')?.value || 0);
+    const bonus = Number.parseFloat(document.getElementById('calc-bonus')?.value || 0);
+
+    const tuitionValue = Math.max(0, tuition * years);
+    const drillValue = Math.max(0, monthlyDrill * 12);
+    const totalValue = tuitionValue + drillValue + Math.max(0, bonus);
+
+    const outTuition = document.getElementById('calc-out-tuition');
+    const outDrill = document.getElementById('calc-out-drill');
+    const outBonus = document.getElementById('calc-out-bonus');
+    const outTotal = document.getElementById('calc-out-total');
+    if (outTuition) outTuition.textContent = formatCurrency(tuitionValue);
+    if (outDrill) outDrill.textContent = formatCurrency(drillValue);
+    if (outBonus) outBonus.textContent = formatCurrency(bonus);
+    if (outTotal) outTotal.textContent = formatCurrency(totalValue);
+  };
+
+  calcBtn.addEventListener('click', calculate);
+  calculate();
+}
+
+function initEligibilityCheck() {
+  const wrapper = document.getElementById('eligibility-questions');
+  if (!wrapper) return;
+
+  const answers = {};
+  const updateResult = () => {
+    const result = document.getElementById('eligibility-result');
+    if (!result) return;
+    const values = Object.values(answers);
+    if (values.length < 3) {
+      result.classList.add('hidden');
+      return;
+    }
+    const passed = values.every(value => value === 'yes');
+    result.classList.remove('hidden');
+    result.classList.toggle('border-green-400', passed);
+    result.classList.toggle('border-orange-400', !passed);
+    result.innerHTML = passed
+      ? '<h3 class="text-green-300 font-black uppercase mb-2">Likely Eligible</h3><p class="text-gray-200">Great start. You look ready for a recruiter conversation and next-step screening.</p>'
+      : '<h3 class="text-orange-300 font-black uppercase mb-2">Needs Recruiter Review</h3><p class="text-gray-200">You may still have options. Talk to a recruiter for waivers, timing, and pathway guidance.</p>';
+  };
+
+  wrapper.querySelectorAll('.eligibility-question').forEach(question => {
+    const key = question.dataset.key;
+    const buttons = question.querySelectorAll('.eligibility-btn');
+    buttons.forEach(button => {
+      button.addEventListener('click', () => {
+        buttons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+        answers[key] = button.dataset.value;
+        updateResult();
+      });
+    });
+  });
+}
+
 function startQuiz() {
   quizIndex = 0;
   quizAnswers = [];
@@ -833,6 +944,8 @@ async function initPortal() {
   renderDrillList();
   initThemeToggle();
   initArmoriesMap();
+  initBenefitsCalculator();
+  initEligibilityCheck();
   initScrollReveal();
   updateScrollProgress();
 
@@ -920,7 +1033,7 @@ async function initPortal() {
     updateScrollProgress();
   });
 
-  lucide.createIcons();
+  if (window.lucide?.createIcons) window.lucide.createIcons();
   console.log('🚀 NJANG Portal Enhanced - Map/Particles/Tilt Ready!');
 }
 
