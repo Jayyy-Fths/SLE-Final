@@ -371,12 +371,13 @@ function initThemeToggle() {
 function loadLanguagePreference() {
   const stored = localStorage.getItem('pageLanguage');
   if (SUPPORTED_LANGUAGES.has(stored)) {
-  if (stored === 'en' || stored === 'es') {
-    return stored;
+    if (stored === 'en' || stored === 'es') {
+      return stored;
+    }
+    return 'en';
   }
   return 'en';
 }
-
 function setLanguage(lang) {
   if (!SUPPORTED_LANGUAGES.has(lang)) lang = 'en';
   currentLanguage = lang;
@@ -1061,3 +1062,4 @@ window.addEventListener('resize', () => {
   const canvas = document.getElementById('particles-canvas');
   if (canvas) canvas.__particleSystem?.resize();
 })
+;
