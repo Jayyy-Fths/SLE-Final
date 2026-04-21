@@ -158,6 +158,50 @@
         </div>
     </section>
 
+    <section id="enlistment-path" class="py-20 bg-black" data-reveal>
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-12">
+                <span class="text-[#ffd700] uppercase tracking-[0.3em] text-xs font-black">Roadmap</span>
+                <h2 class="text-4xl md:text-5xl font-black uppercase mt-4">Your Path to Enlistment</h2>
+                <p class="text-gray-400 mt-4 max-w-2xl mx-auto">See exactly what happens next, from first recruiter conversation to initial training.</p>
+            </div>
+            <div class="grid md:grid-cols-5 gap-4">
+                <article class="path-step"><span class="path-number">1</span><h3>Talk to Recruiter</h3><p>Get your questions answered and pick the right path.</p></article>
+                <article class="path-step"><span class="path-number">2</span><h3>Practice ASVAB</h3><p>Take a diagnostic and get MOS options that fit your scores.</p></article>
+                <article class="path-step"><span class="path-number">3</span><h3>Medical + MEPS</h3><p>Complete physical and qualification screening.</p></article>
+                <article class="path-step"><span class="path-number">4</span><h3>Choose MOS</h3><p>Select a role aligned to your goals and civilian interests.</p></article>
+                <article class="path-step"><span class="path-number">5</span><h3>Ship to Training</h3><p>Begin Basic and AIT with a clear mission and support team.</p></article>
+            </div>
+        </div>
+    </section>
+
+    <section id="benefits-calculator" class="py-24 bg-zinc-900" data-reveal>
+        <div class="max-w-6xl mx-auto px-6 grid lg:grid-cols-2 gap-10 items-start">
+            <div>
+                <span class="text-[#ffd700] uppercase tracking-[0.3em] text-xs font-black">Estimate Value</span>
+                <h2 class="text-4xl md:text-5xl font-black uppercase mt-4 mb-4">Benefits Calculator</h2>
+                <p class="text-gray-400 mb-8">Get a fast estimate of your potential tuition savings, annual drill pay, and enlistment bonus value.</p>
+                <div class="space-y-4">
+                    <label class="block"><span class="text-xs uppercase tracking-widest text-gray-400">Tuition Cost Per Year ($)</span><input id="calc-tuition" type="number" min="0" value="12000" class="input-field w-full mt-2"></label>
+                    <label class="block"><span class="text-xs uppercase tracking-widest text-gray-400">Years in School</span><input id="calc-years" type="number" min="1" max="8" value="4" class="input-field w-full mt-2"></label>
+                    <label class="block"><span class="text-xs uppercase tracking-widest text-gray-400">Estimated Monthly Drill Pay ($)</span><input id="calc-drill" type="number" min="0" value="450" class="input-field w-full mt-2"></label>
+                    <label class="block"><span class="text-xs uppercase tracking-widest text-gray-400">Bonus Eligible?</span><select id="calc-bonus" class="input-field w-full mt-2"><option value="0">No</option><option value="20000">Yes ($20,000)</option></select></label>
+                    <button id="calculate-benefits" class="bg-[#ffd700] text-black px-8 py-4 font-black uppercase rounded-xl hover:bg-white transition-all">Calculate My Estimate</button>
+                </div>
+            </div>
+            <div class="bg-black/50 border border-white/10 rounded-3xl p-8">
+                <h3 class="text-2xl font-black uppercase mb-6">Your Estimate</h3>
+                <div class="space-y-4">
+                    <div class="calc-row"><span>Tuition Savings</span><strong id="calc-out-tuition">$0</strong></div>
+                    <div class="calc-row"><span>Annual Drill Pay</span><strong id="calc-out-drill">$0</strong></div>
+                    <div class="calc-row"><span>Bonus Value</span><strong id="calc-out-bonus">$0</strong></div>
+                    <div class="calc-total"><span>Total Potential Value</span><strong id="calc-out-total">$0</strong></div>
+                </div>
+                <p class="text-xs text-gray-500 mt-4">Estimate only. Actual benefits vary by eligibility, contract, and policy.</p>
+            </div>
+        </div>
+    </section>
+
     <section id="quiz" class="py-24 bg-zinc-900" data-reveal>
         <div class="max-w-3xl mx-auto px-6 text-center">
             <div id="quiz-container" class="bg-zinc-900 p-12 rounded-3xl border border-white/5">
@@ -239,6 +283,47 @@
         </div>
     </section>
 
+    <section id="eligibility-check" class="py-24 bg-zinc-950" data-reveal>
+        <div class="max-w-4xl mx-auto px-6">
+            <div class="text-center mb-10">
+                <span class="text-[#ffd700] uppercase tracking-[0.3em] text-xs font-black">Quick Check</span>
+                <h2 class="text-4xl font-black uppercase mt-4">Eligibility Pre-Screen</h2>
+                <p class="text-gray-400 mt-3">Answer a few questions to see if you're likely ready for the next recruiter conversation.</p>
+            </div>
+            <div class="bg-black/40 border border-white/10 rounded-3xl p-8">
+                <div id="eligibility-questions" class="space-y-6">
+                    <div class="eligibility-question" data-key="age">
+                        <p class="font-bold uppercase text-sm mb-2">Are you between 17 and 35?</p>
+                        <div class="flex gap-3"><button type="button" class="eligibility-btn" data-value="yes">Yes</button><button type="button" class="eligibility-btn" data-value="no">No</button></div>
+                    </div>
+                    <div class="eligibility-question" data-key="citizen">
+                        <p class="font-bold uppercase text-sm mb-2">Are you a U.S. citizen or permanent resident?</p>
+                        <div class="flex gap-3"><button type="button" class="eligibility-btn" data-value="yes">Yes</button><button type="button" class="eligibility-btn" data-value="no">No</button></div>
+                    </div>
+                    <div class="eligibility-question" data-key="education">
+                        <p class="font-bold uppercase text-sm mb-2">Do you have (or are you working toward) a high school diploma/GED?</p>
+                        <div class="flex gap-3"><button type="button" class="eligibility-btn" data-value="yes">Yes</button><button type="button" class="eligibility-btn" data-value="no">No</button></div>
+                    </div>
+                </div>
+                <div id="eligibility-result" class="mt-8 p-6 rounded-2xl border border-white/10 bg-zinc-900/60 hidden"></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="testimonials" class="py-24 bg-black" data-reveal>
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="text-center mb-12">
+                <span class="text-[#ffd700] uppercase tracking-[0.3em] text-xs font-black">Success Stories</span>
+                <h2 class="text-4xl md:text-5xl font-black uppercase mt-4">Why Soldiers Choose NJ Guard</h2>
+            </div>
+            <div class="grid md:grid-cols-3 gap-6">
+                <article class="testimonial-card"><p>"I stayed close to home, got leadership experience, and used tuition support to finish my degree debt-free."</p><h3>SPC R. Alvarez</h3><span>68W • Combat Medic</span></article>
+                <article class="testimonial-card"><p>"My MOS helped me move into civilian IT. The training gave me confidence and certifications employers wanted."</p><h3>SGT J. Patel</h3><span>25B • Information Technology</span></article>
+                <article class="testimonial-card"><p>"One weekend a month gave me structure, team pride, and real career momentum without giving up my civilian goals."</p><h3>PFC M. Rivera</h3><span>12B • Combat Engineer</span></article>
+            </div>
+        </div>
+    </section>
+
 <!-- TRUNCATED HTML for brevity - rest of sections unchanged until modals -->
 
     <!-- Apply Modal (existing) -->
@@ -296,13 +381,20 @@
             </div>
             
             <div class="flex flex-wrap gap-3 pt-4 border-t border-white/10">
-                <button type="button" onclick="toggleFavorite(event,currentMosModal)" 
+                <button type="button" onclick="toggleFavorite(event,window.currentMosModal)" 
                         class="bg-[#ffd700] text-black px-6 py-3 font-black uppercase rounded-xl hover:bg-white transition-all flex items-center gap-2">
                     <i data-lucide="star" class="w-4 h-4"></i> Add to Favorites
                 </button>
                 <a href="#contact" class="bg-white text-black px-6 py-3 font-black uppercase rounded-xl hover:bg-gray-100 transition-all">Contact Recruiter</a>
                 <button onclick="closeMosModal()" class="border border-white/30 px-6 py-3 font-bold uppercase rounded-xl hover:border-[#ffd700] hover:text-[#ffd700] transition-all">Close</button>
             </div>
+        </div>
+    </div>
+
+    <div id="mobile-sticky-cta" class="md:hidden fixed bottom-0 inset-x-0 z-50 bg-black/95 border-t border-white/10 p-3">
+        <div class="flex gap-2">
+            <a href="#eligibility-check" class="flex-1 text-center bg-white text-black font-black uppercase text-xs py-3 rounded-xl">Check Eligibility</a>
+            <a href="#" id="open-apply-modal-sticky" class="flex-1 text-center bg-[#ffd700] text-black font-black uppercase text-xs py-3 rounded-xl">Talk to Recruiter</a>
         </div>
     </div>
 
@@ -324,6 +416,10 @@
         });
 
         document.getElementById('open-apply-modal-mobile')?.addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('apply-modal').classList.remove('hidden');
+        });
+        document.getElementById('open-apply-modal-sticky')?.addEventListener('click', (e) => {
             e.preventDefault();
             document.getElementById('apply-modal').classList.remove('hidden');
         });
