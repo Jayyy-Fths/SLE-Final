@@ -339,6 +339,15 @@ function setThemeIcon(toggle) {
   }
   toggle.setAttribute('aria-pressed', String(!isDarkMode));
 }
+function setThemeIcon(toggle) {
+  if (!toggle) return;
+  const icon = toggle.querySelector('i');
+  if (icon) {
+    icon.dataset.lucide = isDarkMode ? 'sun' : 'moon';
+    lucide.createIcons();
+  }
+  toggle.setAttribute('aria-pressed', String(!isDarkMode));
+}
 
 function initThemeToggle() {
   const toggle = document.getElementById('theme-toggle');
@@ -362,6 +371,7 @@ function initThemeToggle() {
 function loadLanguagePreference() {
   const stored = localStorage.getItem('pageLanguage');
   if (SUPPORTED_LANGUAGES.has(stored)) {
+  if (stored === 'en' || stored === 'es') {
     return stored;
   }
   return 'en';
