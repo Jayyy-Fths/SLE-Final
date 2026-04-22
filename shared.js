@@ -175,8 +175,56 @@ function detectPage() {
   return detected;
 }
 
+const loadedPageScripts = new Set();
+
+function loadPageScript(page) {
+  return new Promise((resolve, reject) => {
+    if (!page) {
+      resolve();
+      return;
+    }
+
+    if (loadedPageScripts.has(page)) {
+      resolve();
+      return;
+    }
+
+    const existing = document.querySelector(`script[data-page-script="${page}"]`);
+    if (existing) {
+      existing.addEventListener('load', () => resolve(), { once: true });
+      existing.addEventListener('error', () => reject(new Error(`Failed to load ${page} module`)), { once: true });
+      return;
+    }
+
+    const pageScript = document.createElement('script');
+    pageScript.src = `pages/${page}.js`;
+    pageScript.defer = true;
+    pageScript.dataset.pageScript = page;
+
+    pageScript.onload = () => {
+      loadedPageScripts.add(page);
+      resolve();
+    };
+
+    pageScript.onerror = () => {
+      reject(new Error(`Failed to load pages/${page}.js`));
+    };
+
+    document.head.appendChild(pageScript);
+  });
+}
+
 async function initPageModule(page) {
   const moduleName = `${page}Module`;
+  if (!window[moduleName]) {
+    try {
+      await loadPageScript(page);
+    } catch (err) {
+      console.error(`❌ Unable to load script for page: ${page}`, err);
+      return;
+    }
+  }
+
   if (window[moduleName]?.init) {
     try {
       await window[moduleName].init();
@@ -218,5 +266,4 @@ document.addEventListener('DOMContentLoaded', async () => {
   const page = detectPage();
   await initPageModule(page);
 });
-
 
