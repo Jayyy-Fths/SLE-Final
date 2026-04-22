@@ -5,6 +5,15 @@
 if (!window.shared) {
   const sharedScript = document.createElement('script');
   sharedScript.src = 'shared.js';
+  sharedScript.onload = () => {
+    // Auto-init page module after shared ready
+    const page = document.body.dataset.page || 'home';
+    const moduleName = `${page}Module`;
+    if (window[moduleName]?.init) {
+      window[moduleName].init();
+      console.log(`🚀 ${page.charAt(0).toUpperCase() + page.slice(1)} module initialized`);
+    }
+  };
   document.head.appendChild(sharedScript);
 }
 
