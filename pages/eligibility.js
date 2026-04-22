@@ -14,3 +14,4 @@ window.eligibilityModule = {
     document.getElementById('check-eligibility')?.addEventListener('click', checkEligibility);
     document.getElementById('calculate-benefits')?.addEventListener('click', calculateBenefits);
   }
+}
