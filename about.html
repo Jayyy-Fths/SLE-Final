@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About NJ National Guard | Citizen Soldier Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-zinc-950 text-white min-h-screen">
+    <div id="scroll-progress" class="fixed top-0 left-0 h-1 bg-[#ffd700] z-50 w-0"></div>
+    <div id="navbar-container"></div>
+    
+    <main class="pt-24 pb-12">
+        <header class="text-center py-20 px-6">
+            <h1 class="text-5xl md:text-7xl font-black uppercase mb-6">About the Guard</h1>
+            <p class="text-xl text-gray-400 max-w-2xl mx-auto">New Jersey Army National Guard - One weekend a month. Two weeks a year. A lifetime of leadership.</p>
+            <a href="index.html" class="mt-8 inline-block bg-[#ffd700] text-black px-8 py-4 font-black uppercase rounded-xl hover:bg-white">← Home</a>
+        </header>
+
+        <section class="max-w-6xl mx-auto px-6">
+            <div class="grid md:grid-cols-2 gap-12 items-center mb-20">
+                <div>
+                    <h2 class="text-4xl font-black uppercase mb-8">Why NJ Guard?</h2>
+                    <p class="text-lg text-gray-300 mb-8 leading-relaxed">Serve your community and country part-time while advancing your civilian career. Access tuition assistance, leadership training, and NJ state benefits.</p>
+                    <ul class="space-y-4 text-gray-400">
+                        <li><i data-lucide="map-pin" class="w-6 h-6 inline mr-3 text-[#ffd700]"></i> Serve close to home</li>
+                        <li><i data-lucide="book-open" class="w-6 h-6 inline mr-3 text-[#ffd700]"></i> 100% NJ tuition coverage</li>
+                        <li><i data-lucide="dollar-sign" class="w-6 h-6 inline mr-3 text-[#ffd700]"></i> Up to $20K enlistment bonuses</li>
+                        <li><i data-lucide="shield" class="w-6 h-6 inline mr-3 text-[#ffd700]"></i> Real-world MOS training</li>
+                    </ul>
+                </div>
+                <div class="relative">
+                    <img src="images/knuckles.jpg" alt="NJ Guard training" class="w-full rounded-3xl shadow-2xl">
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <article class="bg-zinc-900/50 border border-white/10 p-8 rounded-3xl">
+                    <h3 class="text-2xl font-black uppercase mb-4">One Weekend a Month</h3>
+                    <p class="text-gray-300">12 drill weekends + 2 weeks annual training. Compatible with full-time civilian careers.</p>
+                </article>
+                <article class="bg-zinc-900/50 border border-white/10 p-8 rounded-3xl">
+                    <h3 class="text-2xl font-black uppercase mb-4">NJ Benefits</h3>
+                    <p class="text-gray-300">Free NJ college tuition + priority state hiring for veterans.</p>
+                </article>
+                <article class="bg-zinc-900/50 border border-white/10 p-8 rounded-3xl">
+                    <h3 class="text-2xl font-black uppercase mb-4">Federal Support</h3>
+                    <p class="text-gray-300">GI Bill, VA loan, TRICARE health + retirement matching.</p>
+                </article>
+            </div>
+        </section>
+    </main>
+    
+    <div id="footer-container"></div>
+    
+    <script src="shared.js"></script>
+</body>
+</html>

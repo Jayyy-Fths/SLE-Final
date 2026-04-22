@@ -3,11 +3,6 @@ let armories = [];
 let favoriteMOS = [];
 window.currentMosModal = null;
 let isDarkMode = true;
-let allCareers = [];
-let armories = [];
-let favoriteMOS = [];
-window.currentMosModal = null;
-let isDarkMode = true;
 let quizIndex = 0;
 let quizAnswers = [];
 let currentLanguage = 'en';
@@ -32,10 +27,6 @@ const NJ_ZIP_COORDS = {
   '08360': [39.4860, -75.0257], // Vineland
   '08201': [39.3643, -74.4229] // Atlantic City
 };
-const FALLBACK_CAREERS_URL = './careers.json';
-const FALLBACK_ARMORIES_URL = './armories.json';
-const SUPPORTED_LANGUAGES = new Set(['en', 'es']);
-const MAX_FAVORITES = 5;
 
 const languageStrings = {
   en: {
@@ -239,50 +230,6 @@ async function loadArmories() {
     console.warn('Armories load failed:', err);
     armories = [];
   }
-// ========================================
-// CORE DATA LOADERS
-// ========================================
-
-function getStoredJSON(key, fallback = []) {
-  try {
-    const raw = localStorage.getItem(key);
-    if (!raw) return fallback;
-    const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? parsed : fallback;
-  } catch (error) {
-    console.warn(`Unable to parse localStorage key "${key}"`, error);
-    return fallback;
-  }
-}
-
-async function loadCareersWithFallback() {
-  try {
-    const response = await fetch(FALLBACK_CAREERS_URL);
-    if (!response.ok) {
-      throw new Error(`Failed careers fetch: ${response.status}`);
-    }
-    const careersData = await response.json();
-    allCareers = Array.isArray(careersData) ? careersData : [];
-    console.log(`✅ Loaded ${allCareers.length} careers from JSON`);
-  } catch (err) {
-    console.warn('JSON load failed:', err);
-    allCareers = [];
-  }
-}
-
-async function loadArmories() {
-  try {
-    const response = await fetch(FALLBACK_ARMORIES_URL);
-    if (!response.ok) {
-      throw new Error(`Failed armories fetch: ${response.status}`);
-    }
-    const armoryData = await response.json();
-    armories = Array.isArray(armoryData) ? armoryData : [];
-    console.log(`🗺️ Loaded ${armories.length} NJANG armories`);
-  } catch (err) {
-    console.warn('Armories load failed:', err);
-    armories = [];
-  }
 }
 
 // ========================================
@@ -406,44 +353,7 @@ function setThemeIcon(toggle) {
   toggle.setAttribute('aria-pressed', String(!isDarkMode));
 }
 
-function initThemeToggle() {
-function setThemeIcon(toggle) {
-  if (!toggle) return;
-  const icon = toggle.querySelector('i');
-  if (icon) {
-    icon.dataset.lucide = isDarkMode ? 'sun' : 'moon';
-    if (window.lucide?.createIcons) window.lucide.createIcons();
-  }
-  toggle.setAttribute('aria-pressed', String(!isDarkMode));
-}
-function setThemeIcon(toggle) {
-  if (!toggle) return;
-  const icon = toggle.querySelector('i');
-  if (icon) {
-    icon.dataset.lucide = isDarkMode ? 'sun' : 'moon';
-    lucide.createIcons();
-  }
-  toggle.setAttribute('aria-pressed', String(!isDarkMode));
-}
-
-function initThemeToggle() {
-  const toggle = document.getElementById('theme-toggle');
-  const saved = localStorage.getItem('darkMode');
-  isDarkMode = saved !== 'false';
-
-  document.body.classList.toggle('light-theme', !isDarkMode);
-  setThemeIcon(toggle);
-
-  if (toggle) {
-    toggle.addEventListener('click', () => {
-      isDarkMode = !isDarkMode;
-      document.body.classList.toggle('light-theme', !isDarkMode);
-      safeStorageSet('darkMode', String(isDarkMode));
-      setThemeIcon(toggle);
-      showToast(isDarkMode ? languageStrings[currentLanguage].toast.darkMode : languageStrings[currentLanguage].toast.lightMode, 'info');
-    });
-  }
-}
+// Theme handled by shared.js
 
 function loadLanguagePreference() {
   const stored = localStorage.getItem('pageLanguage');
@@ -453,22 +363,6 @@ function loadLanguagePreference() {
   return 'en';
 }
 
-function setLanguage(lang) {
-  if (!SUPPORTED_LANGUAGES.has(lang)) lang = 'en';
-  currentLanguage = lang;
-  }
-}
-
-function loadLanguagePreference() {
-  const stored = localStorage.getItem('pageLanguage');
-  if (SUPPORTED_LANGUAGES.has(stored)) {
-    if (stored === 'en' || stored === 'es') {
-      return stored;
-    }
-    return 'en';
-  }
-  return 'en';
-}
 function setLanguage(lang) {
   if (!SUPPORTED_LANGUAGES.has(lang)) lang = 'en';
   currentLanguage = lang;
@@ -535,18 +429,8 @@ function setLanguage(lang) {
   document.getElementById('theme-toggle')?.setAttribute('aria-label', lang === 'en' ? 'Toggle light and dark theme' : 'Cambiar tema claro y oscuro');
 }
 
-function toggleLanguage() {
-  setLanguage(currentLanguage === 'en' ? 'es' : 'en');
-  showToast(languageStrings[currentLanguage].toast.languageSwitched, 'info');
-}
+// Language handled by shared.js
 
-function observeRevealItems() {
-  const revealItems = document.querySelectorAll('[data-reveal]:not(.visible)');
-  if (!('IntersectionObserver' in window)) {
-    revealItems.forEach(item => item.classList.add('visible'));
-    return;
-  }
-  const observer = new IntersectionObserver((entries) => {
 function observeRevealItems() {
   const revealItems = document.querySelectorAll('[data-reveal]:not(.visible)');
   if (!('IntersectionObserver' in window)) {
@@ -582,48 +466,12 @@ function updateScrollProgress() {
 // TOAST NOTIFICATIONS
 // ========================================
 
-function showToast(message, type = 'success') {
-  const toast = document.getElementById('toast-notification');
-  if (!toast) return;
-  
-  toast.textContent = message;
-  toast.className = `toast toast-${type} show`;
-  
-  setTimeout(() => {
-    toast.classList.remove('show');
-  }, 4000);
-}
+// Toast handled by shared.js - use window.shared.showToast()
 
 // ========================================
 // NJ ANG ARMORIES MAP
 // ========================================
 
-function initArmoriesMap() {
-  const mapContainer = document.getElementById('armories-map');
-  if (!mapContainer || armories.length === 0) return;
-
-  if (window.L) {
-    initLeafletMap();
-    return;
-  }
-
-  if (!document.querySelector('link[data-leaflet-css="true"]')) {
-    const mapLink = document.createElement('link');
-    mapLink.rel = 'stylesheet';
-    mapLink.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
-    mapLink.dataset.leafletCss = 'true';
-    document.head.appendChild(mapLink);
-  }
-
-  if (!document.querySelector('script[data-leaflet-js="true"]')) {
-    const scriptLink = document.createElement('script');
-    scriptLink.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
-    scriptLink.dataset.leafletJs = 'true';
-    scriptLink.onload = initLeafletMap;
-    scriptLink.onerror = () => console.warn('Leaflet failed to load.');
-    document.head.appendChild(scriptLink);
-  }
-}
 function initArmoriesMap() {
   const mapContainer = document.getElementById('armories-map');
   if (!mapContainer || armories.length === 0) return;
@@ -670,13 +518,6 @@ function initLeafletMap() {
         <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(armory.address)}" target="_blank" rel="noopener noreferrer" class="inline-block bg-[#ffd700] text-black px-4 py-1 rounded font-bold text-sm">Get Directions</a>
       </div>
     `;
-        <p class="text-sm mb-1"><strong>📍</strong> ${armory.address}</p>
-        <p class="text-sm mb-1"><strong>📞</strong> <a href="tel:${armory.phone}">${armory.phone}</a></p>
-        <p class="text-sm mb-3"><strong>⏰</strong> ${armory.drill}</p>
-        <p class="text-xs text-gray-600 mb-2">Recruiter: ${armory.recruiter}</p>
-        <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(armory.address)}" target="_blank" rel="noopener noreferrer" class="inline-block bg-[#ffd700] text-black px-4 py-1 rounded font-bold text-sm">Get Directions</a>
-      </div>
-    `;
     
     L.marker([armory.lat, armory.lng])
       .addTo(map)
@@ -692,7 +533,7 @@ function initLeafletMap() {
 }
 
 // ========================================
-// CORE MOS FUNCTIONS (from previous)
+// CORE MOS FUNCTIONS
 // ========================================
 
 async function toggleFavorite(eventOrMos, mos, title) {
@@ -708,53 +549,6 @@ async function toggleFavorite(eventOrMos, mos, title) {
   if (!mos) return;
 
   const selected = allCareers.find(m => String(m.mos) === String(mos));
-  const favoriteTitle = title || selected?.title || mos;
-  const existingIndex = favoriteMOS.findIndex(item => String(item.mos) === String(mos));
-  const isAdding = existingIndex === -1;
-
-  if (isAdding) {
-    if (favoriteMOS.length >= MAX_FAVORITES) {
-      showToast(`Only ${MAX_FAVORITES} favorites allowed. Remove one to add another.`, 'info');
-      return;
-    }
-    favoriteMOS.push({ mos, title: favoriteTitle });
-  } else {
-    favoriteMOS.splice(existingIndex, 1);
-  }
-
-  saveFavorites();
-  updateFavoritesUI();
-  updateCardFavorites();
-  showToast(`⭐ ${favoriteTitle} ${isAdding ? 'added' : 'removed'} from favorites!`, 'success');
-}
-
-function openMosModal(mos) {
-  const selected = allCareers.find(m => m.mos === mos);
-  if (!selected) return;
-
-  const modalTitle = document.getElementById('mos-modal-title');
-  const modalDesc = document.getElementById('mos-modal-desc');
-  const modalAsvab = document.getElementById('mos-modal-asvab');
-  const modalTraining = document.getElementById('mos-modal-training');
-  const modalCategory = document.getElementById('mos-modal-cat');
-  const modalBonus = document.getElementById('mos-modal-bonus');
-  if (modalTitle) modalTitle.innerText = `${selected.mos} - ${selected.title}`;
-  if (modalDesc) modalDesc.innerText = selected.desc;
-  if (modalAsvab) modalAsvab.innerText = selected.asvab;
-  if (modalTraining) modalTraining.innerText = selected.training;
-  if (modalCategory) modalCategory.innerText = selected.cat.toUpperCase();
-  if (modalBonus) modalBonus.classList.toggle('hidden', !selected.bonus);
-
-  window.currentMosModal = selected.mos;
-  document.getElementById('mos-modal')?.classList.remove('hidden');
-  document.body.style.overflow = 'hidden';
-  showToast(`📋 Opened ${selected.title}`, 'info');
-}
-
-function closeMosModal() {
-  document.getElementById('mos-modal')?.classList.add('hidden');
-  document.body.style.overflow = '';
-}
   const favoriteTitle = title || selected?.title || mos;
   const existingIndex = favoriteMOS.findIndex(item => String(item.mos) === String(mos));
   const isAdding = existingIndex === -1;
@@ -886,34 +680,11 @@ function sortCareerData(data, sortKey) {
     return match[2].startsWith('month') ? count * 4 : count;
   };
   if (sortKey === 'title-asc') {
-  updateCardFavorites();
-  initTiltCards();
-  if (window.lucide?.createIcons) window.lucide.createIcons();
-  observeRevealItems();
-}
-
-function sortCareerData(data, sortKey) {
-  const sorted = [...data];
-  const toTrainingWeeks = (value = '') => {
-    const normalized = String(value).toLowerCase();
-    const match = normalized.match(/(\d+)\s*(week|month)/);
-    if (!match) return Number.MAX_SAFE_INTEGER;
-    const count = Number.parseInt(match[1], 10);
-    return match[2].startsWith('month') ? count * 4 : count;
-  };
-  if (sortKey === 'title-asc') {
     sorted.sort((a, b) => a.title.localeCompare(b.title));
   } else if (sortKey === 'title-desc') {
     sorted.sort((a, b) => b.title.localeCompare(a.title));
   } else if (sortKey === 'asvab-asc') {
     sorted.sort((a, b) => parseInt(a.asvab, 10) - parseInt(b.asvab, 10));
-  } else if (sortKey === 'asvab-desc') {
-    sorted.sort((a, b) => parseInt(b.asvab, 10) - parseInt(a.asvab, 10));
-  } else if (sortKey === 'training') {
-    sorted.sort((a, b) => toTrainingWeeks(a.training) - toTrainingWeeks(b.training));
-  }
-  return sorted;
-}
   } else if (sortKey === 'asvab-desc') {
     sorted.sort((a, b) => parseInt(b.asvab, 10) - parseInt(a.asvab, 10));
   } else if (sortKey === 'training') {
@@ -939,10 +710,6 @@ function saveFavorites() {
   localStorage.setItem('favoriteMOS', JSON.stringify(favoriteMOS));
 }
 
-async function loadFavorites() {
-  favoriteMOS = getStoredJSON('favoriteMOS', []).slice(0, MAX_FAVORITES);
-  saveFavorites();
-}
 async function loadFavorites() {
   favoriteMOS = getStoredJSON('favoriteMOS', []).slice(0, MAX_FAVORITES);
   saveFavorites();
@@ -998,591 +765,229 @@ function populateSelectors(careers) {
   });
 
   document.getElementById('view-mode')?.addEventListener('change', () => filterAndRenderCareers());
+}
+
+// ========================================
+// QUIZ SYSTEM
+// ========================================
+
+function startQuiz() {
+  quizIndex = 0;
+  quizAnswers = [];
+  showQuizQuestion();
+}
+
+function showQuizQuestion() {
+  const quizContainer = document.getElementById('quiz-container');
+  if (!quizContainer) return;
+
+  if (quizIndex >= quizQuestions.length) {
+    showQuizResults();
+    return;
+  }
+
+  const question = quizQuestions[quizIndex];
+  quizContainer.innerHTML = `
+    <div class="text-center mb-8">
+      <h3 class="text-2xl font-black uppercase mb-4">${question.question}</h3>
+      <div class="grid gap-4">
+        ${question.options.map((option, i) => `
+          <button class="quiz-option bg-zinc-800 hover:bg-zinc-700 p-4 rounded-xl text-left transition-all" data-value="${option.value}" onclick="selectQuizOption('${option.value}')">
+            <span class="text-[#ffd700] font-bold">${String.fromCharCode(65 + i)}.</span> ${option.label}
+          </button>
+        `).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function selectQuizOption(value) {
+  quizAnswers.push(value);
+  quizIndex++;
+  showQuizQuestion();
+}
+
+function showQuizResults() {
+  const counts = {};
+  quizAnswers.forEach(ans => counts[ans] = (counts[ans] || 0) + 1);
+  const topCategory = Object.keys(counts).reduce((a, b) => counts[a] > counts[b] ? a : b);
+
+  const quizContainer = document.getElementById('quiz-container');
+  if (quizContainer) {
+    quizContainer.innerHTML = `
+      <div class="text-center">
+        <h3 class="text-2xl font-black uppercase mb-4">Your Recommended Path</h3>
+        <p class="text-lg mb-6">Based on your answers, we recommend exploring <strong class="text-[#ffd700]">${topCategory.toUpperCase()}</strong> careers!</p>
+        <button onclick="filterAndRenderCareers(); activeCategory = '${topCategory}'; document.querySelector('[data-category=\"${topCategory}\"]')?.click();" class="bg-[#ffd700] text-black px-8 py-3 rounded-full font-bold uppercase">Explore ${topCategory} MOS</button>
+      </div>
+    `;
+  }
+}
+
+// ========================================
+// ELIGIBILITY CHECKER
+// ========================================
+
+function checkEligibility() {
+  const age = parseInt(document.getElementById('age-input')?.value || 0);
+  const weight = parseInt(document.getElementById('weight-input')?.value || 0);
+  const heightFt = parseInt(document.getElementById('height-ft')?.value || 0);
+  const heightIn = parseInt(document.getElementById('height-in')?.value || 0);
+  const education = document.getElementById('education-select')?.value;
+  const citizenship = document.getElementById('citizenship-select')?.value;
+
+  let eligible = true;
+  let reasons = [];
+
+  if (age < 17 || age > 35) {
+    eligible = false;
+    reasons.push('Age must be between 17-35');
+  }
+
+  if (education !== 'hs' && education !== 'ged') {
+    eligible = false;
+    reasons.push('Must have high school diploma or GED');
+  }
+
+  if (citizenship !== 'us' && citizenship !== 'permanent') {
+    eligible = false;
+    reasons.push('Must be US citizen or permanent resident');
+  }
+
+  const result = document.getElementById('eligibility-result');
+  if (result) {
+    if (eligible) {
+      result.innerHTML = '<div class="text-green-400 font-bold">✅ You may be eligible! Contact a recruiter for full assessment.</div>';
+    } else {
+      result.innerHTML = `<div class="text-red-400 font-bold">❌ Not eligible at this time:</div><ul class="text-sm mt-2">${reasons.map(r => `<li>• ${r}</li>`).join('')}</ul>`;
+    }
+  }
+}
+
+// ========================================
+// BENEFITS CALCULATOR
+// ========================================
+
+function calculateBenefits() {
+  const tuitionCost = parseInt(document.getElementById('calc-tuition')?.value || 0);
+  const yearsInSchool = parseInt(document.getElementById('calc-years')?.value || 1);
+  const monthlyDrillPay = parseInt(document.getElementById('calc-drill')?.value || 0);
+  const bonusValue = parseInt(document.getElementById('calc-bonus')?.value || 0);
+
+  // Calculate total tuition savings
+  const tuitionSavings = tuitionCost * yearsInSchool;
+  
+  // Calculate annual drill pay (12 months)
+  const annualDrillPay = monthlyDrillPay * 12;
+  
+  // Total benefit value
+  const totalValue = tuitionSavings + annualDrillPay + bonusValue;
+
+  // Update output elements
+  const outTuition = document.getElementById('calc-out-tuition');
+  const outDrill = document.getElementById('calc-out-drill');
+  const outBonus = document.getElementById('calc-out-bonus');
+  const outTotal = document.getElementById('calc-out-total');
+  
+  if (outTuition) outTuition.textContent = `$${tuitionSavings.toLocaleString()}`;
+  if (outDrill) outDrill.textContent = `$${annualDrillPay.toLocaleString()}`;
+  if (outBonus) outBonus.textContent = `$${bonusValue.toLocaleString()}`;
+  if (outTotal) outTotal.textContent = `$${totalValue.toLocaleString()}`;
+}
+
+// ========================================
+// UTILITIES
+// ========================================
+
+function safeStorageSet(key, value) {
+  try {
+    localStorage.setItem(key, value);
+  } catch (e) {
+    console.warn('localStorage not available:', e);
+  }
+}
+
+// ========================================
+// INITIALIZATION
+// ========================================
+
+async function init() {
+  currentLanguage = loadLanguagePreference();
+  setLanguage(currentLanguage);
+
+  await Promise.all([
+    loadCareersWithFallback(),
+    loadArmories(),
+    loadFavorites()
+  ]);
+
+  // Initialize UI
+  initThemeToggle();
+  initScrollReveal();
+  initArmoriesMap();
+  populateSelectors(allCareers);
+  filterAndRenderCareers();
+
+  // Event listeners
+  document.getElementById('search-input')?.addEventListener('input', (e) => {
+    currentSearch = e.target.value;
+    filterAndRenderCareers();
+  });
+
   document.getElementById('sort-mode')?.addEventListener('change', (e) => {
     currentSort = e.target.value;
     filterAndRenderCareers();
   });
 
-  document.querySelectorAll('.filter-btn').forEach(button => {
-    button.addEventListener('click', () => {
-      const filter = button.dataset.filter;
-      document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-      button.classList.add('active');
-      activeCategory = filter;
+  document.querySelectorAll('[data-category]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      activeCategory = btn.dataset.category;
+      document.querySelectorAll('[data-category]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
       filterAndRenderCareers();
     });
   });
-}
 
-function renderDrillList() {
-  const list = document.getElementById('drill-list');
-  if (!list) return;
-  list.innerHTML = armories.slice(0, 4).map(armory => `
-    <div class="bg-zinc-800/70 p-4 rounded-3xl border border-white/10">
-      <h4 class="font-bold uppercase text-sm mb-1">${armory.name}</h4>
-      <p class="text-gray-400 text-sm mb-1">${armory.address}</p>
-      <p class="text-gray-300 text-sm"><strong>Drill:</strong> ${armory.drill}</p>
-    </div>
-  `).join('');
+  document.getElementById('start-quiz')?.addEventListener('click', startQuiz);
+  document.getElementById('check-eligibility')?.addEventListener('click', checkEligibility);
+  document.getElementById('calculate-benefits')?.addEventListener('click', calculateBenefits);
 
-  const countEl = document.getElementById('armory-count');
-  if (countEl) countEl.innerText = armories.length;
-}
-
-function toRadians(value) {
-  return (value * Math.PI) / 180;
-}
-
-function haversineMiles([lat1, lon1], [lat2, lon2]) {
-  const earthMiles = 3958.8;
-  const dLat = toRadians(lat2 - lat1);
-  const dLon = toRadians(lon2 - lon1);
-  const a = Math.sin(dLat / 2) ** 2
-    + Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) * Math.sin(dLon / 2) ** 2;
-  return earthMiles * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
-}
-
-function initZipArmoryFinder() {
-  const input = document.getElementById('zip-search');
-  const button = document.getElementById('zip-find-btn');
-  const output = document.getElementById('nearest-armories');
-  const feedback = document.getElementById('zip-feedback');
-  if (!input || !button || !output || !feedback) return;
-
-  const findNearest = () => {
-    const zip = input.value.trim();
-    const origin = NJ_ZIP_COORDS[zip];
-    if (!origin) {
-      feedback.textContent = 'ZIP not in quick lookup yet. Try: 07102, 08608, 08002, 08201.';
-      output.innerHTML = '';
-      return;
-    }
-
-    const nearest = armories
-      .map(armory => ({
-        ...armory,
-        distance: haversineMiles(origin, [armory.lat, armory.lng])
-      }))
-      .sort((a, b) => a.distance - b.distance)
-      .slice(0, 3);
-
-    feedback.textContent = `Top ${nearest.length} nearest armories for ${zip}`;
-    output.innerHTML = nearest.map(armory => `
-      <article class="armory-nearest-card">
-        <h4>${armory.name}</h4>
-        <p>${armory.address}</p>
-        <div class="text-xs text-gray-400 mt-2">${armory.distance.toFixed(1)} miles away</div>
-        <a href="tel:${armory.phone}" class="text-[#ffd700] text-sm font-bold">Call ${armory.phone}</a>
-      </article>
-    `).join('');
-  };
-
-  button.addEventListener('click', findNearest);
-  input.addEventListener('keydown', (event) => {
-    if (event.key === 'Enter') {
-      event.preventDefault();
-      findNearest();
-    }
-  });
-}
-
-function initApplyFormDraft() {
-  const form = document.getElementById('apply-modal-form');
-  if (!form) return;
-
-  const fields = ['modal-firstname', 'modal-lastname', 'modal-email', 'modal-phone', 'modal-message'];
-  const savedDraft = (() => {
-    try {
-      return JSON.parse(safeStorageGet(APPLY_FORM_DRAFT_KEY) || '{}');
-    } catch {
-      return {};
-    }
-  })();
-
-  fields.forEach(id => {
-    const input = document.getElementById(id);
-    if (!input) return;
-    if (savedDraft[id]) input.value = savedDraft[id];
-    input.addEventListener('input', () => {
-      const draft = {};
-      fields.forEach(fieldId => {
-        const field = document.getElementById(fieldId);
-        if (field?.value) draft[fieldId] = field.value;
-      });
-      safeStorageSet(APPLY_FORM_DRAFT_KEY, JSON.stringify(draft));
-    });
-  });
-}
-
-function formatCurrency(value) {
-  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(value);
-}
-
-function initBenefitsCalculator() {
-  const calcBtn = document.getElementById('calculate-benefits');
-  if (!calcBtn) return;
-
-  const calculate = () => {
-    const tuition = Number.parseFloat(document.getElementById('calc-tuition')?.value || 0);
-    const years = Number.parseFloat(document.getElementById('calc-years')?.value || 0);
-    const monthlyDrill = Number.parseFloat(document.getElementById('calc-drill')?.value || 0);
-    const bonus = Number.parseFloat(document.getElementById('calc-bonus')?.value || 0);
-
-    const tuitionValue = Math.max(0, tuition * years);
-    const drillValue = Math.max(0, monthlyDrill * 12);
-    const totalValue = tuitionValue + drillValue + Math.max(0, bonus);
-
-    const outTuition = document.getElementById('calc-out-tuition');
-    const outDrill = document.getElementById('calc-out-drill');
-    const outBonus = document.getElementById('calc-out-bonus');
-    const outTotal = document.getElementById('calc-out-total');
-    if (outTuition) outTuition.textContent = formatCurrency(tuitionValue);
-    if (outDrill) outDrill.textContent = formatCurrency(drillValue);
-    if (outBonus) outBonus.textContent = formatCurrency(bonus);
-    if (outTotal) outTotal.textContent = formatCurrency(totalValue);
-  };
-
-  calcBtn.addEventListener('click', calculate);
-  calculate();
-}
-
-function initEligibilityCheck() {
-  const wrapper = document.getElementById('eligibility-questions');
-  if (!wrapper) return;
-
-  const answers = {};
-  const updateResult = () => {
-    const result = document.getElementById('eligibility-result');
-    if (!result) return;
-    const values = Object.values(answers);
-    if (values.length < 3) {
-      result.classList.add('hidden');
-      return;
-    }
-    const passed = values.every(value => value === 'yes');
-    result.classList.remove('hidden');
-    result.classList.toggle('border-green-400', passed);
-    result.classList.toggle('border-orange-400', !passed);
-    result.innerHTML = passed
-      ? '<h3 class="text-green-300 font-black uppercase mb-2">Likely Eligible</h3><p class="text-gray-200">Great start. You look ready for a recruiter conversation and next-step screening.</p>'
-      : '<h3 class="text-orange-300 font-black uppercase mb-2">Needs Recruiter Review</h3><p class="text-gray-200">You may still have options. Talk to a recruiter for waivers, timing, and pathway guidance.</p>';
-  };
-
-  wrapper.querySelectorAll('.eligibility-question').forEach(question => {
-    const key = question.dataset.key;
-    const buttons = question.querySelectorAll('.eligibility-btn');
-    buttons.forEach(button => {
-      button.addEventListener('click', () => {
-        buttons.forEach(btn => btn.classList.remove('active'));
-        button.classList.add('active');
-        answers[key] = button.dataset.value;
-        updateResult();
-      });
-    });
-  });
-}
-
-function toRadians(value) {
-  return (value * Math.PI) / 180;
-}
-
-function haversineMiles([lat1, lon1], [lat2, lon2]) {
-  const earthMiles = 3958.8;
-  const dLat = toRadians(lat2 - lat1);
-  const dLon = toRadians(lon2 - lon1);
-  const a = Math.sin(dLat / 2) ** 2
-    + Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) * Math.sin(dLon / 2) ** 2;
-  return earthMiles * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
-}
-
-function initZipArmoryFinder() {
-  const input = document.getElementById('zip-search');
-  const button = document.getElementById('zip-find-btn');
-  const output = document.getElementById('nearest-armories');
-  const feedback = document.getElementById('zip-feedback');
-  if (!input || !button || !output || !feedback) return;
-
-  const findNearest = () => {
-    const zip = input.value.trim();
-    const origin = NJ_ZIP_COORDS[zip];
-    if (!origin) {
-      feedback.textContent = 'ZIP not in quick lookup yet. Try: 07102, 08608, 08002, 08201.';
-      output.innerHTML = '';
-      return;
-    }
-
-    const nearest = armories
-      .map(armory => ({
-        ...armory,
-        distance: haversineMiles(origin, [armory.lat, armory.lng])
-      }))
-      .sort((a, b) => a.distance - b.distance)
-      .slice(0, 3);
-
-    feedback.textContent = `Top ${nearest.length} nearest armories for ${zip}`;
-    output.innerHTML = nearest.map(armory => `
-      <article class="armory-nearest-card">
-        <h4>${armory.name}</h4>
-        <p>${armory.address}</p>
-        <div class="text-xs text-gray-400 mt-2">${armory.distance.toFixed(1)} miles away</div>
-        <a href="tel:${armory.phone}" class="text-[#ffd700] text-sm font-bold">Call ${armory.phone}</a>
-      </article>
-    `).join('');
-  };
-
-  button.addEventListener('click', findNearest);
-  input.addEventListener('keydown', (event) => {
-    if (event.key === 'Enter') {
-      event.preventDefault();
-      findNearest();
-    }
-  });
-}
-
-function initApplyFormDraft() {
-  const form = document.getElementById('apply-modal-form');
-  if (!form) return;
-
-  const fields = ['modal-firstname', 'modal-lastname', 'modal-email', 'modal-phone', 'modal-message'];
-  const savedDraft = (() => {
-    try {
-      return JSON.parse(localStorage.getItem(APPLY_FORM_DRAFT_KEY) || '{}');
-    } catch {
-      return {};
-    }
-  })();
-
-  fields.forEach(id => {
-    const input = document.getElementById(id);
-    if (!input) return;
-    if (savedDraft[id]) input.value = savedDraft[id];
-    input.addEventListener('input', () => {
-      const draft = {};
-      fields.forEach(fieldId => {
-        const field = document.getElementById(fieldId);
-        if (field?.value) draft[fieldId] = field.value;
-      });
-      localStorage.setItem(APPLY_FORM_DRAFT_KEY, JSON.stringify(draft));
-    });
-  });
-}
-
-function formatCurrency(value) {
-  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(value);
-}
-
-function initBenefitsCalculator() {
-  const calcBtn = document.getElementById('calculate-benefits');
-  if (!calcBtn) return;
-
-  const calculate = () => {
-    const tuition = Number.parseFloat(document.getElementById('calc-tuition')?.value || 0);
-    const years = Number.parseFloat(document.getElementById('calc-years')?.value || 0);
-    const monthlyDrill = Number.parseFloat(document.getElementById('calc-drill')?.value || 0);
-    const bonus = Number.parseFloat(document.getElementById('calc-bonus')?.value || 0);
-
-    const tuitionValue = Math.max(0, tuition * years);
-    const drillValue = Math.max(0, monthlyDrill * 12);
-    const totalValue = tuitionValue + drillValue + Math.max(0, bonus);
-
-    const outTuition = document.getElementById('calc-out-tuition');
-    const outDrill = document.getElementById('calc-out-drill');
-    const outBonus = document.getElementById('calc-out-bonus');
-    const outTotal = document.getElementById('calc-out-total');
-    if (outTuition) outTuition.textContent = formatCurrency(tuitionValue);
-    if (outDrill) outDrill.textContent = formatCurrency(drillValue);
-    if (outBonus) outBonus.textContent = formatCurrency(bonus);
-    if (outTotal) outTotal.textContent = formatCurrency(totalValue);
-  };
-
-  calcBtn.addEventListener('click', calculate);
-  calculate();
-}
-
-function initEligibilityCheck() {
-  const wrapper = document.getElementById('eligibility-questions');
-  if (!wrapper) return;
-
-  const answers = {};
-  const updateResult = () => {
-    const result = document.getElementById('eligibility-result');
-    if (!result) return;
-    const values = Object.values(answers);
-    if (values.length < 3) {
-      result.classList.add('hidden');
-      return;
-    }
-    const passed = values.every(value => value === 'yes');
-    result.classList.remove('hidden');
-    result.classList.toggle('border-green-400', passed);
-    result.classList.toggle('border-orange-400', !passed);
-    result.innerHTML = passed
-      ? '<h3 class="text-green-300 font-black uppercase mb-2">Likely Eligible</h3><p class="text-gray-200">Great start. You look ready for a recruiter conversation and next-step screening.</p>'
-      : '<h3 class="text-orange-300 font-black uppercase mb-2">Needs Recruiter Review</h3><p class="text-gray-200">You may still have options. Talk to a recruiter for waivers, timing, and pathway guidance.</p>';
-  };
-
-  wrapper.querySelectorAll('.eligibility-question').forEach(question => {
-    const key = question.dataset.key;
-    const buttons = question.querySelectorAll('.eligibility-btn');
-    buttons.forEach(button => {
-      button.addEventListener('click', () => {
-        buttons.forEach(btn => btn.classList.remove('active'));
-        button.classList.add('active');
-        answers[key] = button.dataset.value;
-        updateResult();
-      });
-    });
-  });
-}
-
-function formatCurrency(value) {
-  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(value);
-}
-
-function initBenefitsCalculator() {
-  const calcBtn = document.getElementById('calculate-benefits');
-  if (!calcBtn) return;
-
-  const calculate = () => {
-    const tuition = Number.parseFloat(document.getElementById('calc-tuition')?.value || 0);
-    const years = Number.parseFloat(document.getElementById('calc-years')?.value || 0);
-    const monthlyDrill = Number.parseFloat(document.getElementById('calc-drill')?.value || 0);
-    const bonus = Number.parseFloat(document.getElementById('calc-bonus')?.value || 0);
-
-    const tuitionValue = Math.max(0, tuition * years);
-    const drillValue = Math.max(0, monthlyDrill * 12);
-    const totalValue = tuitionValue + drillValue + Math.max(0, bonus);
-
-    const outTuition = document.getElementById('calc-out-tuition');
-    const outDrill = document.getElementById('calc-out-drill');
-    const outBonus = document.getElementById('calc-out-bonus');
-    const outTotal = document.getElementById('calc-out-total');
-    if (outTuition) outTuition.textContent = formatCurrency(tuitionValue);
-    if (outDrill) outDrill.textContent = formatCurrency(drillValue);
-    if (outBonus) outBonus.textContent = formatCurrency(bonus);
-    if (outTotal) outTotal.textContent = formatCurrency(totalValue);
-  };
-
-  calcBtn.addEventListener('click', calculate);
-  calculate();
-}
-
-function initEligibilityCheck() {
-  const wrapper = document.getElementById('eligibility-questions');
-  if (!wrapper) return;
-
-  const answers = {};
-  const updateResult = () => {
-    const result = document.getElementById('eligibility-result');
-    if (!result) return;
-    const values = Object.values(answers);
-    if (values.length < 3) {
-      result.classList.add('hidden');
-      return;
-    }
-    const passed = values.every(value => value === 'yes');
-    result.classList.remove('hidden');
-    result.classList.toggle('border-green-400', passed);
-    result.classList.toggle('border-orange-400', !passed);
-    result.innerHTML = passed
-      ? '<h3 class="text-green-300 font-black uppercase mb-2">Likely Eligible</h3><p class="text-gray-200">Great start. You look ready for a recruiter conversation and next-step screening.</p>'
-      : '<h3 class="text-orange-300 font-black uppercase mb-2">Needs Recruiter Review</h3><p class="text-gray-200">You may still have options. Talk to a recruiter for waivers, timing, and pathway guidance.</p>';
-  };
-
-  wrapper.querySelectorAll('.eligibility-question').forEach(question => {
-    const key = question.dataset.key;
-    const buttons = question.querySelectorAll('.eligibility-btn');
-    buttons.forEach(button => {
-      button.addEventListener('click', () => {
-        buttons.forEach(btn => btn.classList.remove('active'));
-        button.classList.add('active');
-        answers[key] = button.dataset.value;
-        updateResult();
-      });
-    });
-  });
-}
-
-function startQuiz() {
-  quizIndex = 0;
-  quizAnswers = [];
-  document.getElementById('quiz-start')?.classList.add('hidden');
-  document.getElementById('quiz-result')?.classList.add('hidden');
-  document.getElementById('quiz-question')?.classList.remove('hidden');
-  showQuizQuestion();
-}
-
-function showQuizQuestion() {
-  const questionEl = document.getElementById('q-text');
-  const optionsEl = document.getElementById('q-options');
-  const progressEl = document.getElementById('q-progress');
-  const current = quizQuestions[quizIndex];
-  if (!current || !optionsEl || !questionEl || !progressEl) return;
-
-  questionEl.innerText = current.question;
-  progressEl.innerText = `Question ${quizIndex + 1} of ${quizQuestions.length}`;
-  optionsEl.innerHTML = current.options.map(option => `
-    <button class="w-full rounded-3xl border border-white/10 bg-zinc-900/80 px-6 py-4 text-left font-bold hover:border-[#ffd700] transition-all" onclick="chooseQuizAnswer('${option.value}')">
-      ${option.label}
-    </button>
-  `).join('');
-}
-
-function chooseQuizAnswer(value) {
-  quizAnswers.push(value);
-  quizIndex += 1;
-  if (quizIndex >= quizQuestions.length) {
-    const recommendation = quizAnswers.reduce((acc, answer) => ({ ...acc, [answer]: (acc[answer] || 0) + 1 }), {});
-    const top = Object.entries(recommendation).sort((a, b) => b[1] - a[1])[0]?.[0] || 'combat';
-    const match = allCareers.find(m => m.cat === top) || allCareers[0] || { cat: 'combat', desc: 'Explore infantry and combat roles.' };
-
-    document.getElementById('result-cat').innerText = `${match.cat.toUpperCase()} HERO`;
-    document.getElementById('result-desc').innerText = match.desc;
-    document.getElementById('quiz-result')?.classList.remove('hidden');
-    document.getElementById('quiz-question')?.classList.add('hidden');
-    showToast('✅ Quiz complete. Here is your top MOS recommendation.', 'success');
-    return;
-  }
-  showQuizQuestion();
-}
-
-function resetQuiz() {
-  document.getElementById('quiz-result')?.classList.add('hidden');
-  document.getElementById('quiz-question')?.classList.add('hidden');
-  document.getElementById('quiz-start')?.classList.remove('hidden');
-}
-
-async function initPortal() {
-  await loadCareersWithFallback();
-  await loadArmories();
-  await loadFavorites();
-
-  currentLanguage = loadLanguagePreference();
-  setLanguage(currentLanguage);
-  populateSelectors(allCareers);
-  filterAndRenderCareers();
-  updateFavoritesUI();
-  updateCardFavorites();
-  renderDrillList();
-  initThemeToggle();
-  initArmoriesMap();
-  initZipArmoryFinder();
-  initApplyFormDraft();
-  initBenefitsCalculator();
-  initEligibilityCheck();
-  initScrollReveal();
-  updateScrollProgress();
-  initThemeToggle();
-  initArmoriesMap();
-  initBenefitsCalculator();
-  initEligibilityCheck();
-  initScrollReveal();
-  updateScrollProgress();
-
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-      closeMosModal();
-      document.getElementById('apply-modal')?.classList.add('hidden');
-      document.body.style.overflow = '';
-    }
-  });
-
-  document.getElementById('mos-search')?.addEventListener('input', throttle((e) => {
-    currentSearch = e.target.value;
-    filterAndRenderCareers();
-  }, 200));
-
-  document.getElementById('apply-modal-form')?.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const feedback = document.getElementById('modal-feedback');
-    const submitBtn = e.target.querySelector('button[type="submit"]');
-    const originalText = submitBtn.innerText;
-    
-    // Get form data
-    const firstName = document.getElementById('modal-firstname').value.trim();
-    const lastName = document.getElementById('modal-lastname').value.trim();
-    const email = document.getElementById('modal-email').value.trim();
-    const phone = document.getElementById('modal-phone').value.trim();
-    const message = document.getElementById('modal-message').value.trim();
-    
-    // Disable button and show loading
-    submitBtn.disabled = true;
-    submitBtn.innerText = 'Sending...';
-    
-    try {
-      // Send to Convex
-      // Simulate sending inquiry (Convex removed)
-      console.log('Inquiry submitted:', { firstName, lastName, email, phone, message });
-      
-      // Show success
-      if (feedback) {
-        feedback.classList.remove('hidden');
-        feedback.innerText = languageStrings[currentLanguage].modal.sentMessage;
-        feedback.classList.remove('text-red-400');
-        feedback.classList.add('text-green-400');
-      }
-      
-      // Clear form
-      e.target.reset();
-      localStorage.removeItem(APPLY_FORM_DRAFT_KEY);
-      
-      // Close modal after delay
-      setTimeout(() => {
-        document.getElementById('apply-modal')?.classList.add('hidden');
-        if (feedback) feedback.classList.add('hidden');
-      }, 1900);
-      
-    } catch (error) {
-      console.error('Failed to submit inquiry:', error);
-      if (feedback) {
-        feedback.classList.remove('hidden');
-        feedback.innerText = '❌ Failed to send message. Please try again.';
-        feedback.classList.remove('text-green-400');
-        feedback.classList.add('text-red-400');
-      }
-    } finally {
-      // Re-enable button
-      submitBtn.disabled = false;
-      submitBtn.innerText = originalText;
-    }
-  });
-
-  const particleCanvas = document.createElement('canvas');
-  particleCanvas.id = 'particles-canvas';
-  particleCanvas.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: -1;';
-  document.body.prepend(particleCanvas);
-  particleCanvas.__particleSystem = new ParticleSystem(particleCanvas);
-
-  document.body.addEventListener('mousemove', (e) => {
-    const canvas = document.getElementById('particles-canvas');
-    if (canvas && canvas.__particleSystem) {
-      canvas.__particleSystem.mouse = { x: e.clientX, y: e.clientY };
-    }
-  });
-
-  window.addEventListener('scroll', () => {
-    updateScrollProgress();
-  });
-
-  if (window.lucide?.createIcons) window.lucide.createIcons();
-  console.log('🚀 NJANG Portal Enhanced - Map/Particles/Tilt Ready!');
-}
-  if (window.lucide?.createIcons) window.lucide.createIcons();
-  console.log('🚀 NJANG Portal Enhanced - Map/Particles/Tilt Ready!');
-}
-
-// Throttle helper
-function throttle(func, delay) {
-  let timeout;
-  return (...args) => {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => func.apply(this, args), delay);
-  };
-}
-
-window.addEventListener('load', initPortal);
-window.addEventListener('resize', () => {
+  // Particle system
   const canvas = document.getElementById('particles-canvas');
-  if (canvas) canvas.__particleSystem?.resize();
-})
-;
+  if (canvas) {
+    const particles = new ParticleSystem(canvas);
+    document.addEventListener('mousemove', (e) => {
+      particles.mouse.x = e.clientX;
+      particles.mouse.y = e.clientY;
+    });
+    window.addEventListener('resize', () => particles.resize());
+  }
+
+  // Scroll progress
+  window.addEventListener('scroll', updateScrollProgress);
+
+  // Modal handlers
+  document.getElementById('close-mos-modal')?.addEventListener('click', closeMosModal);
+  document.getElementById('mos-modal')?.addEventListener('click', (e) => {
+    if (e.target.id === 'mos-modal') closeMosModal();
+  });
+
+  // Apply modal
+  document.getElementById('apply-modal-form')?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const data = Object.fromEntries(formData);
+    console.log('Apply form submitted:', data);
+    showToast(languageStrings[currentLanguage].modal.sentMessage, 'success');
+    document.getElementById('apply-modal')?.classList.add('hidden');
+  });
+
+  console.log('🚀 NJ National Guard Portal initialized');
+}
+
+// Start when DOM ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}

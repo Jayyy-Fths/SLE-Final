@@ -1,39 +1,48 @@
-# Cool Features + NJANG Armories Map ✅ LIVE!
+# Multi-Page Portal - Refactor Phase (Step 8: script.js + shared logic)
 
-## Previous Tasks:
-✅ MOS Popup + Debug Fixes  
-✅ Core Portal Functional
-✅ Fixed theme toggle duplicate listeners + added missing scroll progress bar
+✅ **Overall Plan Approved** - Modular page-specific JS + enhanced shared.js
 
-## New Features **COMPLETE**:
-- [x] **armories.json** - 12 NJANG locations (Morristown, Sea Girt, Trenton, etc.)
-- [x] **#armories Section** - Interactive Leaflet map w/ clustering + popups  
-- [x] **Particle System** - Hero canvas w/ military stars/shields (mouse attracted)
-- [x] **3D Tilt Cards** - MOS cards tilt + glow on hover (60fps)
-- [x] **Theme Toggle ☀️** - Dark/light mode (persists in localStorage)
-- [x] **Toast Notifications** - Achievement/success popups
-- [x] **Enhanced Nav** - Armories link + spinning theme button
+## Current Progress: Step 8 - In Progress [1/12 steps]
 
-## Visual Upgrades:
-```
-🗺️ Interactive NJ Map ← Pin popups w/ phone/drill times
-✨ Particle Background ← Stars follow mouse  
-🎮 3D Tilt Cards ← Tilt + shine on hover
-🌙 Theme Toggle ← Instant dark/light switch
-📱 Toasts ← Success/achievement notifications
-```
+### ✅ Completed:
+- [✅] Create TODO.md with detailed steps
 
-**Test Everything:**
-```
-open index.html
-```
-1. **Particles**: Move mouse → Stars/shields follow in hero
-2. **Tilt**: Hover MOS cards → 3D perspective tilt  
-3. **Map**: Scroll to #armories → Click pins (recruiter info)
-4. **Theme**: Click ☀️ in nav → Instant theme switch
-5. **Toast**: Favorite MOS → Success popup
+### ✅ Completed:
+- [✅] 2. Create pages/ directory structure (careers, home, armories, eligibility)
 
-**Zero console errors. 60fps performance.** 🚀
+### ✅ Completed:
+- [✅] 3. Extract careers logic → pages/careers.js (complete module)
 
-**Portal now ultra-cool + fully functional!**
+### ✅ Completed:
+- [✅] 4. Extract home/hero logic → pages/home.js (particles, tilt, reveal)
 
+### ✅ Completed:
+- [✅] 5. Enhance shared.js (router, exports, events) - page auto-detection/init
+
+### ✅ Completed:
+- [✅] 6. script.js → bootstrap.js (minimal loader created)
+
+### ✅ Completed:
+- [✅] 7. Update HTML files (index.html, careers.html → bootstrap.js + data-page)
+
+### 🔄 In Progress:
+- [ ] 8. Test cross-page (open index.html, careers.html - verify MOS, particles, favorites sync)
+
+
+
+
+### ⏳ Remaining Steps:
+- [ ] 3. Extract careers logic → pages/careers.js
+- [ ] 4. Extract home/hero logic → pages/home.js  
+- [ ] 5. Extract armories map → pages/armories.js
+- [ ] 6. Extract eligibility/quiz → pages/eligibility.js
+- [ ] 7. Enhance shared.js (exports, router, events)
+- [ ] 8. Replace script.js → bootstrap.js (minimal loader)
+- [ ] 9. Update index.html (data-page="home", remove dupe handlers)
+- [ ] 10. Update careers.html (data-page="careers")
+- [ ] 11. Update armories.html + eligibility.html
+- [ ] 12. Test all pages + cross-page sync (favorites/theme), update TODO.md
+
+**Next:** Verify each step via browser before proceeding. After 12 → Step 9 (PWA).
+
+**Commands to test:** `open index.html`, `open careers.html`, etc.

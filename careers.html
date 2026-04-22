@@ -1,74 +1,128 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Careers | NJ National Guard</title>
+    <meta name="description" content="Explore 150+ Army MOS careers in the NJ National Guard. Filter by category, search, compare ASVAB/training/bonuses.">
+    <title>Careers & MOS Explorer | NJ National Guard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-zinc-950 text-white">
+<body class="bg-black text-white min-h-screen">
+    <div id="scroll-progress" class="fixed top-0 left-0 h-1 bg-[#ffd700] z-50 w-0 transition-all duration-300"></div>
+    
+    <!-- Dynamic Nav -->
+    <div id="navbar-container"></div>
+    
+    <main class="pt-24 pb-12">
+        <header class="text-center py-20 px-6 bg-gradient-to-b from-black to-zinc-900/50">
+            <h1 class="text-5xl md:text-7xl font-black uppercase tracking-tighter mb-6 bg-gradient-to-r from-white via-gray-200 to-white bg-clip-text text-transparent">
+                MOS Explorer
+            </h1>
+            <p class="text-xl text-gray-300 max-w-3xl mx-auto mb-8 leading-relaxed">
+                Choose from 150+ Army Military Occupational Specialties. Filter by category, search job titles, compare ASVAB scores, training length, and bonus eligibility.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+                <a href="index.html" class="bg-[#ffd700] text-black px-8 py-4 font-black uppercase rounded-xl hover:bg-white shadow-xl hover:shadow-2xl transition-all text-center">← Back to Home</a>
+            </div>
+        </header>
 
-    <nav class="fixed w-full z-50 bg-black/90 backdrop-blur-md border-b border-white/10">
-        <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
-            <a href="index.html" class="text-xl font-black italic tracking-tighter uppercase">NJ National Guard</a>
-            <a href="index.html" class="text-sm font-bold text-[#ffd700]">← BACK TO HOME</a>
+        <section class="max-w-7xl mx-auto px-6 pb-12">
+            <!-- Filters & Controls -->
+            <div class="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6 mb-12">
+                <div>
+                    <h2 class="text-4xl lg:text-5xl font-black uppercase mb-2" data-i18n="career.heading">MOS Explorer</h2>
+                    <p class="text-gray-400 text-lg" data-i18n="career.description">Click cards for full details. Use filters above.</p>
+                </div>
+                <div class="flex flex-wrap gap-2 order-first lg:order-last">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="combat">Combat</button>
+                    <button class="filter-btn" data-filter="intel">Intel</button>
+                    <button class="filter-btn" data-filter="medical">Medical</button>
+                    <button class="filter-btn" data-filter="engineer">Engineer</button>
+                    <button class="filter-btn" data-filter="aviation">Aviation</button>
+                    <button class="filter-btn" data-filter="logistics">Logistics</button>
+                </div>
+            </div>
+
+            <div class="mb-12 grid md:grid-cols-4 gap-6 items-end">
+                <div class="md:col-span-2">
+                    <label class="text-gray-300 text-xs uppercase tracking-wider block mb-2">Quick Search</label>
+                    <input type="text" id="mos-search" placeholder="🔍 Search MOS Code or Job Title..." class="input-field w-full p-5 text-lg">
+                </div>
+                <div>
+                    <label class="text-gray-300 text-xs uppercase tracking-wider block mb-2">View</label>
+                    <select id="view-mode" class="input-field w-full">
+                        <option value="cards">Grid View</option>
+                        <option value="list">List View</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="text-gray-300 text-xs uppercase tracking-wider block mb-2">Sort</label>
+                    <select id="sort-mode" class="input-field w-full">
+                        <option value="title-asc">A–Z</option>
+                        <option value="title-desc">Z–A</option>
+                        <option value="asvab-asc">ASVAB Low-High</option>
+                        <option value="asvab-desc">ASVAB High-Low</option>
+                        <option value="training">Training Length</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Favorites -->
+            <div id="favorites-section" class="mb-12 p-6 bg-zinc-900/50 border border-white/10 rounded-2xl">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="font-black uppercase text-lg" data-i18n="career.favorites">Your Top 5 Favorites</h3>
+                    <span id="career-count" class="text-gray-400 text-sm uppercase tracking-wider">0 / 150+</span>
+                </div>
+                <div id="favorite-list" class="grid gap-3 min-h-[100px]"></div>
+            </div>
+
+            <!-- MOS Grid -->
+            <div id="career-grid" class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"></div>
+        </section>
+    </main>
+    
+    <!-- Dynamic Footer -->
+    <div id="footer-container"></div>
+
+    <!-- MOS Modal (shared across pages) -->
+    <div id="mos-modal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4" role="dialog">
+        <div class="bg-zinc-900/95 rounded-3xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto border border-white/20 shadow-2xl">
+            <div class="flex justify-between items-start mb-6">
+                <div>
+                    <h2 id="mos-modal-title" class="text-3xl font-black uppercase tracking-tighter mb-1"></h2>
+                    <div id="mos-modal-cat" class="text-[#ffd700] font-mono text-sm uppercase font-bold tracking-wider"></div>
+                </div>
+                <button id="close-mos-modal" class="text-3xl hover:text-[#ffd700] transition-colors">&times;</button>
+            </div>
+            <div class="grid md:grid-cols-2 gap-8 mb-8">
+                <div>
+                    <h4 class="font-black uppercase text-sm mb-3 text-gray-400 tracking-wider">Description</h4>
+                    <p id="mos-modal-desc" class="text-gray-200 leading-relaxed text-lg"></p>
+                </div>
+                <div class="space-y-4">
+                    <div class="bg-zinc-800/50 p-5 rounded-xl border border-[#ffd700]/30">
+                        <h5 class="font-bold uppercase text-xs mb-2 text-[#ffd700]">ASVAB</h5>
+                        <p id="mos-modal-asvab" class="text-2xl font-mono font-bold"></p>
+                    </div>
+                    <div class="bg-zinc-800/50 p-5 rounded-xl border border-white/20">
+                        <h5 class="font-bold uppercase text-xs mb-2">Training</h5>
+                        <p id="mos-modal-training" class="text-xl font-bold"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="flex flex-wrap gap-3 pt-4 border-t border-white/10">
+                <button id="mos-fav-btn" class="bg-[#ffd700] text-black px-6 py-3 font-black uppercase rounded-xl hover:bg-white transition-all flex items-center gap-2">
+                    <i data-lucide="star" class="w-4 h-4"></i> Add to Favorites
+                </button>
+                <a href="contact.html" class="bg-white text-black px-6 py-3 font-black uppercase rounded-xl hover:bg-gray-100 transition-all">Contact Recruiter</a>
+            </div>
         </div>
-    </nav>
+    </div>
 
-    <header class="pt-40 pb-20 px-6 text-center">
-        <h1 class="text-5xl md:text-7xl font-black mb-6">EXPLORE CAREERS</h1>
-        <p class="text-gray-400 max-w-2xl mx-auto text-lg">From cyber security to combat medic, find a role that fits your civilian goals.</p>
-    </header>
-
-    <section class="max-w-7xl mx-auto px-6 pb-24">
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div class="bg-zinc-900 border border-white/10 rounded-2xl overflow-hidden hover:border-[#ffd700] transition-all group">
-                <img src="https://images.unsplash.com/photo-1763656444686-340ef6ea2c4c" class="h-48 w-full object-cover grayscale group-hover:grayscale-0 transition-all">
-                <div class="p-8">
-                    <h3 class="text-2xl font-bold text-[#ffd700] mb-4">COMBAT & ARMS</h3>
-                    <ul class="space-y-2 text-gray-400">
-                        <li>• Infantryman (11B)</li>
-                        <li>• M1 Armor Crewman</li>
-                        <li>• Field Artillery Firefinder</li>
-                        <li>• Combat Engineer</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="bg-zinc-900 border border-white/10 rounded-2xl overflow-hidden hover:border-[#ffd700] transition-all group">
-                <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b" class="h-48 w-full object-cover grayscale group-hover:grayscale-0 transition-all">
-                <div class="p-8">
-                    <h3 class="text-2xl font-bold text-[#ffd700] mb-4">INTEL & CYBER</h3>
-                    <ul class="space-y-2 text-gray-400">
-                        <li>• Cyber Operations Specialist</li>
-                        <li>• Intelligence Analyst</li>
-                        <li>• Signal Support Systems</li>
-                        <li>• Cryptologic Linguist</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="bg-zinc-900 border border-white/10 rounded-2xl overflow-hidden hover:border-[#ffd700] transition-all group">
-                <img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef" class="h-48 w-full object-cover grayscale group-hover:grayscale-0 transition-all">
-                <div class="p-8">
-                    <h3 class="text-2xl font-bold text-[#ffd700] mb-4">MEDICAL</h3>
-                    <ul class="space-y-2 text-gray-400">
-                        <li>• Combat Medic Specialist</li>
-                        <li>• Dental Specialist</li>
-                        <li>• Nutrition Care</li>
-                        <li>• Veterinary Food Safety</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <footer class="py-12 border-t border-white/10 text-center text-gray-500 text-sm">
-        &copy; 2024 New Jersey Army National Guard.
-    </footer>
-
-    <script>lucide.createIcons();</script>
-</body>
+    <script src="bootstrap.js"></script>
+    <!-- careersModule auto-loaded by router -->
+</body data-page="careers">
 </html>

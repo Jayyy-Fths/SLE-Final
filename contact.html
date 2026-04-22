@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Contact NJ National Guard recruiters. Multi-step form for career questions, eligibility, MOS info.">
+    <title>Contact Recruiter | NJ National Guard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-black text-white min-h-screen">
+    <div id="scroll-progress" class="fixed top-0 left-0 h-1 bg-[#ffd700] z-50 w-0 transition-all duration-300"></div>
+    
+    <!-- Dynamic Nav -->
+    <div id="navbar-container"></div>
+    
+    <main class="pt-24 pb-12">
+        <header class="text-center py-20 px-6">
+            <h1 class="text-5xl md:text-7xl font-black uppercase mb-6 bg-gradient-to-r from-[#ffd700] to-orange-500 bg-clip-text text-transparent">
+                Talk to a Recruiter
+            </h1>
+            <p class="text-xl text-gray-400 max-w-2xl mx-auto mb-12 leading-relaxed">
+                Our team responds within 24 hours. Tell us about your goals and we'll connect you with the right recruiter.
+            </p>
+            <a href="index.html" class="inline-block bg-white text-black px-8 py-4 font-black uppercase rounded-2xl hover:bg-gray-100 shadow-xl transition-all">← Back to Home</a>
+        </header>
+
+        <section class="max-w-2xl mx-auto px-6">
+            <div class="bg-zinc-900/50 backdrop-blur-xl border border-white/10 rounded-3xl p-10 mb-8">
+                <div id="contact-form-step-1" class="contact-step">
+                    <h2 class="text-2xl font-black uppercase mb-6">Step 1: Your Info</h2>
+                    <form id="contact-personal-form">
+                        <input type="text" id="contact-firstname" placeholder="First Name *" class="input-field mb-4" required>
+                        <input type="text" id="contact-lastname" placeholder="Last Name *" class="input-field mb-4" required>
+                        <input type="email" id="contact-email" placeholder="Email *" class="input-field mb-4" required>
+                        <input type="tel" id="contact-phone" placeholder="Phone *" class="input-field mb-4" required>
+                        <input type="text" id="contact-zip" placeholder="ZIP Code" class="input-field mb-6" maxlength="5">
+                        <div class="flex gap-4">
+                            <button type="button" onclick="prevStep()" class="flex-1 bg-gray-800 text-gray-300 py-4 rounded-xl hover:bg-gray-700 transition-all hidden">← Previous</button>
+                            <button type="submit" class="flex-1 bg-[#ffd700] text-black font-black py-4 uppercase rounded-xl hover:bg-white shadow-lg transition-all">Next: Interests →</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div id="contact-form-step-2" class="contact-step hidden">
+                    <h2 class="text-2xl font-black uppercase mb-6">Step 2: Interests</h2>
+                    <form id="contact-interests-form">
+                        <label class="block mb-4">
+                            <span class="text-sm font-bold uppercase mb-2 block text-gray-300">What interests you?</span>
+                            <select id="contact-interest" class="input-field" required>
+                                <option value="">Select...</option>
+                                <option value="careers">Specific MOS/Career</option>
+                                <option value="eligibility">Eligibility Questions</option>
+                                <option value="benefits">Benefits/Tuition/Bonus</option>
+                                <option value="training">Split Training Option</option>
+                                <option value="general">General Info</option>
+                            </select>
+                        </label>
+                        <textarea id="contact-message" placeholder="Tell us more (MOS codes, questions, goals)..." rows="5" class="input-field mb-6" required></textarea>
+                        <div class="flex gap-4">
+                            <button type="button" onclick="prevStep()" class="flex-1 bg-gray-800 text-gray-300 py-4 rounded-xl hover:bg-gray-700 transition-all">← Previous</button>
+                            <button type="submit" class="flex-1 bg-[#ffd700] text-black font-black py-4 uppercase rounded-xl hover:bg-white shadow-lg transition-all">Send Message</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div id="contact-success" class="hidden text-center p-12 rounded-3xl bg-green-500/20 border-2 border-green-400/50">
+                <i data-lucide="check-circle" class="w-24 h-24 text-green-400 mx-auto mb-6"></i>
+                <h2 class="text-3xl font-black uppercase mb-4 text-green-300">Message Sent!</h2>
+                <p class="text-xl text-green-200 mb-8 max-w-md mx-auto">Your recruiter will contact you within 24 hours. Check your email/spam folder.</p>
+                <a href="index.html" class="inline-block bg-green-500 text-white px-8 py-4 font-black uppercase rounded-2xl hover:bg-green-600 shadow-xl transition-all">← Continue Exploring</a>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Dynamic Footer -->
+    <div id="footer-container"></div>
+
+    <script src="shared.js"></script>
+    <script>
+        let currentStep = 1;
+        
+        function showStep(step) {
+            document.querySelectorAll('.contact-step').forEach(s => s.classList.add('hidden'));
+            document.getElementById(`contact-form-step-${step}`).classList.remove('hidden');
+            currentStep = step;
+        }
+        
+        function prevStep() {
+            if (currentStep > 1) showStep(currentStep - 1);
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            // Step 1 submit
+            document.getElementById('contact-personal-form')?.addEventListener('submit', (e) => {
+                e.preventDefault();
+                showStep(2);
+            });
+            
+            // Step 2 submit
+            document.getElementById('contact-interests-form')?.addEventListener('submit', (e) => {
+                e.preventDefault();
+                // Simulate submission
+                window.shared.showToast('✅ Message sent to recruiting team!', 'success');
+                document.getElementById('contact-success').classList.remove('hidden');
+                document.querySelector('.contact-step').classList.add('hidden');
+            });
+        });
+    </script>
+</body>
+</html>
+

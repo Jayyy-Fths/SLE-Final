@@ -119,62 +119,27 @@
                 </div>
             </div>
             <div class="text-center" data-reveal>
-                <img src="images/nuckles.jpg loading="lazy" class="w-full rounded-3xl shadow-xl" alt="Guard training"
+                <img src="images/knuckles.jpg" loading="lazy" class="w-full rounded-3xl shadow-xl" alt="Guard training"
                      onerror="this.style.display='none';">
             </div>
         </div>
     </section>
 
     <!-- NEW: NJANG ARMORIES MAP SECTION -->
-    <section id="armories" class="py-24 bg-gradient-to-br from-zinc-900 via-black to-zinc-950" data-reveal>
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="text-center mb-16">
-                <span class="text-[#ffd700] text-lg font-bold uppercase tracking-[0.3em]">Find Your Unit</span>
-                <h2 class="text-5xl md:text-6xl font-black uppercase mt-6 mb-6 bg-gradient-to-r from-white via-gray-200 to-white bg-clip-text text-transparent">NJANG Armories Near You</h2>
-                <p class="text-xl text-gray-400 max-w-2xl mx-auto mb-12 leading-relaxed">Interactive map with 12+ New Jersey Army National Guard armories. Click pins for recruiter contact, drill times, and directions.</p>
-                <div class="max-w-xl mx-auto bg-zinc-900/70 border border-white/10 rounded-2xl p-4">
-                    <label for="zip-search" class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Find nearest armories by ZIP</label>
-                    <div class="flex gap-2">
-                        <input id="zip-search" type="text" maxlength="5" inputmode="numeric" placeholder="e.g. 07102" class="input-field flex-1 !py-3">
-                        <button id="zip-find-btn" class="bg-[#ffd700] text-black font-black px-5 rounded-xl uppercase text-xs">Find</button>
-                    </div>
-                    <div id="zip-feedback" class="text-xs text-gray-400 mt-2"></div>
-                </div>
+<section class="py-24 bg-gradient-to-br from-zinc-900/50 to-black/50 text-center">
+    <h2 class="text-4xl md:text-6xl font-black uppercase mb-8">12+ NJ Armories</h2>
+    <p class="text-xl text-gray-400 mb-12 max-w-2xl mx-auto">Find recruiter, drill times, directions.</p>
+    <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+        <a href="armories.html" class="group">
+            <div class="bg-zinc-900/50 border border-white/10 p-10 rounded-3xl hover:border-[#ffd700] hover:shadow-2xl transition-all">
+                <i data-lucide="map-pin" class="w-20 h-20 text-[#ffd700] mx-auto mb-6 group-hover:scale-110 transition-transform"></i>
+                <h3 class="text-2xl font-black uppercase mb-4">Interactive Map</h3>
+                <p class="text-gray-400">ZIP search + recruiter contacts</p>
             </div>
-            
-            <div id="armories-map" class="w-full h-[70vh] rounded-3xl border-2 border-white/10 shadow-2xl relative overflow-hidden">
-                <div class="absolute top-6 left-6 bg-black/80 backdrop-blur-xl p-4 rounded-2xl border border-white/20 text-sm z-10">
-                    <div class="flex items-center gap-2 mb-2">
-                        <div class="w-3 h-3 bg-[#ffd700] rounded-full"></div>
-                        <span class="font-bold uppercase tracking-wide">NJANG Locations</span>
-                    </div>
-                    <div class="space-y-1 text-gray-300">
-                        <div><i data-lucide="map-pin" class="w-4 h-4 inline mr-1"></i> <strong id="armory-count">0</strong> Armories</div>
-                        <div><i data-lucide="phone" class="w-4 h-4 inline mr-1"></i> Click pins for recruiter info</div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="mt-16 grid md:grid-cols-2 gap-8">
-                <div class="bg-zinc-900/50 backdrop-blur-xl p-8 rounded-3xl border border-white/10">
-                    <h3 class="text-2xl font-black uppercase mb-6 flex items-center gap-3">
-                        <i data-lucide="calendar" class="w-8 h-8"></i> Drill Weekend Schedule
-                    </h3>
-                    <div id="drill-list" class="space-y-3 text-sm">
-                        <!-- Populated by JS -->
-                    </div>
-                </div>
-                <div class="space-y-6">
-                    <div class="bg-gradient-to-r from-[#ffd700]/10 to-orange-500/10 border border-[#ffd700]/30 p-6 rounded-2xl">
-                        <h4 class="font-black uppercase text-lg mb-3">💡 Pro Tip</h4>
-                        <p class="text-gray-300 leading-relaxed">Most NJ Guard units drill one weekend per month (Saturday 0730-1730) plus 2 weeks annual training. Contact your local recruiter for exact schedule.</p>
-                    </div>
-                    <a href="#contact" class="block w-full bg-[#ffd700] text-black font-black py-5 uppercase rounded-2xl text-center hover:bg-white transition-all shadow-lg text-lg">Find My Recruiter →</a>
-                </div>
-            </div>
-            <div id="nearest-armories" class="mt-8 grid md:grid-cols-3 gap-4"></div>
-        </div>
-    </section>
+        </a>
+    </div>
+    <a href="armories.html" class="mt-12 bg-[#ffd700] text-black px-12 py-6 font-black uppercase rounded-2xl hover:bg-white shadow-2xl transition-all inline-block">View Map →</a>
+</section>
 
     <section id="enlistment-path" class="py-20 bg-black" data-reveal>
         <div class="max-w-7xl mx-auto px-6">
@@ -193,198 +158,52 @@
         </div>
     </section>
 
-    <section id="benefits-calculator" class="py-24 bg-zinc-900" data-reveal>
-        <div class="max-w-6xl mx-auto px-6 grid lg:grid-cols-2 gap-10 items-start">
-            <div>
-                <span class="text-[#ffd700] uppercase tracking-[0.3em] text-xs font-black">Estimate Value</span>
-                <h2 class="text-4xl md:text-5xl font-black uppercase mt-4 mb-4">Benefits Calculator</h2>
-                <p class="text-gray-400 mb-8">Get a fast estimate of your potential tuition savings, annual drill pay, and enlistment bonus value.</p>
-                <div class="space-y-4">
-                    <label class="block"><span class="text-xs uppercase tracking-widest text-gray-400">Tuition Cost Per Year ($)</span><input id="calc-tuition" type="number" min="0" value="12000" class="input-field w-full mt-2"></label>
-                    <label class="block"><span class="text-xs uppercase tracking-widest text-gray-400">Years in School</span><input id="calc-years" type="number" min="1" max="8" value="4" class="input-field w-full mt-2"></label>
-                    <label class="block"><span class="text-xs uppercase tracking-widest text-gray-400">Estimated Monthly Drill Pay ($)</span><input id="calc-drill" type="number" min="0" value="450" class="input-field w-full mt-2"></label>
-                    <label class="block"><span class="text-xs uppercase tracking-widest text-gray-400">Bonus Eligible?</span><select id="calc-bonus" class="input-field w-full mt-2"><option value="0">No</option><option value="20000">Yes ($20,000)</option></select></label>
-                    <button id="calculate-benefits" class="bg-[#ffd700] text-black px-8 py-4 font-black uppercase rounded-xl hover:bg-white transition-all">Calculate My Estimate</button>
-                </div>
+
+
+<section class="py-24 bg-zinc-900 text-center">
+    <h2 class="text-4xl md:text-6xl font-black uppercase mb-8">Mission Quiz</h2>
+    <p class="text-xl text-gray-400 mb-12 max-w-2xl mx-auto">4 questions → perfect MOS match.</p>
+    <div class="max-w-lg mx-auto">
+        <a href="eligibility.html" class="bg-[#ffd700] text-black p-12 rounded-3xl font-black uppercase text-2xl hover:bg-white shadow-2xl transition-all block w-full">Take Quiz Now →</a>
+    </div>
+</section>
+
+<section class="py-24 bg-black text-center">
+    <h2 class="text-4xl md:text-6xl font-black uppercase mb-8">150+ MOS Careers</h2>
+    <p class="text-xl text-gray-400 mb-12 max-w-2xl mx-auto">Cyber to combat medic – find your specialty.</p>
+    <div class="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+        <a href="careers.html" class="group">
+            <div class="bg-zinc-900/50 border border-white/10 p-8 rounded-3xl hover:border-[#ffd700] hover:shadow-2xl transition-all h-full">
+                <i data-lucide="shield" class="w-16 h-16 text-[#ffd700] mx-auto mb-4 group-hover:rotate-12 transition-transform"></i>
+                <h3 class="text-2xl font-black uppercase mb-3">MOS Explorer</h3>
+                <p class="text-gray-400">Search, filter, compare 150+ careers</p>
             </div>
-            <div class="bg-black/50 border border-white/10 rounded-3xl p-8">
-                <h3 class="text-2xl font-black uppercase mb-6">Your Estimate</h3>
-                <div class="space-y-4">
-                    <div class="calc-row"><span>Tuition Savings</span><strong id="calc-out-tuition">$0</strong></div>
-                    <div class="calc-row"><span>Annual Drill Pay</span><strong id="calc-out-drill">$0</strong></div>
-                    <div class="calc-row"><span>Bonus Value</span><strong id="calc-out-bonus">$0</strong></div>
-                    <div class="calc-total"><span>Total Potential Value</span><strong id="calc-out-total">$0</strong></div>
-                </div>
-                <p class="text-xs text-gray-500 mt-4">Estimate only. Actual benefits vary by eligibility, contract, and policy.</p>
-            </div>
+        </a>
+    </div>
+    <a href="careers.html" class="mt-12 bg-[#ffd700] text-black px-12 py-6 font-black uppercase rounded-2xl hover:bg-white shadow-2xl transition-all inline-block">Browse All MOS →</a>
+</section>
+
+<section class="py-24 bg-zinc-950 text-center">
+    <h2 class="text-4xl md:text-6xl font-black uppercase mb-8">Eligibility Check</h2>
+    <p class="text-xl text-gray-400 mb-12 max-w-2xl mx-auto">Age, ASVAB, fitness - get your score.</p>
+    <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+        <div class="bg-zinc-900/50 border border-white/10 p-10 rounded-3xl hover:border-[#ffd700] hover:shadow-2xl transition-all">
+            <i data-lucide="clipboard-list" class="w-20 h-20 text-[#ffd700] mx-auto mb-6"></i>
+            <h3 class="text-2xl font-black uppercase mb-4">Pre-Screen Tool</h3>
+            <p class="text-gray-400 mb-8">8 questions → eligibility score + MOS recs</p>
+            <a href="eligibility.html" class="bg-[#ffd700] text-black px-8 py-4 font-black uppercase rounded-xl hover:bg-white block w-full transition-all">Start Check →</a>
         </div>
-    </section>
+    </div>
+</section>
 
-    <section id="enlistment-path" class="py-20 bg-black" data-reveal>
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="text-center mb-12">
-                <span class="text-[#ffd700] uppercase tracking-[0.3em] text-xs font-black">Roadmap</span>
-                <h2 class="text-4xl md:text-5xl font-black uppercase mt-4">Your Path to Enlistment</h2>
-                <p class="text-gray-400 mt-4 max-w-2xl mx-auto">See exactly what happens next, from first recruiter conversation to initial training.</p>
-            </div>
-            <div class="grid md:grid-cols-5 gap-4">
-                <article class="path-step"><span class="path-number">1</span><h3>Talk to Recruiter</h3><p>Get your questions answered and pick the right path.</p></article>
-                <article class="path-step"><span class="path-number">2</span><h3>Practice ASVAB</h3><p>Take a diagnostic and get MOS options that fit your scores.</p></article>
-                <article class="path-step"><span class="path-number">3</span><h3>Medical + MEPS</h3><p>Complete physical and qualification screening.</p></article>
-                <article class="path-step"><span class="path-number">4</span><h3>Choose MOS</h3><p>Select a role aligned to your goals and civilian interests.</p></article>
-                <article class="path-step"><span class="path-number">5</span><h3>Ship to Training</h3><p>Begin Basic and AIT with a clear mission and support team.</p></article>
-            </div>
-        </div>
-    </section>
-
-    <section id="benefits-calculator" class="py-24 bg-zinc-900" data-reveal>
-        <div class="max-w-6xl mx-auto px-6 grid lg:grid-cols-2 gap-10 items-start">
-            <div>
-                <span class="text-[#ffd700] uppercase tracking-[0.3em] text-xs font-black">Estimate Value</span>
-                <h2 class="text-4xl md:text-5xl font-black uppercase mt-4 mb-4">Benefits Calculator</h2>
-                <p class="text-gray-400 mb-8">Get a fast estimate of your potential tuition savings, annual drill pay, and enlistment bonus value.</p>
-                <div class="space-y-4">
-                    <label class="block"><span class="text-xs uppercase tracking-widest text-gray-400">Tuition Cost Per Year ($)</span><input id="calc-tuition" type="number" min="0" value="12000" class="input-field w-full mt-2"></label>
-                    <label class="block"><span class="text-xs uppercase tracking-widest text-gray-400">Years in School</span><input id="calc-years" type="number" min="1" max="8" value="4" class="input-field w-full mt-2"></label>
-                    <label class="block"><span class="text-xs uppercase tracking-widest text-gray-400">Estimated Monthly Drill Pay ($)</span><input id="calc-drill" type="number" min="0" value="450" class="input-field w-full mt-2"></label>
-                    <label class="block"><span class="text-xs uppercase tracking-widest text-gray-400">Bonus Eligible?</span><select id="calc-bonus" class="input-field w-full mt-2"><option value="0">No</option><option value="20000">Yes ($20,000)</option></select></label>
-                    <button id="calculate-benefits" class="bg-[#ffd700] text-black px-8 py-4 font-black uppercase rounded-xl hover:bg-white transition-all">Calculate My Estimate</button>
-                </div>
-            </div>
-            <div class="bg-black/50 border border-white/10 rounded-3xl p-8">
-                <h3 class="text-2xl font-black uppercase mb-6">Your Estimate</h3>
-                <div class="space-y-4">
-                    <div class="calc-row"><span>Tuition Savings</span><strong id="calc-out-tuition">$0</strong></div>
-                    <div class="calc-row"><span>Annual Drill Pay</span><strong id="calc-out-drill">$0</strong></div>
-                    <div class="calc-row"><span>Bonus Value</span><strong id="calc-out-bonus">$0</strong></div>
-                    <div class="calc-total"><span>Total Potential Value</span><strong id="calc-out-total">$0</strong></div>
-                </div>
-                <p class="text-xs text-gray-500 mt-4">Estimate only. Actual benefits vary by eligibility, contract, and policy.</p>
-            </div>
-        </div>
-    </section>
-
-    <section id="quiz" class="py-24 bg-zinc-900" data-reveal>
-        <div class="max-w-3xl mx-auto px-6 text-center">
-            <div id="quiz-container" class="bg-zinc-900 p-12 rounded-3xl border border-white/5">
-                <div id="quiz-start">
-                    <i data-lucide="compass" class="w-12 h-12 text-[#ffd700] mx-auto mb-6"></i>
-                    <h2 id="quiz-heading" class="text-4xl font-black uppercase mb-4">Mission Match Quiz</h2>
-                    <p class="text-gray-400 mb-8">Answer 4 quick questions to discover your ideal MOS career path.</p>
-                    <button onclick="startQuiz()" class="bg-[#ffd700] text-black px-8 py-4 font-black uppercase hover:bg-white transition-all">Start Quiz</button>
-                </div>
-                <div id="quiz-question" class="hidden">
-                    <span id="q-progress" class="text-[#ffd700] font-mono text-sm uppercase tracking-widest mb-4 block">Question 1 of 4</span>
-                    <h3 id="q-text" class="text-2xl font-black mt-4 mb-10 uppercase">Where do you perform best?</h3>
-                    <div id="q-options" class="grid gap-4 max-w-lg mx-auto"></div>
-                </div>
-                <div id="quiz-result" class="hidden">
-                    <h4 class="text-[#ffd700] font-mono uppercase mb-2 text-lg">Top Recommendation:</h4>
-                    <h2 id="result-cat" class="text-5xl font-black mb-4 uppercase">Cyber & Intel</h2>
-                    <p id="result-desc" class="text-gray-400 mb-8 text-lg">You thrive in high-tech environments and enjoy solving complex problems.</p>
-                    <button onclick="resetQuiz()" class="text-xs font-bold uppercase border-b-2 border-[#ffd700] hover:border-white transition-all px-2">Retake Quiz</button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="careers" class="py-24 bg-black" data-reveal>
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
-                <div>
-                    <h2 id="careers-heading" class="text-5xl font-black tracking-tighter uppercase mb-4" data-i18n="career.heading">MOS Explorer</h2>
-                    <p class="text-gray-400" data-i18n="career.description">Click any MOS card to view full details. Use filters and search above.</p>
-                </div>
-                <div class="flex flex-wrap gap-2">
-                    <button class="filter-btn active" data-filter="all">All</button>
-                    <button class="filter-btn" data-filter="combat">Combat</button>
-                    <button class="filter-btn" data-filter="intel">Intel</button>
-                    <button class="filter-btn" data-filter="medical">Medical</button>
-                    <button class="filter-btn" data-filter="engineer">Engineer</button>
-                    <button class="filter-btn" data-filter="aviation">Aviation</button>
-                    <button class="filter-btn" data-filter="logistics">Logistics</button>
-                </div>
-            </div>
-
-            <div class="mb-6 grid md:grid-cols-4 gap-4 items-end">
-                <div class="md:col-span-2">
-                    <label class="text-gray-300 text-xs uppercase tracking-wider block mb-1">Quick Select</label>
-                    <select id="mos-dropdown" class="input-field w-full" data-i18n-placeholder="career.selectPlaceholder"></select>
-                </div>
-                <div>
-                    <label class="text-gray-300 text-xs uppercase tracking-wider block mb-1" data-i18n="career.viewLabel">View</label>
-                    <select id="view-mode" class="input-field w-full">
-                        <option value="cards">Grid</option>
-                        <option value="list">List</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="text-gray-300 text-xs uppercase tracking-wider block mb-1" data-i18n="career.sortLabel">Sort</label>
-                    <select id="sort-mode" class="input-field w-full">
-                        <option value="title-asc">Title A–Z</option>
-                        <option value="title-desc">Title Z–A</option>
-                        <option value="asvab-asc">ASVAB Low → High</option>
-                        <option value="asvab-desc">ASVAB High → Low</option>
-                        <option value="training">Training Length</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="mb-8 p-6 bg-zinc-900/50 border border-white/10 rounded-xl">
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-                    <h3 class="font-black uppercase text-sm" data-i18n="career.favorites">Your Top 5 Favorites</h3>
-                    <span id="career-count" class="text-gray-400 text-xs uppercase tracking-wider">0 / 0</span>
-                </div>
-                <div id="favorite-list" class="grid gap-2 min-h-[80px]"></div>
-            </div>
-
-            <input type="text" id="mos-search" data-i18n-placeholder="career.searchPlaceholder" placeholder="🔍 Search MOS Code or Job Title (150+ careers)..." 
-                   class="w-full bg-zinc-900 border border-white/20 p-5 rounded-xl mb-12 focus:border-[#ffd700] focus:ring-2 focus:ring-[#ffd700]/30 outline-none transition-all font-bold uppercase tracking-wider text-lg">
-
-            <div id="career-grid" class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
-        </div>
-    </section>
-
-    <section id="eligibility-check" class="py-24 bg-zinc-950" data-reveal>
-        <div class="max-w-4xl mx-auto px-6">
-            <div class="text-center mb-10">
-                <span class="text-[#ffd700] uppercase tracking-[0.3em] text-xs font-black">Quick Check</span>
-                <h2 class="text-4xl font-black uppercase mt-4">Eligibility Pre-Screen</h2>
-                <p class="text-gray-400 mt-3">Answer a few questions to see if you're likely ready for the next recruiter conversation.</p>
-            </div>
-            <div class="bg-black/40 border border-white/10 rounded-3xl p-8">
-                <div id="eligibility-questions" class="space-y-6">
-                    <div class="eligibility-question" data-key="age">
-                        <p class="font-bold uppercase text-sm mb-2">Are you between 17 and 35?</p>
-                        <div class="flex gap-3"><button type="button" class="eligibility-btn" data-value="yes">Yes</button><button type="button" class="eligibility-btn" data-value="no">No</button></div>
-                    </div>
-                    <div class="eligibility-question" data-key="citizen">
-                        <p class="font-bold uppercase text-sm mb-2">Are you a U.S. citizen or permanent resident?</p>
-                        <div class="flex gap-3"><button type="button" class="eligibility-btn" data-value="yes">Yes</button><button type="button" class="eligibility-btn" data-value="no">No</button></div>
-                    </div>
-                    <div class="eligibility-question" data-key="education">
-                        <p class="font-bold uppercase text-sm mb-2">Do you have (or are you working toward) a high school diploma/GED?</p>
-                        <div class="flex gap-3"><button type="button" class="eligibility-btn" data-value="yes">Yes</button><button type="button" class="eligibility-btn" data-value="no">No</button></div>
-                    </div>
-                </div>
-                <div id="eligibility-result" class="mt-8 p-6 rounded-2xl border border-white/10 bg-zinc-900/60 hidden"></div>
-            </div>
-        </div>
-    </section>
-
-    <section id="testimonials" class="py-24 bg-black" data-reveal>
-        <div class="max-w-6xl mx-auto px-6">
-            <div class="text-center mb-12">
-                <span class="text-[#ffd700] uppercase tracking-[0.3em] text-xs font-black">Success Stories</span>
-                <h2 class="text-4xl md:text-5xl font-black uppercase mt-4">Why Soldiers Choose NJ Guard</h2>
-            </div>
-            <div class="grid md:grid-cols-3 gap-6">
-                <article class="testimonial-card"><p>"I stayed close to home, got leadership experience, and used tuition support to finish my degree debt-free."</p><h3>SPC R. Alvarez</h3><span>68W • Combat Medic</span></article>
-                <article class="testimonial-card"><p>"My MOS helped me move into civilian IT. The training gave me confidence and certifications employers wanted."</p><h3>SGT J. Patel</h3><span>25B • Information Technology</span></article>
-                <article class="testimonial-card"><p>"One weekend a month gave me structure, team pride, and real career momentum without giving up my civilian goals."</p><h3>PFC M. Rivera</h3><span>12B • Combat Engineer</span></article>
-            </div>
-        </div>
-    </section>
+<section class="py-24 bg-black text-center">
+    <h2 class="text-4xl md:text-5xl font-black uppercase mb-12">Ready to Serve?</h2>
+    <p class="text-xl text-gray-400 mb-12 max-w-2xl mx-auto">Join thousands of NJ citizens serving part-time with full-time benefits.</p>
+    <div class="flex flex-col lg:flex-row gap-8 items-center justify-center">
+        <a href="contact.html" class="bg-[#ffd700] text-black px-12 py-6 font-black uppercase rounded-2xl hover:bg-white shadow-2xl text-xl transition-all">Contact Recruiter</a>
+        <a href="careers.html" class="border-2 border-white/30 backdrop-blur px-12 py-6 font-black uppercase rounded-2xl hover:bg-white hover:text-black transition-all text-xl">Browse Careers</a>
+    </div>
+</section>
 
 <!-- TRUNCATED HTML for brevity - rest of sections unchanged until modals -->
 
@@ -460,73 +279,7 @@
         </div>
     </div>
 
-    <script src="script.js"></script>
-    <script>
-        // Basic handlers
-        document.getElementById('menu-toggle')?.addEventListener('click', () => {
-            const menu = document.getElementById('mobile-menu');
-            const button = document.getElementById('menu-toggle');
-            if (!menu || !button) return;
-            const isHidden = menu.classList.toggle('hidden');
-            menu.setAttribute('aria-hidden', String(isHidden));
-            button.setAttribute('aria-expanded', String(!isHidden));
-        });
-
-        document.getElementById('open-apply-modal')?.addEventListener('click', (e) => {
-            e.preventDefault();
-            document.getElementById('apply-modal').classList.remove('hidden');
-        });
-
-        document.getElementById('open-apply-modal-mobile')?.addEventListener('click', (e) => {
-            e.preventDefault();
-            document.getElementById('apply-modal').classList.remove('hidden');
-        });
-        document.getElementById('open-apply-modal-sticky')?.addEventListener('click', (e) => {
-            e.preventDefault();
-            document.getElementById('apply-modal').classList.remove('hidden');
-        });
-
-        document.getElementById('language-toggle')?.addEventListener('click', () => {
-            toggleLanguage();
-        });
-
-        document.getElementById('language-toggle-mobile')?.addEventListener('click', () => {
-            toggleLanguage();
-        });
-
-        document.getElementById('close-apply-modal')?.addEventListener('click', () => {
-            document.getElementById('apply-modal').classList.add('hidden');
-        });
-
-        // Close modals on backdrop click
-        document.querySelectorAll('#apply-modal, #mos-modal').forEach(modal => {
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    modal.classList.add('hidden');
-                    document.body.style.overflow = '';
-                }
-            });
-        });
-
-        // FAQ accordion
-        document.querySelectorAll('.faq-item summary').forEach(el => {
-            el.addEventListener('click', () => {
-                document.querySelectorAll('.faq-item').forEach(item => {
-                    if (item !== el.parentElement) item.removeAttribute('open');
-                });
-            });
-        });
-
-        // Navbar scroll effect
-        window.addEventListener('scroll', () => {
-            const nav = document.getElementById('navbar');
-            if (!nav) return;
-            if (window.scrollY > 100) {
-                nav.classList.add('bg-black/95', 'backdrop-blur-md', 'shadow-lg');
-            } else {
-                nav.classList.remove('bg-black/95', 'backdrop-blur-md', 'shadow-lg');
-            }
-        });
-    </script>
-</body>
+    <script src="bootstrap.js"></script>
+    <!-- All handlers now managed by shared.js + homeModule -->
+</body data-page="home">
 </html>
