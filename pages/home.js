@@ -1,75 +1,133 @@
-// pages/home.js - COMPLETE Home Module (particles, tilt, reveal)
+// pages/home.js - Home Module with reveal animations
 
-class ParticleSystem {
-  constructor(canvas) {
-    this.canvas = canvas;
-    this.ctx = canvas.getContext('2d');
-    this.resize();
-    this.particles = [];
-    this.mouse = { x: 0, y: 0 };
-    this.initParticles();
-    this.animate();
-  }
-
-  resize() {
-    this.canvas.width = window.innerWidth;
-    this.canvas.height = window.innerHeight;
-  }
-
-  initParticles() {
-    for (let i = 0; i < 100; i++) {
-      this.particles.push({
-        x: Math.random() * this.canvas.width,
-        y: Math.random() * this.canvas.height,
-        vx: (Math.random() - 0.5) * 0.5,
-        vy: (Math.random() - 0.5) * 0.5,
-        size: Math.random() * 2 + 1,
-        opacity: Math.random() * 0.5 + 0.2,
-        type: Math.random() > 0.7 ? 'shield' : 'star'
-      });
-    }
-  }
-
-  animate() {
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    this.particles.forEach(p => {
-      // Full particle logic (bounce, mouse attract, draw shield/star)
+function initScrollReveal() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }
     });
-    requestAnimationFrame(() => this.animate());
-  }
+  }, { threshold: 0.1 });
+  
+  document.querySelectorAll('[data-reveal]').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)';
+    observer.observe(el);
+  });
 }
 
 function initTiltCards() {
   document.querySelectorAll('.mos-card').forEach(card => {
-    // Full mousemove/mouseleave tilt logic
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      
+      const rotateX = (y - centerY) / 10;
+      const rotateY = (centerX - x) / 10;
+      
+      card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
+    });
+    
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1)';
+    });
   });
 }
 
-function observeRevealItems() {
-  // Full IntersectionObserver for data-reveal
+function initModals() {
+  // Apply Modal
+  const applyModal = document.getElementById('apply-modal');
+  const openApplyBtns = document.querySelectorAll('#open-apply-modal, #open-apply-modal-mobile, #open-apply-modal-sticky');
+  const closeApplyBtn = document.getElementById('close-apply-modal');
+  const applyForm = document.getElementById('apply-modal-form');
+  
+  if (applyModal) {
+    openApplyBtns.forEach(btn => {
+      if (btn) btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        applyModal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+      });
+    });
+    
+    closeApplyBtn?.addEventListener('click', () => {
+      applyModal.classList.add('hidden');
+      document.body.style.overflow = '';
+    });
+    
+    applyModal.addEventListener('click', (e) => {
+      if (e.target === applyModal) {
+        applyModal.classList.add('hidden');
+        document.body.style.overflow = '';
+      }
+    });
+    
+    applyForm?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (window.shared?.showToast) {
+        window.shared.showToast('✅ Message sent to recruiting team!', 'success');
+      }
+      applyForm.reset();
+      applyModal.classList.add('hidden');
+      document.body.style.overflow = '';
+    });
+  }
+  
+  // MOS Modal
+  const mosModal = document.getElementById('mos-modal');
+  if (mosModal) {
+    mosModal.addEventListener('click', (e) => {
+      if (e.target === mosModal) {
+        closeMosModal();
+      }
+    });
+  }
 }
 
-function initScrollReveal() {
-  observeRevealItems();
+function closeMosModal() {
+  const mosModal = document.getElementById('mos-modal');
+  if (mosModal) {
+    mosModal.classList.add('hidden');
+    document.body.style.overflow = '';
+  }
 }
 
-function updateScrollProgress() {
-  // Scroll bar logic (if #scroll-progress exists)
+function toggleFavorite(eventOrMos, mos, title) {
+  if (eventOrMos?.stopPropagation) eventOrMos.stopPropagation();
+  if (window.shared?.toggleFavorite) {
+    window.shared.toggleFavorite(mos, title);
+  }
+}
+
+function openMosModal(mos) {
+  // This is typically called from careers.js, but keeping it available globally
+  const mosModal = document.getElementById('mos-modal');
+  if (mosModal && window.careersModule?.openMosModal) {
+    window.careersModule.openMosModal(mos);
+  }
 }
 
 window.homeModule = {
   init() {
-    const canvas = document.getElementById('particles-canvas');
-    if (canvas) {
-      const particles = new ParticleSystem(canvas);
-      document.addEventListener('mousemove', (e) => {
-        particles.mouse.x = e.clientX;
-        particles.mouse.y = e.clientY;
-      });
-      window.addEventListener('resize', () => particles.resize());
+    console.log('🚀 Initializing home module');
+    
+    // Initialize Lucide icons
+    if (typeof lucide !== 'undefined') {
+      lucide.createIcons();
     }
-    initTiltCards();
+    
+    // Initialize all interactions
     initScrollReveal();
-    window.addEventListener('scroll', updateScrollProgress);
+    initTiltCards();
+    initModals();
+    
+    console.log('✅ Home module ready');
   }
 };
+

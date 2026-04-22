@@ -1,4 +1,4 @@
-// pages/careers.js - MOS Explorer Module (COMPLETE EXTRACT from script.js)
+// pages/careers.js - MOS Explorer Module (COMPLETE)
 
 // Globals
 let allCareers = [];
@@ -7,46 +7,7 @@ let activeCategory = 'all';
 let currentSort = 'title-asc';
 let currentSearch = '';
 const MAX_FAVORITES = 5;
-const FALLBACK_CAREERS_URL = '../careers.json';
-
-const languageStrings = {
-  en: {
-    career: {
-      heading: 'MOS Explorer',
-      description: 'Click any MOS card to view full details. Use filters, sorting, and search above.',
-      favorites: 'Your Top 5 Favorites',
-      searchPlaceholder: '🔍 Search MOS Code or Job Title (150+ careers)...',
-      sortLabel: 'Sort',
-      viewLabel: 'View',
-      selectPlaceholder: 'Select a MOS',
-      viewGrid: 'Grid',
-      viewList: 'List',
-      sortTitleAsc: 'Title A–Z',
-      sortTitleDesc: 'Title Z–A',
-      sortAsvabAsc: 'ASVAB Low → High',
-      sortAsvabDesc: 'ASVAB High → Low',
-      sortTraining: 'Training Length'
-    }
-  },
-  es: {
-    career: {
-      heading: 'Explorador MOS',
-      description: 'Haz clic en cualquier tarjeta MOS para ver detalles completos. Usa filtros, ordenación y búsqueda arriba.',
-      favorites: 'Tus 5 Favoritos Principales',
-      searchPlaceholder: '🔍 Busca Código MOS o Título (150+ carreras)...',
-      sortLabel: 'Ordenar',
-      viewLabel: 'Ver',
-      selectPlaceholder: 'Selecciona un MOS',
-      viewGrid: 'Cuadrícula',
-      viewList: 'Lista',
-      sortTitleAsc: 'Título A–Z',
-      sortTitleDesc: 'Título Z–A',
-      sortAsvabAsc: 'ASVAB Bajo → Alto',
-      sortAsvabDesc: 'ASVAB Alto → Bajo',
-      sortTraining: 'Duración de Entrenamiento'
-    }
-  }
-};
+const FALLBACK_CAREERS_URL = './careers.json';
 
 function getStoredJSON(key, fallback = []) {
   try {
@@ -69,6 +30,37 @@ async function loadCareers() {
   }
 }
 
+function openMosModal(mos) {
+  const selected = allCareers.find(m => m.mos === mos);
+  if (!selected) return;
+
+  const modal = document.getElementById('mos-modal');
+  if (!modal) return;
+
+  document.getElementById('mos-modal-title').textContent = `${selected.mos} - ${selected.title}`;
+  document.getElementById('mos-modal-cat').textContent = `Category: ${selected.cat || 'Other'}`;
+  document.getElementById('mos-modal-desc').textContent = selected.desc || 'No description';
+  document.getElementById('mos-modal-asvab').textContent = selected.asvab || 'N/A';
+  document.getElementById('mos-modal-training').textContent = selected.training || 'Varies';
+  
+  const bonusDiv = document.getElementById('mos-modal-bonus');
+  if (bonusDiv) {
+    bonusDiv.style.display = selected.bonus ? 'block' : 'none';
+  }
+
+  modal.classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+  window.currentMosModal = mos;
+}
+
+function closeMosModal() {
+  const modal = document.getElementById('mos-modal');
+  if (modal) {
+    modal.classList.add('hidden');
+    document.body.style.overflow = '';
+  }
+}
+
 function toggleFavorite(eventOrMos, mos, title) {
   if (eventOrMos?.stopPropagation) eventOrMos.stopPropagation();
   const existingIndex = favoriteMOS.findIndex(item => item.mos === mos);
@@ -76,7 +68,9 @@ function toggleFavorite(eventOrMos, mos, title) {
 
   if (isAdding) {
     if (favoriteMOS.length >= MAX_FAVORITES) {
-      window.shared?.showToast(`Only ${MAX_FAVORITES} favorites allowed.`, 'info');
+      if (window.shared?.showToast) {
+        window.shared.showToast(`Only ${MAX_FAVORITES} favorites allowed.`, 'info');
+      }
       return;
     }
     favoriteMOS.push({ mos, title });
@@ -84,53 +78,86 @@ function toggleFavorite(eventOrMos, mos, title) {
     favoriteMOS.splice(existingIndex, 1);
   }
 
-  localStorage.setItem('favoriteMOS', JSON.stringify(favoriteMOS));
+  try {
+    localStorage.setItem('favoriteMOS', JSON.stringify(favoriteMOS));
+  } catch (e) {
+    console.warn('Failed to save favorites:', e);
+  }
+  
   updateFavoritesUI();
   updateCardFavorites();
-  window.shared?.showToast(`⭐ ${title || mos} ${isAdding ? 'added' : 'removed'}!`, 'success');
-}
-
-function openMosModal(mos) {
-  const selected = allCareers.find(m => m.mos === mos);
-  if (!selected) return;
-
-  // Populate modal elements (full logic from script.js)
-  document.getElementById('mos-modal-title').textContent = `${selected.mos} - ${selected.title}`;
-  // ... fill all modal fields
-  document.getElementById('mos-modal').classList.remove('hidden');
-  document.body.style.overflow = 'hidden';
-}
-
-function closeMosModal() {
-  document.getElementById('mos-modal')?.classList.add('hidden');
-  document.body.style.overflow = '';
-}
-
-function categoryColor(cat) {
-  // Full switch from script.js
-  const colors = {
-    combat: { bg: '#dc2626', to: '#f97316' },
-    // ... all categories
-  };
-  return colors[cat] || { bg: '#475569', to: '#94a3b8' };
+  if (window.shared?.showToast) {
+    window.shared.showToast(`⭐ ${title || mos} ${isAdding ? 'added' : 'removed'}!`, 'success');
+  }
 }
 
 function renderCareers(data) {
   const grid = document.getElementById('career-grid');
-  const viewMode = document.getElementById('view-mode')?.value || 'cards';
   if (!grid) return;
 
   if (data.length === 0) {
-    grid.innerHTML = `<div class="col-span-full text-center text-gray-400 italic uppercase">${languageStrings[currentLanguage].career.noResults || 'No results'}</div>`;
+    grid.innerHTML = '<div class="col-span-full text-center text-gray-400 italic uppercase">No results found</div>';
     return;
   }
 
-  // Full grid/list render HTML from script.js (tilt cards, bonus badges, etc.)
-  // Includes onclick="openMosModal('${m.mos}')" and favorite-btn onclick
+  grid.innerHTML = data.map(m => {
+    const isFav = favoriteMOS.findIndex(f => f.mos === m.mos) > -1;
+    const categoryColor = {
+      combat: 'from-red-600 to-orange-500',
+      intel: 'from-purple-600 to-blue-500',
+      medical: 'from-green-600 to-emerald-500',
+      engineer: 'from-yellow-600 to-amber-500',
+      aviation: 'from-sky-600 to-cyan-500',
+      logistics: 'from-slate-600 to-gray-500'
+    };
+    const gradientClass = categoryColor[m.cat] || 'from-slate-600 to-gray-500';
+    
+    return `
+      <div class="mos-card bg-zinc-900/50 border border-white/10 p-6 rounded-2xl hover:border-[#ffd700] transition-all cursor-pointer group"
+           onclick="openMosModal('${m.mos}')" style="${isFav ? 'border-color: #ffd700;' : ''}">
+        <div class="flex justify-between items-start mb-4">
+          <div class="bg-gradient-to-r ${gradientClass} px-3 py-1 rounded-full text-white text-xs font-bold">${m.cat || 'Other'}</div>
+          <button class="favorite-btn ${isFav ? 'text-[#ffd700]' : 'text-gray-400'} hover:text-[#ffd700] transition-colors"
+                  onclick="toggleFavorite(event, '${m.mos}', '${(m.title || '').replace(/'/g, "\\'")}'); return false;">
+            <i data-lucide="star" class="w-5 h-5 ${isFav ? 'fill-current' : ''}"></i>
+          </button>
+        </div>
+        <p class="text-[#ffd700] font-mono text-sm font-bold">${m.mos}</p>
+        <h3 class="text-lg font-black uppercase mb-2">${m.title || 'Untitled'}</h3>
+        <p class="text-gray-400 text-sm mb-4">${m.desc || 'No description'}</p>
+        <div class="text-xs text-gray-500 space-y-1">
+          <p>ASVAB: <span class="text-white font-mono">${m.asvab || 'N/A'}</span></p>
+          <p>Training: <span class="text-white font-mono">${m.training || 'Varies'}</span></p>
+        </div>
+      </div>
+    `;
+  }).join('');
+  
+  if (typeof lucide !== 'undefined') {
+    lucide.createIcons();
+  }
 }
 
 function sortCareerData(data, sortKey) {
-  // Full sorting logic (title, asvab, training weeks parser)
+  const sorted = [...data];
+  
+  const sortMap = {
+    'title-asc': (a, b) => (a.title || '').localeCompare(b.title || ''),
+    'title-desc': (a, b) => (b.title || '').localeCompare(a.title || ''),
+    'asvab-asc': (a, b) => {
+      const aScore = parseInt(a.asvab) || 0;
+      const bScore = parseInt(b.asvab) || 0;
+      return aScore - bScore;
+    },
+    'asvab-desc': (a, b) => {
+      const aScore = parseInt(a.asvab) || 0;
+      const bScore = parseInt(b.asvab) || 0;
+      return bScore - aScore;
+    }
+  };
+  
+  const compareFn = sortMap[sortKey] || sortMap['title-asc'];
+  return sorted.sort(compareFn);
 }
 
 function filterAndRenderCareers() {
@@ -141,16 +168,32 @@ function filterAndRenderCareers() {
   });
   const sorted = sortCareerData(filtered, currentSort);
   renderCareers(sorted);
-  document.getElementById('career-count').textContent = `${sorted.length} / ${allCareers.length}`;
+  const careeCount = document.getElementById('career-count');
+  if (careeCount) careeCount.textContent = `${sorted.length} / ${allCareers.length}`;
 }
 
 function updateFavoritesUI() {
   const list = document.getElementById('favorite-list');
   if (!list) return;
   if (favoriteMOS.length === 0) {
-    list.innerHTML = '<div class="text-gray-500 italic uppercase">No favorites yet.</div>';
+    list.innerHTML = '<div class="text-gray-500 italic">No favorites yet. Click ⭐ on any MOS.</div>';
   } else {
-    // Render favorites list with remove buttons
+    list.innerHTML = favoriteMOS.map(f => `
+      <div class="flex justify-between items-center bg-zinc-800/50 p-3 rounded-lg">
+        <div>
+          <p class="font-mono text-[#ffd700] text-sm">${f.mos}</p>
+          <p class="text-sm">${f.title || 'Untitled'}</p>
+        </div>
+        <button class="text-red-400 hover:text-red-300 transition-colors"
+                onclick="toggleFavorite(null, '${f.mos}', '${(f.title || '').replace(/'/g, "\\'")}')"
+                title="Remove from favorites">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+    `).join('');
+    if (typeof lucide !== 'undefined') {
+      lucide.createIcons();
+    }
   }
 }
 
@@ -159,21 +202,55 @@ function updateCardFavorites() {
 }
 
 function populateSelectors() {
-  // MOS dropdown population
+  // MOS dropdown population - optional for this version
 }
 
 function initCareersListeners() {
-  // All event listeners: search, filters, sort, view-mode, dropdown change
+  // Search input
+  const searchInput = document.getElementById('search-mos');
+  if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+      currentSearch = e.target.value;
+      filterAndRenderCareers();
+    });
+  }
+  
+  // Category filters
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeCategory = btn.dataset.filter || 'all';
+      filterAndRenderCareers();
+    });
+  });
+  
+  // Sort dropdown
+  const sortSelect = document.getElementById('sort-mode');
+  if (sortSelect) {
+    sortSelect.addEventListener('change', (e) => {
+      currentSort = e.target.value;
+      filterAndRenderCareers();
+    });
+  }
 }
 
 async function init() {
+  console.log('🚀 Initializing careers module');
+  
   favoriteMOS = getStoredJSON('favoriteMOS', []);
   await loadCareers();
+  
   populateSelectors();
   filterAndRenderCareers();
   initCareersListeners();
   updateFavoritesUI();
+  
+  if (typeof lucide !== 'undefined') {
+    lucide.createIcons();
+  }
+  
+  console.log('✅ Careers module ready');
 }
 
-// Export for bootstrap
-window.careersModule = { init };
+window.careersModule = { init, openMosModal, toggleFavorite, closeMosModal };

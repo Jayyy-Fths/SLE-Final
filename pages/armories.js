@@ -1,78 +1,76 @@
-// pages/armories.js - COMPLETE Armories Module
+// pages/armories.js - Armories Map Module
 
 let armories = [];
-const FALLBACK_ARMORIES_URL = '../armories.json';
+const FALLBACK_ARMORIES_URL = './armories.json';
 
 async function loadArmories() {
   try {
     const response = await fetch(FALLBACK_ARMORIES_URL);
-    if (!response.ok) throw new Error();
-    armories = await response.json();
+    if (!response.ok) {
+      console.warn('Armories fetch failed:', response.status);
+      return [];
+    }
+    const data = await response.json();
+    armories = Array.isArray(data) ? data : [];
     console.log(`🗺️ Loaded ${armories.length} armories`);
-  } catch {
-    console.warn('Armories load failed');
-    armories = [];
+    return armories;
+  } catch (err) {
+    console.warn('Armories load error:', err);
+    return [];
   }
 }
 
-function initLeafletMap() {
-  const njCenter = [40.0583, -74.4057];
-  const map = L.map('armories-map').setView(njCenter, 9);
-  
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-  
-  armories.forEach(armory => {
-    const popupContent = `
-      <div class="armory-popup">
-        <h3>${armory.name}</h3>
-        <p>${armory.address}</p>
-        <p><a href="tel:${armory.phone}">${armory.phone}</a></p>
-        <!-- Full popup -->
-      </div>
-    `;
-    L.marker([armory.lat, armory.lng])
-      .addTo(map)
-      .bindPopup(popupContent);
-  });
-  
-  if (armories.length) {
-    const group = new L.featureGroup(armories.map(a => L.marker([a.lat, a.lng])));
-    map.fitBounds(group.getBounds().pad(0.1));
+async function initArmoriesSearch() {
+  // Populate search functionality if armories were loaded
+  const searchInput = document.getElementById('armory-search');
+  if (searchInput && armories.length > 0) {
+    searchInput.addEventListener('input', (e) => {
+      const query = e.target.value.toLowerCase();
+      const filtered = armories.filter(a => 
+        (a.name && a.name.toLowerCase().includes(query)) || 
+        (a.city && a.city.toLowerCase().includes(query)) ||
+        (a.zip && a.zip.includes(query))
+      );
+      displayArmories(filtered);
+    });
+    displayArmories(armories);
   }
 }
 
-function initArmoriesMap() {
-  const container = document.getElementById('armories-map');
-  if (!container || armories.length === 0) return;
-
-  if (window.L) {
-    initLeafletMap();
+function displayArmories(list) {
+  const container = document.getElementById('armories-list');
+  if (!container) return;
+  
+  if (list.length === 0) {
+    container.innerHTML = '<p class="col-span-full text-center text-gray-400">No armories found</p>';
     return;
   }
+  
+  container.innerHTML = list.map(armory => `
+    <div class="bg-zinc-900/50 border border-white/10 p-6 rounded-2xl hover:border-[#ffd700] transition-all">
+      <h3 class="font-black text-lg mb-2">${armory.name || 'Armory'}</h3>
+      <p class="text-gray-400 text-sm mb-2">${armory.address || ''}</p>
+      <p class="text-gray-400 text-sm mb-3">${armory.city || ''}, ${armory.state || 'NJ'} ${armory.zip || ''}</p>
+      ${armory.phone ? `<p class="text-[#ffd700] font-mono text-sm"><a href="tel:${armory.phone}">${armory.phone}</a></p>` : ''}
+    </div>
+  `).join('');
+}
 
-  // Lazy load Leaflet CSS/JS (copy full logic from script.js)
-  const cssLink = document.querySelector('link[data-leaflet-css]');
-  if (!cssLink) {
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
-    link.dataset.leafletCss = 'true';
-    document.head.appendChild(link);
+async function initArmoriesModule() {
+  console.log('🚀 Initializing armories module');
+  
+  // Initialize Lucide icons
+  if (typeof lucide !== 'undefined') {
+    lucide.createIcons();
   }
-
-  const jsScript = document.querySelector('script[data-leaflet-js]');
-  if (!jsScript) {
-    const script = document.createElement('script');
-    script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
-    script.dataset.leafletJs = 'true';
-    script.onload = initLeafletMap;
-    document.head.appendChild(script);
-  }
+  
+  // Load and display armories
+  await loadArmories();
+  await initArmoriesSearch();
+  
+  console.log('✅ Armories module ready');
 }
 
 window.armoriesModule = {
-  async init() {
-    await loadArmories();
-    initArmoriesMap();
-  }
+  init: initArmoriesModule
 };

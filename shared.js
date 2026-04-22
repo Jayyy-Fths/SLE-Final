@@ -157,27 +157,8 @@ function initScrollProgress() {
 }
 
 // ========================================
-// INIT - Run on all pages
+// Page Detection + Auto-Init Router
 // ========================================
-document.addEventListener('DOMContentLoaded', () => {
-  initTheme();
-  loadLanguage();
-  loadComponents();
-  initScrollProgress();
-  initSharedListeners();
-  
-  // Expose globals for page scripts
-  window.shared = {
-    getFavorites,
-    toggleFavorite,
-    setLanguage,
-    showToast,
-    isDarkMode
-  };
-  
-console.log('🚀 Shared.js + Page Router initialized');
-
-// NEW: Page Detection + Auto-Init Router (added to end)
 function detectPage() {
   const pageData = document.body.dataset.page || document.title.toLowerCase().split(' | ')[0] || '';
   const path = window.location.pathname.split('/').pop().replace('.html', '');
@@ -190,7 +171,7 @@ function detectPage() {
     'about': 'about',
     'resources': 'resources'
   };
-  const detected = pageMap[path] || (pageData.includes('career') || pageData.includes('mos') ? 'careers' : 'home');
+  const detected = pageMap[path] || pageData.toLowerCase().replace(/[^a-z]/g, '') || 'home';
   return detected;
 }
 
@@ -204,21 +185,38 @@ async function initPageModule(page) {
       console.error(`❌ ${page} module error:`, err);
     }
   } else {
-    console.log(`ℹ️ No ${moduleName} found for page: ${page}`);
+    console.warn(`⚠️ No ${moduleName} found for page: ${page}`);
   }
 }
 
-// AUTO-INIT PAGE MODULE after shared setup
-setTimeout(async () => {
+// ========================================
+// INIT - Run on all pages
+// ========================================
+document.addEventListener('DOMContentLoaded', async () => {
+  initTheme();
+  loadLanguage();
+  await loadComponents();
+  initScrollProgress();
+  initSharedListeners();
+  
+  // Expose globals for page scripts
+  window.shared = {
+    getFavorites,
+    toggleFavorite,
+    setLanguage,
+    showToast,
+    isDarkMode,
+    pageRouter: {
+      detectPage,
+      initPageModule
+    }
+  };
+  
+  console.log('🚀 Shared.js initialized');
+  
+  // AUTO-INIT PAGE MODULE after shared setup
   const page = detectPage();
   await initPageModule(page);
-}, 100);
-
 });
-
-window.shared.pageRouter = {
-  detectPage,
-  initPageModule
-};
 
 

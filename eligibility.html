@@ -9,7 +9,7 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-zinc-950 text-white min-h-screen">
+<body class="bg-zinc-950 text-white min-h-screen" data-page="eligibility">
     <div id="scroll-progress" class="fixed top-0 left-0 h-1 bg-[#ffd700] z-50 w-0 transition-all duration-300"></div>
     
     <!-- Dynamic Nav -->
@@ -135,27 +135,7 @@
     <!-- Dynamic Footer -->
     <div id="footer-container"></div>
 
-    <script src="shared.js"></script>
-    <script src="script.js"></script>
-    <script>
-        // Page-specific eligibility init
-        document.addEventListener('DOMContentLoaded', () => {
-            const form = document.getElementById('eligibility-form');
-            if (form) {
-                form.addEventListener('submit', (e) => {
-                    e.preventDefault();
-                    calculateEligibility(); // From script.js
-                });
-            }
-            
-            // Live age/ASVAB updates
-            document.querySelectorAll('input[type="range"]').forEach(range => {
-                range.addEventListener('input', () => {
-                    const output = document.getElementById(range.id + '-value');
-                    if (output) output.textContent = range.value;
-                });
-            });
-        });
-    </script>
-</body>
+    <script src="bootstrap.js"></script>
+    <script src="pages/eligibility.js"></script>
+</body data-page="eligibility">
 </html>
