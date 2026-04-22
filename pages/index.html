@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="NJ National Guard Citizen Soldier Portal - Careers, armories, eligibility check, recruiter contact.">
+    <meta name="theme-color" content="#000000">
+    <title>NJ National Guard | Citizen Soldier Portal</title>
+    <link rel="manifest" href="/manifest.json">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script src="assets/js/bootstrap.js" defer></script>
+</head>
+<body class="bg-black text-white selection:bg-[#ffd700] selection:text-black" data-page="home">
+    <a href="#main-content" class="skip-link focus:outline-none focus:ring-4 focus:ring-[#ffd700]">Skip to main content</a>
+    
+    <div id="toast-notification"></div>
+    <div id="scroll-progress" class="scroll-progress"></div>
+    
+    <!-- Dynamic Components -->
+    <div id="navbar-container"></div>
+    
+    <main id="main-content">
+        <!-- Hero Section -->
+        <header class="relative h-screen flex items-center justify-center overflow-hidden">
+            <div class="absolute inset-0 z-0">
+                <img src="assets/images/knuckles.jpg" 
+                     class="w-full h-full object-cover opacity-50 scale-105 animate-slow-zoom" alt="NJ Guard training exercise"
+                     loading="eager" onerror="this.src='https://images.unsplash.com/photo-1564507592333-c9164ea0e6ce?auto=format&fit=crop&q=80&w=1920';">
+                <div class="absolute inset-0 bg-gradient-to-b from-black/80 via-transparent to-black"></div>
+            </div>
+            <div class="relative z-10 text-center px-6 max-w-4xl mx-auto" data-reveal>
+                <div class="inline-block px-6 py-2 border border-[#ffd700]/30 rounded-full bg-black/50 backdrop-blur-sm mb-8">
+                    <span id="hero-tagline" class="text-[#ffd700] text-xs font-black tracking-[0.5em] uppercase" data-i18n="hero.tagline">Always Ready • Always There</span>
+                </div>
+                <h1 class="text-5xl md:text-7xl lg:text-8xl font-black mb-8 tracking-tight leading-tight" data-i18n-html="hero.title">
+                    OWN YOUR <br><span class="text-[#ffd700] block">FUTURE</span>
+                </h1>
+                <p class="text-xl md:text-2xl text-gray-300 max-w-2xl mx-auto mb-12 leading-relaxed" data-i18n="hero.subtitle">
+                    Join the NJ National Guard. Keep your civilian career + gain leadership, tuition benefits, 
+                    $20K+ bonuses, and skills that employers value for life.
+                </p>
+                <div class="flex flex-col lg:flex-row gap-6 justify-center items-center mb-16">
+                    <a href="pages/eligibility.html" class="bg-[#ffd700] text-black px-12 py-6 font-black text-xl uppercase rounded-2xl hover:bg-white shadow-2xl hover:shadow-gold-lg transition-all px-12" data-i18n="hero.cta.primary">Check Your Eligibility →</a>
+                    <a href="pages/careers.html" class="border-2 border-white/30 backdrop-blur-md px-12 py-6 font-black text-xl uppercase rounded-2xl hover:bg-white hover:text-black transition-all" data-i18n="hero.cta.secondary">Browse 150+ Careers</a>
+                </div>
+                <div class="flex flex-wrap justify-center gap-4 text-xs font-bold uppercase tracking-wider">
+                    <span class="badge bg-green-500/20 border border-green-400/50 text-green-300" data-i18n="hero.benefits.tuition"><i data-lucide="award" class="w-4 h-4 inline"></i> 100% Tuition Paid</span>
+                    <span class="badge bg-blue-500/20 border border-blue-400/50 text-blue-300" data-i18n="hero.benefits.bonus"><i data-lucide="dollar-sign" class="w-4 h-4 inline"></i> Up to $20K Bonus</span>
+                    <span class="badge bg-yellow-500/20 border border-yellow-400/50 text-yellow-300" data-i18n="hero.benefits.service"><i data-lucide="clock" class="w-4 h-4 inline"></i> 1 Weekend/Month</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Trust Metrics -->
+        <section id="metrics" class="py-16 bg-gradient-to-r from-black to-zinc-900/50 border-y border-white/10" data-reveal>
+            <div class="max-w-6xl mx-auto px-6">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                    <div class="metric-card">
+                        <div class="text-4xl lg:text-5xl font-black text-[#ffd700] mb-2">150+</div>
+                        <div class="text-gray-400 uppercase tracking-wide text-sm">MOS Careers</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="text-4xl lg:text-5xl font-black text-[#ffd700] mb-2">12+</div>
+                        <div class="text-gray-400 uppercase tracking-wide text-sm">NJ Armories</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="text-4xl lg:text-5xl font-black text-[#ffd700] mb-2">1/mo</div>
+                        <div class="text-gray-400 uppercase tracking-wide text-sm">Weekend Drills</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="text-4xl lg:text-5xl font-black text-[#ffd700] mb-2">24h</div>
+                        <div class="text-gray-400 uppercase tracking-wide text-sm">Recruiter Response</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Why NJ Guard -->
+        <section id="overview" class="py-24 lg:py-32 bg-zinc-950/50">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="text-center mb-20" data-reveal>
+                    <span class="inline-block px-4 py-2 bg-[#ffd700]/10 border border-[#ffd700]/30 rounded-full text-[#ffd700] text-xs font-black uppercase tracking-wider mb-6">Why Choose NJ Guard?</span>
+                    <h2 class="text-5xl lg:text-6xl font-black uppercase mb-6" data-i18n="overview.title">Local Service<br>National Impact</h2>
+                    <p class="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed" data-i18n="overview.subtitle">
+                        Serve your community close to home while gaining elite training, full tuition coverage, 
+                        and leadership credentials that accelerate your civilian career.
+                    </p>
+                </div>
+                
+                <div class="grid lg:grid-cols-2 gap-16 items-center">
+                    <div data-reveal="slide-right">
+                        <div class="space-y-8">
+                            <div class="info-card p-8 rounded-3xl border border-white/10 backdrop-blur-md hover:border-[#ffd700]/50 transition-all">
+                                <div class="w-12 h-12 bg-gradient-to-br from-[#ffd700] to-[#ff8c00] rounded-2xl flex items-center justify-center mb-6 shadow-lg">
+                                    <i data-lucide="map-pin" class="w-6 h-6 text-black font-bold"></i>
+                                </div>
+                                <h3 class="text-2xl font-black uppercase mb-4">Local Duty Stations</h3>
+                                <p class="text-gray-300 leading-relaxed" data-i18n="overview.local">12+ NJ armories. One weekend/month + 2 weeks/year training. Stay close to family & career.</p>
+                            </div>
+                            <div class="info-card p-8 rounded-3xl border border-white/10 backdrop-blur-md hover:border-[#ffd700]/50 transition-all">
+                                <div class="w-12 h-12 bg-gradient-to-br from-[#ffd700] to-[#ff8c00] rounded-2xl flex items-center justify-center mb-6 shadow-lg">
+                                    <i data-lucide="graduation-cap" class="w-6 h-6 text-black font-bold"></i>
+                                </div>
+                                <h3 class="text-2xl font-black uppercase mb-4">100% Tuition Coverage</h3>
+                                <p class="text-gray-300 leading-relaxed" data-i18n="overview.tuition">NJ state college tuition 100% covered. GI Bill ready. Transfer credits accepted nationwide.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="relative" data-reveal="slide-left">
+                        <img src="assets/images/knuckles.jpg" alt="NJ National Guard training at local armory" 
+                             class="w-full rounded-3xl shadow-2xl ring-4 ring-black/20 hover:ring-[#ffd700]/30 transition-all duration-500 object-cover h-[500px]"
+                             loading="lazy">
+                        <div class="absolute -bottom-6 -right-8 w-48 h-48 bg-gradient-to-br from-[#ffd700]/20 to-transparent rounded-3xl blur-3xl"></div>
+                    </div>
+                </div>
+                
+                <div class="mt-24 grid md:grid-cols-3 gap-8" data-reveal>
+                    <div class="info-card p-10 text-center">
+                        <i data-lucide="code" class="w-16 h-16 text-[#ffd700] mx-auto mb-6"></i>
+                        <h3 class="text-2xl font-black uppercase mb-4">Cyber & Tech</h3>
+                        <p class="text-gray-400 leading-relaxed">CompTIA certs, network security, drone ops. Future-proof skills.</p>
+                    </div>
+                    <div class="info-card p-10 text-center">
+                        <i data-lucide="heart-pulse" class="w-16 h-16 text-[#ffd700] mx-auto mb-6"></i>
+                        <h3 class="text-2xl font-black uppercase mb-4">Medical MOS</h3>
+                        <p class="text-gray-400 leading-relaxed">EMT/Paramedic certs, surgical tech, behavioral health. Patient care experience.</p>
+                    </div>
+                    <div class="info-card p-10 text-center">
+                        <i data-lucide="truck" class="w-16 h-16 text-[#ffd700] mx-auto mb-6"></i>
+                        <h3 class="text-2xl font-black uppercase mb-4">Logistics & Trades</h3>
+                        <p class="text-gray-400 leading-relaxed">CDL, welding, HVAC, heavy equipment. Journeyman-level training.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Armories CTA -->
+        <section class="py-32 bg-gradient-to-b from-zinc-900 to-black text-center relative overflow-hidden">
+            <div class="absolute inset-0 bg-[radial-gradient(ellipse_50%_50%_at_50%_50%,rgba(255,215,0,0.1),transparent)]"></div>
+            <div class="relative z-10 max-w-6xl mx-auto px-6">
+                <h2 class="text-5xl lg:text-7xl font-black uppercase mb-8 bg-gradient-to-r from-white to-gray-200 bg-clip-text text-transparent" data-i18n="armories.title">12+ NJ Armories<br>Find Yours Now</h2>
+                <p class="text-2xl text-gray-300 mb-12 max-w-3xl mx-auto leading-relaxed" data-i18n="armories.subtitle">
+                    Interactive map with recruiter contacts, drill schedules, directions. 
+                    See your closest unit and schedule a visit today.
+                </p>
+                <div class="grid lg:grid-cols-2 gap-12 items-center mb-16">
+                    <div class="text-left">
+                        <div class="space-y-6">
+                            <div class="flex items-center gap-4 p-6 bg-white/5 backdrop-blur rounded-2xl border border-white/10">
+                                <div class="w-12 h-12 bg-[#ffd700] rounded-xl flex items-center justify-center">
+                                    <i data-lucide="phone" class="w-6 h-6 text-black"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-black text-lg mb-1">Direct Recruiter Lines</h4>
+                                    <p class="text-gray-400">Call your local armory recruiter directly.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4 p-6 bg-white/5 backdrop-blur rounded-2xl border border-white/10">
+                                <div class="w-12 h-12 bg-[#ffd700] rounded-xl flex items-center justify-center">
+                                    <i data-lucide="calendar" class="w-6 h-6 text-black"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-black text-lg mb-1">Drill Schedules</h4>
+                                    <p class="text-gray-400">Know exactly when units train.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <a href="pages/armories.html" class="group block w-full bg-gradient-to-r from-[#ffd700] to-[#ff8c00] text-black p-12 rounded-3xl font-black uppercase text-2xl shadow-2xl hover:shadow-gold-xl transition-all hover:-translate-y-2 mx-auto max-w-md">
+                            <i data-lucide="map-pin" class="w-20 h-20 mx-auto mb-6 opacity-75 group-hover:opacity-100 transition-opacity group-hover:scale-110"></i>
+                            <span>Open Interactive Map</span>
+                            <div class="text-sm font-normal mt-2 opacity-75 group-hover:opacity-100">ZIP search + 11 locations</div>
+                        </a>
+                    </div>
+                </div>
+                <a href="pages/armories.html" class="inline-block bg-white text-black px-16 py-8 font-black uppercase text-xl rounded-3xl hover:bg-gray-100 shadow-2xl hover:shadow-gold-xl transition-all hover:scale-[1.02]" data-i18n="armories.cta">Find Your Armory →</a>
+            </div>
+        </section>
+
+        <!-- Enlistment Roadmap -->
+        <section id="roadmap" class="py-32 bg-black/50">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="text-center mb-24" data-reveal>
+                    <span class="inline-block px-6 py-3 bg-gradient-to-r from-[#ffd700]/20 to-[#ff8c00]/20 border border-[#ffd700]/40 rounded-2xl text-[#ffd700] text-lg font-black uppercase tracking-wide mb-8">Your Exact Roadmap</span>
+                    <h2 class="text-5xl lg:text-7xl font-black uppercase mb-6">From Conversation<br>to Commission</h2>
+                </div>
+                <div class="relative">
+                    <div class="grid md:grid-cols-5 gap-8 max-w-6xl mx-auto">
+                        <article class="path-step bg-zinc-900/50 backdrop-blur border border-white/10 rounded-3xl p-10 text-center group hover:border-[#ffd700]/70 hover:shadow-gold-xl transition-all" data-reveal="fade-up">
+                            <div class="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-blue-500 to-blue-600 rounded-3xl flex items-center justify-center group-hover:scale-110 transition-all shadow-xl">
+                                <span class="text-2xl font-black text-white">01</span>
+                            </div>
+                            <h3 class="text-xl font-black uppercase mb-4">Meet Recruiter</h3>
+                            <p class="text-gray-400 leading-relaxed mb-6">Personal consultation. ASVAB preview. MOS matching.</p>
+                            <div class="text-xs uppercase tracking-wider text-[#ffd700] font-bold">30 minutes</div>
+                        </article>
+                        <article class="path-step bg-zinc-900/50 backdrop-blur border border-white/10 rounded-3xl p-10 text-center group hover:border-[#ffd700]/70 hover:shadow-gold-xl transition-all" data-reveal="fade-up" data-delay="100">
+                            <div class="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-green-500 to-emerald-600 rounded-3xl flex items-center justify-center group-hover:scale-110 transition-all shadow-xl">
+                                <span class="text-2xl font-black text-white">02</span>
+                            </div>
+                            <h3 class="text-xl font-black uppercase mb-4">ASVAB + Medical</h3>
+                            <p class="text-gray-400 leading-relaxed mb-6">1-day MEPS trip. Official scores + qualification.</p>
+                            <div class="text-xs uppercase tracking-wider text-[#ffd700] font-bold">1 Day</div>
+                        </article>
+                        <article class="path-step bg-zinc-900/50 backdrop-blur border border-white/10 rounded-3xl p-10 text-center group hover:border-[#ffd700]/70 hover:shadow-gold-xl transition-all" data-reveal="fade-up" data-delay="200">
+                            <div class="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-yellow-500 to-amber-600 rounded-3xl flex items-center justify-center group-hover:scale-110 transition-all shadow-xl">
+                                <span class="text-2xl font-black text-white">03</span>
+                            </div>
+                            <h3 class="text-xl font-black uppercase mb-4">Select MOS</h3>
+                            <p class="text-gray-400 leading-relaxed mb-6">Choose your specialty based on scores + goals.</p>
+                            <div class="text-xs uppercase tracking-wider text-[#ffd700] font-bold">1 Meeting</div>
+                        </article>
+                        <article class="path-step bg-zinc-900/50 backdrop-blur border border-white/10 rounded-3xl p-10 text-center group hover:border-[#ffd700]/70 hover:shadow-gold-xl transition-all" data-reveal="fade-up" data-delay="300">
+                            <div class="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-purple-500 to-violet-600 rounded-3xl flex items-center justify-center group-hover:scale-110 transition-all shadow-xl">
+                                <span class="text-2xl font-black text-white">04</span>
+                            </div>
+                            <h3 class="text-xl font-black uppercase mb-4">Ship to Training</h3>
+                            <p class="text-gray-400 leading-relaxed mb-6">Basic + AIT. Earn certs while you train.</p>
+                            <div class="text-xs uppercase tracking-wider text-[#ffd700] font-bold">10-52 Weeks</div>
+                        </article>
+                        <article class="path-step bg-zinc-900/50 backdrop-blur border border-white/10 rounded-3xl p-10 text-center group hover:border-[#ffd700]/70 hover:shadow-gold-xl transition-all" data-reveal="fade-up" data-delay="400">
+                            <div class="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-red-500 to-orange-600 rounded-3xl flex items-center justify-center group-hover:scale-110 transition-all shadow-xl">
+                                <span class="text-2xl font-black text-white">05</span>
+                            </div>
+                            <h3 class="text-xl font-black uppercase mb-4">Join Your Unit</h3>
+                            <p class="text-gray-400 leading-relaxed mb-6">Return home. Drill locally. Full benefits active.</p>
+                            <div class="text-xs uppercase tracking-wider text-[#ffd700] font-bold">Lifetime</div>
+                        </article>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Actions -->
+        <section class="py-32 bg-gradient-to-br from-zinc-900/30 to-black/50">
+            <div class="max-w-6xl mx-auto px-6 text-center">
+                <h2 class="text-5xl lg:text-6xl font-black uppercase mb-16 bg-gradient-to-r from-white via-gray-100 to-white bg-clip-text text-transparent" data-i18n="actions.title">Start Right Now</h2>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <a href="pages/eligibility.html" class="group block p-12 bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl hover:border-[#ffd700] hover:bg-white/10 hover:shadow-gold-xl transition-all text-center">
+                        <i data-lucide="check-circle" class="w-20 h-20 text-[#ffd700] mx-auto mb-8 group-hover:rotate-12 group-hover:scale-110 transition-transform duration-500"></i>
+                        <h3 class="text-2xl font-black uppercase mb-4" data-i18n="actions.eligibility">Eligibility Check</h3>
+                        <p class="text-xl text-gray-300 mb-8" data-i18n="actions.eligibility.desc">8 questions. Instant score + MOS matches.</p>
+                        <span class="text-[#ffd700] font-bold uppercase tracking-wide text-sm">Takes 2 minutes →</span>
+                    </a>
+                    <a href="pages/careers.html" class="group block p-12 bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl hover:border-[#ffd700] hover:bg-white/10 hover:shadow-gold-xl transition-all text-center">
+                        <i data-lucide="list" class="w-20 h-20 text-[#ffd700] mx-auto mb-8 group-hover:rotate-12 group-hover:scale-110 transition-transform duration-500"></i>
+                        <h3 class="text-2xl font-black uppercase mb-4" data-i18n="actions.careers">MOS Explorer</h3>
+                        <p class="text-xl text-gray-300 mb-8" data-i18n="actions.careers.desc">150+ careers. Filter, compare, bookmark favorites.</p>
+                        <span class="text-[#ffd700] font-bold uppercase tracking-wide text-sm">Interactive search →</span>
+                    </a>
+                    <a href="pages/armories.html" class="group block p-12 bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl hover:border-[#ffd700] hover:bg-white/10 hover:shadow-gold-xl transition-all text-center">
+                        <i data-lucide="map-pin" class="w-20 h-20 text-[#ffd700] mx-auto mb-8 group-hover:rotate-12 group-hover:scale-110 transition-transform duration-500"></i>
+                        <h3 class="text-2xl font-black uppercase mb-4" data-i18n="actions.armories">Find Armory</h3>
+                        <p class="text-xl text-gray-300 mb-8" data-i18n="actions.armories.desc">11 locations. Recruiter phone + drill times.</p>
+                        <span class="text-[#ffd700] font-bold uppercase tracking-wide text-sm">Map + directions →</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials / Social Proof -->
+        <section class="py-32 bg-zinc-950/50">
+            <div class="max-w-5xl mx-auto px-6">
+                <div class="text-center mb-20" data-reveal>
+                    <span class="inline-block px-6 py-3 bg-gradient-to-r from-green-500/20 to-emerald-500/20 border border-green-400/40 rounded-2xl text-green-400 text-lg font-black uppercase tracking-wide mb-8">Real Guardsmen Speak</span>
+                    <h2 class="text-5xl lg:text-6xl font-black uppercase mb-6">NJ Guard Changed<br>My Trajectory</h2>
+                </div>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <blockquote class="testimonial-card p-10 rounded-3xl border border-white/10 backdrop-blur-md hover:shadow-gold-xl transition-all">
+                        <p class="text-xl text-gray-300 italic mb-8 leading-relaxed">"Paid my way through engineering at Rutgers. Now IT manager making $120k. One weekend a month."</p>
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-[#ffd700] rounded-full flex items-center justify-center">
+                                <i data-lucide="shield-check" class="w-6 h-6 text-black"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-black uppercase text-lg">SGT Alex Rivera</h4>
+                                <span class="text-[#ffd700] uppercase tracking-wider text-sm font-bold">25B IT Specialist</span>
+                            </div>
+                        </div>
+                    </blockquote>
+                    <blockquote class="testimonial-card p-10 rounded-3xl border border-white/10 backdrop-blur-md hover:shadow-gold-xl transition-all">
+                        <p class="text-xl text-gray-300 italic mb-8 leading-relaxed">"EMT cert while in AIT. Now full-time firefighter + Guard medic. Best of both worlds."</p>
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-[#ffd700] rounded-full flex items-center justify-center">
+                                <i data-lucide="heart-pulse" class="w-6 h-6 text-black"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-black uppercase text-lg">SPC Taylor Kim</h4>
+                                <span class="text-[#ffd700] uppercase tracking-wider text-sm font-bold">68W Combat Medic</span>
+                            </div>
+                        </div>
+                    </blockquote>
+                    <blockquote class="testimonial-card p-10 rounded-3xl border border-white/10 backdrop-blur-md hover:shadow-gold-xl transition-all">
+                        <p class="text-xl text-gray-300 italic mb-8 leading-relaxed">"Welding cert + leadership training = $95k union job. NJ Guard made it happen."</p>
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-[#ffd700] rounded-full flex items-center justify-center">
+                                <i data-lucide="hard-drive" class="w-6 h-6 text-black"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-black uppercase text-lg">SSG Marcus Jackson</h4>
+                                <span class="text-[#ffd700] uppercase tracking-wider text-sm font-bold">91E Allied Trades</span>
+                            </div>
+                        </div>
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Dynamic Footer -->
+    <div id="footer-container"></div>
+    
+    <!-- Global Apply Modal (shared) -->
+    <dialog id="contact-modal" class="backdrop:bg-black/80 backdrop-blur-md">
+        <div class="bg-zinc-900/95 rounded-3xl p-10 max-w-lg mx-auto border border-white/20 shadow-2xl max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-8">
+                <div>
+                    <h3 class="text-3xl font-black uppercase" data-i18n="modal.title">Contact Recruiter</h3>
+                    <p class="text-gray-400 mt-2" data-i18n="modal.subtitle">Get personalized answers within 24 hours.</p>
+                </div>
+                <button id="close-contact-modal" class="text-4xl hover:text-[#ffd700] p-2" aria-label="Close">&times;</button>
+            </div>
+            <form id="contact-form" class="space-y-6">
+                <input type="text" name="firstName" placeholder="First Name *" class="input-field w-full" required>
+                <input type="text" name="lastName" placeholder="Last Name *" class="input-field w-full" required>
+                <input type="email" name="email" placeholder="Email Address *" class="input-field w-full" required>
+                <input type="tel" name="phone" placeholder="Phone Number *" class="input-field w-full" required>
+                <select name="interest" class="input-field w-full" required>
+                    <option value="">Primary Interest</option>
+                    <option value="careers">Find My MOS/Career</option>
+                    <option value="eligibility">Eligibility Questions</option>
+                    <option value="benefits">Benefits Info</option>
+                    <option value="armory">Local Armory Visit</option>
+                </select>
+                <textarea name="message" rows="4" placeholder="Tell us your goals or questions..." class="input-field w-full" required></textarea>
+                <button type="submit" class="w-full bg-gradient-to-r from-[#ffd700] to-[#ff8c00] text-black font-black py-5 text-xl uppercase rounded-2xl hover:shadow-gold-xl transition-all shadow-lg">Send Message</button>
+            </form>
+            <p id="form-feedback" class="mt-6 text-center font-bold text-green-400 hidden" role="status" aria-live="polite" data-i18n="modal.success">✅ Message sent! Recruiter will call within 24 hours.</p>
+        </div>
+    </dialog>
+
+    <!-- Install PWA Banner (Progressive Enhancement) -->
+    <div id="install-banner" class="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-[#ffd700] to-[#ff8c00] text-black px-8 py-4 rounded-2xl shadow-2xl hidden z-50 max-w-sm mx-4 flex items-center gap-4">
+        <i data-lucide="download" class="w-6 h-6"></i>
+        <div>
+            <div class="font-black uppercase text-sm tracking-wide">Add to Home Screen</div>
+            <div class="text-xs opacity-90">Install NJ Guard Portal app</div>
+        </div>
+        <button id="install-accept" class="ml-auto font-bold uppercase text-xs px-4 py-1 bg-black/20 rounded-xl hover:bg-black/40 transition-all">Install</button>
+        <button id="install-dismiss" class="ml-2 text-xs underline hover:no-underline opacity-75 hover:opacity-100 transition-opacity">✕</button>
+    </div>
+</body>
+</html>

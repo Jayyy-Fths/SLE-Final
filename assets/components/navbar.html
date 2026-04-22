@@ -1,0 +1,41 @@
+<nav id="navbar" class="fixed w-full z-50 transition-all duration-300 py-6 px-6 backdrop-blur-xl" role="navigation" aria-label="Main navigation">
+    <div class="max-w-7xl mx-auto flex justify-between items-center">
+        <a href="pages/index.html" class="flex items-center gap-2 hover:text-[#ffd700] transition-colors group">
+            <div class="w-8 h-8 bg-[#ffd700] rotate-45 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <i data-lucide="shield" class="text-black -rotate-45 w-5 h-5"></i>
+            </div>
+            <span class="text-xl font-black italic tracking-tighter uppercase">NJ National Guard</span>
+        </a>
+        <div class="hidden md:flex items-center gap-8 text-xs font-bold uppercase tracking-widest">
+            <a href="pages/index.html#overview" class="hover:text-[#ffd700]" data-i18n="nav.overview">Overview</a>
+            <a href="pages/about.html" class="hover:text-[#ffd700]" data-i18n="nav.about">About</a>
+            <a href="pages/careers.html" class="hover:text-[#ffd700]" data-i18n="nav.careers">Careers</a>
+            <a href="pages/armories.html" class="hover:text-[#ffd700]" data-i18n="nav.armories">🗺️ Armories</a>
+            <a href="pages/resources.html" class="hover:text-[#ffd700]" data-i18n="nav.resources">Resources</a>
+            <a href="pages/eligibility.html" class="hover:text-[#ffd700]" data-i18n="nav.eligibility">Eligibility</a>
+            <a href="pages/contact.html" class="hover:text-[#ffd700]" data-i18n="nav.contact">Contact</a>
+            <button id="theme-toggle" class="favorite-btn p-2 hover:rotate-180 transition-all" title="Toggle Theme" aria-pressed="false" aria-label="Toggle light and dark theme">
+                <i data-lucide="sun" class="w-5 h-5"></i>
+            </button>
+            <button id="language-toggle" class="bg-[#ff8c00] text-black px-4 py-2 font-black rounded-lg hover:bg-[#ffd700] transition-all" aria-label="Switch language">ES</button>
+            <a href="pages/contact.html" class="bg-[#ffd700] text-black px-6 py-3 font-black uppercase rounded-lg hover:bg-white shadow-lg hover:shadow-xl transition-all" data-i18n="nav.recruiter">Contact Recruiter</a>
+        </div>
+        <button id="menu-toggle" class="md:hidden text-[#ffd700] font-bold text-xl" aria-controls="mobile-menu" aria-expanded="false" aria-label="Open mobile menu">
+            <i data-lucide="menu" class="w-6 h-6"></i>
+        </button>
+    </div>
+</nav>
+
+<div id="mobile-menu" class="hidden fixed inset-x-0 top-20 bg-black/95 z-40 px-6 py-8 border-t border-white/10" aria-hidden="true">
+    <div class="flex flex-col gap-4 text-sm uppercase tracking-widest">
+        <a href="pages/index.html" class="hover:text-[#ffd700] py-2 border-b border-white/10" data-i18n="nav.home">Home</a>
+        <a href="pages/about.html" class="hover:text-[#ffd700] py-2 border-b border-white/10" data-i18n="nav.about">About</a>
+        <a href="pages/careers.html" class="hover:text-[#ffd700] py-2 border-b border-white/10" data-i18n="nav.careers">Careers</a>
+        <a href="pages/armories.html" class="hover:text-[#ffd700] py-2 border-b border-white/10" data-i18n="nav.armories">Armories</a>
+        <a href="pages/resources.html" class="hover:text-[#ffd700] py-2 border-b border-white/10" data-i18n="nav.resources">Resources</a>
+        <a href="pages/eligibility.html" class="hover:text-[#ffd700] py-2 border-b border-white/10" data-i18n="nav.eligibility">Eligibility</a>
+        <a href="pages/contact.html" class="hover:text-[#ffd700] py-2 border-b border-white/10" data-i18n="nav.contact">Contact</a>
+        <button id="language-toggle-mobile" class="bg-[#ff8c00] text-black px-4 py-3 font-black rounded-lg hover:bg-[#ffd700] transition-all mt-4" aria-label="Switch language">ES</button>
+        <a href="pages/contact.html" class="bg-[#ffd700] text-black px-6 py-4 font-black uppercase rounded-2xl hover:bg-white shadow-xl mt-4 block text-center transition-all" data-i18n="nav.recruiter">Contact Recruiter</a>
+    </div>
+</div>
