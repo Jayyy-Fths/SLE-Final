@@ -1,222 +1,382 @@
-// shared.js - Common logic for multi-page NJ Guard portal
-// Theme, language, nav/footer load, favorites sync
+// shared.js - Core shared runtime for NJ Guard multi-page portal
+// Handles theme, language, shared components, toast notifications, and page-module bootstrapping.
 
-const SUPPORTED_LANGUAGES = new Set(['en', 'es']);
-let currentLanguage = 'en';
-let isDarkMode = true;
+(() => {
+  'use strict';
 
-// ========================================
-// Storage Utils
-// ========================================
-function safeStorageGet(key, fallback = null) {
-  try {
-    return localStorage.getItem(key) || fallback;
-  } catch {
-    return fallback;
-  }
-}
+  const STORAGE_KEYS = {
+    theme: 'darkMode',
+    language: 'pageLanguage',
+    favorites: 'favoriteMOS'
+  };
 
-function safeStorageSet(key, value) {
-  try {
-    localStorage.setItem(key, value);
-  } catch {}
-}
+  const SUPPORTED_LANGUAGES = new Set(['en', 'es']);
+  const PAGE_MAP = {
+    index: 'home',
+    careers: 'careers',
+    armories: 'armories',
+    eligibility: 'eligibility',
+    contact: 'contact',
+    about: 'about',
+    resources: 'resources'
+  };
 
-// ========================================
-// Theme System
-// ========================================
-function initTheme() {
-  const saved = safeStorageGet('darkMode', 'true');
-  isDarkMode = saved !== 'false';
-  document.body.classList.toggle('light-theme', !isDarkMode);
-}
+  const state = {
+    language: 'en',
+    isDarkMode: true,
+    pageScripts: new Map(),
+    listenersBound: false
+  };
 
-function toggleTheme() {
-  isDarkMode = !isDarkMode;
-  document.body.classList.toggle('light-theme', !isDarkMode);
-  safeStorageSet('darkMode', String(isDarkMode));
-  
-  // Update toggle icon
-  const toggles = document.querySelectorAll('#theme-toggle i');
-  toggles.forEach(icon => {
-    icon.dataset.lucide = isDarkMode ? 'sun' : 'moon';
-  });
-  if (window.lucide?.createIcons) window.lucide.createIcons();
-}
-
-// ========================================
-// Language System
-// ========================================
-function loadLanguage() {
-  currentLanguage = safeStorageGet('pageLanguage', 'en');
-  if (!SUPPORTED_LANGUAGES.has(currentLanguage)) currentLanguage = 'en';
-}
-
-function setLanguage(lang) {
-  if (!SUPPORTED_LANGUAGES.has(lang)) lang = 'en';
-  currentLanguage = lang;
-  safeStorageSet('pageLanguage', lang);
-  document.documentElement.lang = lang;
-  // Trigger i18n update in page-specific scripts
-  document.dispatchEvent(new CustomEvent('languageChange', { detail: { lang } }));
-}
-
-function toggleLanguage() {
-  setLanguage(currentLanguage === 'en' ? 'es' : 'en');
-}
-
-// ========================================
-// Favorites Sync (MOS)
-// ========================================
-function getFavorites() {
-  return JSON.parse(safeStorageGet('favoriteMOS', '[]') || '[]');
-}
-
-function saveFavorites(favs) {
-  safeStorageSet('favoriteMOS', JSON.stringify(favs));
-}
-
-function toggleFavorite(mos, title) {
-  const favs = getFavorites();
-  const index = favs.findIndex(f => f.mos === mos);
-  if (index > -1) {
-    favs.splice(index, 1);
-  } else {
-    favs.push({ mos, title });
-  }
-  saveFavorites(favs);
-  document.dispatchEvent(new CustomEvent('favoritesUpdate'));
-}
-
-// ========================================
-// Nav/Footer Loader
-// ========================================
-async function loadComponents() {
-  const navContainer = document.getElementById('navbar-container');
-  const footerContainer = document.getElementById('footer-container');
-  
-  if (navContainer && !navContainer.hasChildNodes()) {
+  function safeStorageGet(key, fallback = null) {
     try {
-      const navResp = await fetch('components/navbar.html');
-      navContainer.innerHTML = await navResp.text();
+      const value = localStorage.getItem(key);
+      return value === null ? fallback : value;
+    } catch {
+      return fallback;
+    }
+  }
+
+  function safeStorageSet(key, value) {
+    try {
+      localStorage.setItem(key, value);
     } catch {}
   }
-  
-  if (footerContainer && !footerContainer.hasChildNodes()) {
+
+  function safeStorageJSONGet(key, fallback) {
+    const raw = safeStorageGet(key, null);
+    if (raw === null) return fallback;
     try {
-      const footerResp = await fetch('components/footer.html');
-      footerContainer.innerHTML = await footerResp.text();
-    } catch {}
+      return JSON.parse(raw);
+    } catch {
+      return fallback;
+    }
   }
-  
-  // Re-init listeners after load
-  initSharedListeners();
-}
 
-function initSharedListeners() {
-  // Theme toggle
-  document.getElementById('theme-toggle')?.addEventListener('click', toggleTheme);
-  document.getElementById('language-toggle')?.addEventListener('click', toggleLanguage);
-  
-  // Mobile menu
-  document.getElementById('menu-toggle')?.addEventListener('click', () => {
-    const menu = document.getElementById('mobile-menu');
-    if (menu) menu.classList.toggle('hidden');
-  });
-}
-
-// ========================================
-// Toast Notification
-// ========================================
-function showToast(message, type = 'success') {
-  // Create toast if not exists
-  let toast = document.getElementById('toast-notification');
-  if (!toast) {
-    toast = document.createElement('div');
-    toast.id = 'toast-notification';
-    toast.className = 'toast toast-success fixed top-4 right-4 z-50 p-4 rounded-xl shadow-2xl max-w-sm';
-    document.body.appendChild(toast);
+  function renderIcons() {
+    if (window.lucide?.createIcons) {
+      window.lucide.createIcons();
+    }
   }
-  
-  toast.textContent = message;
-  toast.className = `toast toast-${type} show fixed top-4 right-4 z-50 p-4 rounded-xl shadow-2xl max-w-sm backdrop-blur`;
-  
-  setTimeout(() => toast.classList.remove('show'), 4000);
-}
 
-// ========================================
-// Scroll Progress
-// ========================================
-function initScrollProgress() {
-  window.addEventListener('scroll', () => {
+  // =========================
+  // Theme
+  // =========================
+  function applyTheme(isDarkMode) {
+    state.isDarkMode = Boolean(isDarkMode);
+    document.body.classList.toggle('light-theme', !state.isDarkMode);
+    safeStorageSet(STORAGE_KEYS.theme, String(state.isDarkMode));
+
+    const iconName = state.isDarkMode ? 'sun' : 'moon';
+    document.querySelectorAll('[data-theme-icon]').forEach((icon) => {
+      icon.dataset.lucide = iconName;
+    });
+    renderIcons();
+  }
+
+  function initTheme() {
+    const saved = safeStorageGet(STORAGE_KEYS.theme, 'true');
+    applyTheme(saved !== 'false');
+  }
+
+  function toggleTheme() {
+    applyTheme(!state.isDarkMode);
+  }
+
+  // =========================
+  // Language
+  // =========================
+  function normalizeLanguage(lang) {
+    return SUPPORTED_LANGUAGES.has(lang) ? lang : 'en';
+  }
+
+  function updateLanguageButtonLabels() {
+    const nextLang = state.language === 'en' ? 'ES' : 'EN';
+    document.querySelectorAll('#language-toggle, #language-toggle-mobile').forEach((button) => {
+      button.textContent = nextLang;
+      button.setAttribute('aria-label', `Switch language to ${nextLang}`);
+    });
+  }
+
+  function setLanguage(lang) {
+    state.language = normalizeLanguage(lang);
+    safeStorageSet(STORAGE_KEYS.language, state.language);
+    document.documentElement.lang = state.language;
+    updateLanguageButtonLabels();
+    document.dispatchEvent(new CustomEvent('languageChange', { detail: { lang: state.language } }));
+  }
+
+  function loadLanguage() {
+    setLanguage(safeStorageGet(STORAGE_KEYS.language, 'en'));
+  }
+
+  function toggleLanguage() {
+    setLanguage(state.language === 'en' ? 'es' : 'en');
+  }
+
+  // =========================
+  // Favorites
+  // =========================
+  function getFavorites() {
+    const data = safeStorageJSONGet(STORAGE_KEYS.favorites, []);
+    return Array.isArray(data) ? data : [];
+  }
+
+  function saveFavorites(favorites) {
+    safeStorageSet(STORAGE_KEYS.favorites, JSON.stringify(favorites));
+  }
+
+  function toggleFavorite(mos, title) {
+    if (!mos) return;
+
+    const favorites = getFavorites();
+    const index = favorites.findIndex((item) => item?.mos === mos);
+
+    if (index > -1) {
+      favorites.splice(index, 1);
+    } else {
+      favorites.push({ mos, title: title || mos });
+    }
+
+    saveFavorites(favorites);
+    document.dispatchEvent(new CustomEvent('favoritesUpdate', { detail: { favorites } }));
+  }
+
+  // =========================
+  // Shared components + listeners
+  // =========================
+  async function loadHTML(url) {
+    const response = await fetch(url, { cache: 'no-cache' });
+    if (!response.ok) {
+      throw new Error(`Failed to load ${url}: ${response.status}`);
+    }
+    return response.text();
+  }
+
+  async function injectComponent(containerId, filePath) {
+    const container = document.getElementById(containerId);
+    if (!container || container.childElementCount > 0) return;
+
+    try {
+      container.innerHTML = await loadHTML(filePath);
+    } catch (error) {
+      console.warn(`⚠️ Component load failed for ${filePath}`, error);
+    }
+  }
+
+  async function loadComponents() {
+    await Promise.all([
+      injectComponent('navbar-container', 'components/navbar.html'),
+      injectComponent('footer-container', 'components/footer.html')
+    ]);
+
+    bindSharedListeners();
+    renderIcons();
+  }
+
+  function bindSharedListeners() {
+    // re-bind every time components are injected to avoid stale handlers,
+    // but avoid duplicate handlers by replacing click listeners through .onclick
+    const themeButtons = document.querySelectorAll('#theme-toggle, #theme-toggle-mobile');
+    themeButtons.forEach((button) => {
+      button.onclick = toggleTheme;
+      const icon = button.querySelector('i');
+      if (icon) {
+        icon.setAttribute('data-theme-icon', 'true');
+      }
+    });
+
+    const languageButtons = document.querySelectorAll('#language-toggle, #language-toggle-mobile');
+    languageButtons.forEach((button) => {
+      button.onclick = toggleLanguage;
+    });
+
+    const menuToggle = document.getElementById('menu-toggle');
+    if (menuToggle) {
+      menuToggle.onclick = () => {
+        const menu = document.getElementById('mobile-menu');
+        if (!menu) return;
+        const isOpen = !menu.classList.contains('hidden');
+        menu.classList.toggle('hidden');
+        menuToggle.setAttribute('aria-expanded', String(!isOpen));
+        menu.setAttribute('aria-hidden', String(isOpen));
+      };
+    }
+
+    updateLanguageButtonLabels();
+  }
+
+  // =========================
+  // UX helpers
+  // =========================
+  function showToast(message, type = 'success') {
+    if (!message) return;
+
+    let toast = document.getElementById('toast-notification');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'toast-notification';
+      toast.setAttribute('role', 'status');
+      toast.setAttribute('aria-live', 'polite');
+      document.body.appendChild(toast);
+    }
+
+    toast.textContent = message;
+    toast.className = `toast toast-${type} show fixed top-4 right-4 z-50 p-4 rounded-xl shadow-2xl max-w-sm backdrop-blur`;
+
+    window.clearTimeout(showToast._timeoutId);
+    showToast._timeoutId = window.setTimeout(() => {
+      toast.classList.remove('show');
+    }, 3500);
+  }
+
+  function initScrollProgress() {
     const progress = document.getElementById('scroll-progress');
     if (!progress) return;
-    const scrolled = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
-    progress.style.width = scrolled + '%';
-  });
-}
 
-// ========================================
-// Page Detection + Auto-Init Router
-// ========================================
-function detectPage() {
-  const pageData = document.body.dataset.page || document.title.toLowerCase().split(' | ')[0] || '';
-  const path = window.location.pathname.split('/').pop().replace('.html', '');
-  const pageMap = {
-    'index': 'home',
-    'careers': 'careers',
-    'armories': 'armories',
-    'eligibility': 'eligibility',
-    'contact': 'contact',
-    'about': 'about',
-    'resources': 'resources'
-  };
-  const detected = pageMap[path] || pageData.toLowerCase().replace(/[^a-z]/g, '') || 'home';
-  return detected;
-}
+    const renderProgress = () => {
+      const maxScrollable = document.documentElement.scrollHeight - window.innerHeight;
+      const percent = maxScrollable > 0 ? (window.scrollY / maxScrollable) * 100 : 0;
+      progress.style.width = `${Math.max(0, Math.min(100, percent))}%`;
+    };
 
-async function initPageModule(page) {
-  const moduleName = `${page}Module`;
-  if (window[moduleName]?.init) {
-    try {
-      await window[moduleName].init();
-      console.log(`✅ ${page.charAt(0).toUpperCase() + page.slice(1)} module loaded`);
-    } catch (err) {
-      console.error(`❌ ${page} module error:`, err);
-    }
-  } else {
-    console.warn(`⚠️ No ${moduleName} found for page: ${page}`);
+    renderProgress();
+    window.addEventListener('scroll', renderProgress, { passive: true });
+    window.addEventListener('resize', renderProgress);
   }
-}
 
-// ========================================
-// INIT - Run on all pages
-// ========================================
-document.addEventListener('DOMContentLoaded', async () => {
-  initTheme();
-  loadLanguage();
-  await loadComponents();
-  initScrollProgress();
-  initSharedListeners();
-  
-  // Expose globals for page scripts
-  window.shared = {
-    getFavorites,
-    toggleFavorite,
-    setLanguage,
-    showToast,
-    isDarkMode,
-    pageRouter: {
-      detectPage,
-      initPageModule
+  // =========================
+  // Page router + module loading
+  // =========================
+  function detectPage() {
+    const fromData = (document.body.dataset.page || '').trim().toLowerCase();
+    if (fromData) return fromData;
+
+    const fileName = (window.location.pathname.split('/').pop() || 'index.html').replace('.html', '').toLowerCase();
+    return PAGE_MAP[fileName] || fileName || 'home';
+  }
+
+  function loadPageScript(page) {
+    if (!page) return Promise.resolve();
+
+    if (state.pageScripts.has(page)) {
+      return state.pageScripts.get(page);
     }
-  };
-  
-  console.log('🚀 Shared.js initialized');
-  
-  // AUTO-INIT PAGE MODULE after shared setup
-  const page = detectPage();
-  await initPageModule(page);
-});
 
+    const modulePath = `pages/${page}.js`;
 
+    const loadPromise = new Promise((resolve, reject) => {
+      const existing = document.querySelector(`script[data-page-script="${page}"]`);
+      if (existing) {
+        if (existing.dataset.loaded === 'true') {
+          resolve();
+          return;
+        }
+
+        existing.addEventListener('load', () => resolve(), { once: true });
+        existing.addEventListener('error', () => reject(new Error(`Failed to load ${modulePath}`)), { once: true });
+        return;
+      }
+
+      const script = document.createElement('script');
+      script.src = modulePath;
+      script.defer = true;
+      script.dataset.pageScript = page;
+
+      script.onload = () => {
+        script.dataset.loaded = 'true';
+        resolve();
+      };
+
+      script.onerror = () => {
+        state.pageScripts.delete(page);
+        reject(new Error(`Failed to load ${modulePath}`));
+      };
+
+      document.head.appendChild(script);
+    });
+
+    state.pageScripts.set(page, loadPromise);
+    return loadPromise;
+  }
+
+  async function initPageModule(page) {
+    const moduleName = `${page}Module`;
+
+    if (!window[moduleName]) {
+      try {
+        await loadPageScript(page);
+      } catch (error) {
+        console.error(`❌ Could not load script for page module "${moduleName}"`, error);
+        return;
+      }
+    }
+
+    const module = window[moduleName];
+    if (!module?.init || typeof module.init !== 'function') {
+      console.warn(`⚠️ No usable module found for page: ${page}`);
+      return;
+    }
+
+    try {
+      await module.init();
+      console.log(`✅ ${moduleName} initialized`);
+    } catch (error) {
+      console.error(`❌ Error while initializing ${moduleName}`, error);
+      showToast('Page initialization failed. Please refresh.', 'error');
+    }
+  }
+
+  // =========================
+  // Shared public API
+  // =========================
+  function getSharedAPI() {
+    return {
+      getFavorites,
+      toggleFavorite,
+      setLanguage,
+      showToast,
+      pageRouter: {
+        detectPage,
+        initPageModule,
+        loadPageScript
+      },
+      get isDarkMode() {
+        return state.isDarkMode;
+      },
+      get language() {
+        return state.language;
+      }
+    };
+  }
+
+  // =========================
+  // Boot sequence
+  // =========================
+  async function boot() {
+    initTheme();
+    loadLanguage();
+
+    await loadComponents();
+
+    if (!state.listenersBound) {
+      bindSharedListeners();
+      state.listenersBound = true;
+    }
+
+    initScrollProgress();
+
+    window.shared = getSharedAPI();
+
+    const page = detectPage();
+    await initPageModule(page);
+
+    console.log('🚀 shared.js boot complete');
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    boot().catch((error) => {
+      console.error('❌ Shared boot failed', error);
+    });
+  });
+})();
