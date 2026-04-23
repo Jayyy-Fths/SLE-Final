@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="src/css/style.css">
 </head>
 <body class="bg-black text-white selection:bg-[#ffd700] selection:text-black">
     <a href="#overview" class="skip-link">Skip to main content</a>
@@ -29,7 +29,7 @@
                 <a href="#overview" class="hover:text-[#ffd700]" data-i18n="nav.overview">Overview</a>
                 <a href="#quiz" class="hover:text-[#ffd700]" data-i18n="nav.quiz">Mission Quiz</a>
                 <a href="#careers" class="hover:text-[#ffd700]" data-i18n="nav.careers">Careers</a>
-                <a href="#armories" class="hover:text-[#ffd700]" data-i18n="nav.armories">🗺️ Armories</a>
+                <a href="#armories" class="hover:text-[#ffd700]" data-i18n="nav.armories">Armories</a>
                 <a href="#split-training" class="hover:text-[#ffd700]" data-i18n="nav.split">Split Option</a>
                 <a href="#faq" class="hover:text-[#ffd700]" data-i18n="nav.faq">FAQ</a>
                 <button id="theme-toggle" class="favorite-btn p-2 hover:rotate-180" title="Toggle Theme" aria-pressed="false" aria-label="Toggle light and dark theme">
@@ -62,7 +62,7 @@
                  onerror="this.src='https://images.unsplash.com/photo-1564507592333-c9164ea0e6ce?auto=format&fit=crop&q=80';">
             <div class="absolute inset-0 bg-gradient-to-b from-black/80 via-transparent to-black"></div>
         </div>
-        <div class="relative z-10 text-center px-6" data-reveal>
+        <div class="relative z-10 text-center px-6" >
             <div class="inline-block px-4 py-1 border border-[#ffd700]/30 rounded-full bg-black/50 backdrop-blur-sm mb-6">
                 <span id="hero-top-tag" class="text-[#ffd700] text-[10px] font-bold tracking-[0.4em] uppercase" data-i18n="hero.topTag">Always Ready • Always There</span>
             </div>
@@ -80,7 +80,7 @@
         </div>
     </header>
 
-    <section id="trust-metrics" class="py-10 bg-black/80 border-y border-white/10" data-reveal>
+    <section id="trust-metrics" class="py-10 bg-black/80 border-y border-white/10" >
         <div class="max-w-6xl mx-auto px-6 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div class="metric-card"><strong>150+</strong><span>MOS Career Paths</span></div>
             <div class="metric-card"><strong>12+</strong><span>NJ Armory Locations</span></div>
@@ -89,36 +89,36 @@
         </div>
     </section>
 
-<section id="overview" class="py-20 bg-zinc-950" data-reveal>
+<section id="overview" class="py-20 bg-zinc-950" >
         <div class="max-w-6xl mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center">
             <div>
                 <span class="text-[#ffd700] uppercase font-black tracking-wider text-[11px]">Why NJ Guard</span>
                 <h2 id="overview-heading" class="text-4xl md:text-5xl font-black uppercase mt-4 mb-6" data-i18n="overview.heading">One Program, Multiple Futures</h2>
                 <p id="overview-copy" class="text-gray-300 leading-relaxed mb-8" data-i18n="overview.copy">The New Jersey National Guard pairs military discipline with civilian career growth. Keep your hometown roots and access national-level training, pay, and educational assistance.</p>
                 <div class="grid sm:grid-cols-2 gap-4">
-                    <article class="info-card" data-reveal>
+                    <article class="info-card" >
                         <i data-lucide="map-pin" class="w-5 h-5 text-[#ffd700]"></i>
                         <h3 class="font-black uppercase">Local Support</h3>
                         <p class="text-gray-400 text-sm" data-i18n="overview.card1">Serve close to home with 12 drills each year and two weeks annual training.</p>
                     </article>
-                    <article class="info-card" data-reveal>
+                    <article class="info-card" >
                         <i data-lucide="book-open" class="w-5 h-5 text-[#ffd700]"></i>
                         <h3 class="font-black uppercase">Education</h3>
                         <p class="text-gray-400 text-sm" data-i18n="overview.card2">Access tuition waiver, scholarships, and transfer credits at NJ colleges.</p>
                     </article>
-                    <article class="info-card" data-reveal>
+                    <article class="info-card" >
                         <i data-lucide="cpu" class="w-5 h-5 text-[#ffd700]"></i>
                         <h3 class="font-black uppercase">Career Training</h3>
                         <p class="text-gray-400 text-sm" data-i18n="overview.card3">Choose from 150+ MOS, from cyber warfare to combat medicine.</p>
                     </article>
-                    <article class="info-card" data-reveal>
+                    <article class="info-card" >
                         <i data-lucide="heart-pulse" class="w-5 h-5 text-[#ffd700]"></i>
                         <h3 class="font-black uppercase">Benefits</h3>
                         <p class="text-gray-400 text-sm" data-i18n="overview.card4">Health, retirement, VA benefits, and leadership credentials.</p>
                     </article>
                 </div>
             </div>
-            <div class="text-center" data-reveal>
+            <div class="text-center" >
                 <img src="images/knuckles.jpg" loading="lazy" class="w-full rounded-3xl shadow-xl" alt="Guard training"
                      onerror="this.style.display='none';">
             </div>
@@ -141,7 +141,7 @@
     <a href="armories.html" class="mt-12 bg-[#ffd700] text-black px-12 py-6 font-black uppercase rounded-2xl hover:bg-white shadow-2xl transition-all inline-block">View Map →</a>
 </section>
 
-    <section id="enlistment-path" class="py-20 bg-black" data-reveal>
+    <section id="enlistment-path" class="py-20 bg-black" >
         <div class="max-w-7xl mx-auto px-6">
             <div class="text-center mb-12">
                 <span class="text-[#ffd700] uppercase tracking-[0.3em] text-xs font-black">Roadmap</span>
@@ -205,7 +205,6 @@
     </div>
 </section>
 
-<!-- TRUNCATED HTML for brevity - rest of sections unchanged until modals -->
 
     <!-- Apply Modal (existing) -->
     <div id="apply-modal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="apply-modal-title" aria-describedby="apply-modal-desc">
@@ -279,7 +278,6 @@
         </div>
     </div>
 
-    <script src="bootstrap.js"></script>
-    <!-- All handlers now managed by shared.js + homeModule -->
-</body data-page="home">
+    <script src="src/js/bootstrap.js"></script>
+</body>
 </html>

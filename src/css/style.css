@@ -3,8 +3,12 @@
 :root {
     --nj-gold: #ffd700;
     --nj-orange: #ff8c00;
-    --dark-bg: 0 0% 7%;
-    --dark-card: 0 0% 10%;
+    --bg-primary: 0 0% 7%;
+    --bg-secondary: 0 0% 10%;
+    --text-primary: 0 0% 95%;
+    --text-secondary: 0 0% 65%;
+    --border: 0 0% 20%;
+    --glass: 0 0% 10% / 0.95;
 }
 
 * { box-sizing: border-box; }
@@ -40,24 +44,14 @@ body {
     }
 }
 
-/* Dark Theme (default) */
-body {
-    --bg-primary: 0 0% 7%;
-    --bg-secondary: 0 0% 10%; 
-    --text-primary: 0 0% 95%;
-    --text-secondary: 0 0% 65%;
-    --border: 0 0% 20%;
-    --glass: 0 0% 10% / 0.95;
-}
-
 /* Light Theme */
 body.light-theme {
-    --bg-primary: 255 255% 98%;
-    --bg-secondary: 255 255% 95%;
+    --bg-primary: 0 0% 98%;
+    --bg-secondary: 0 0% 95%;
     --text-primary: 0 0% 10%;
     --text-secondary: 0 0% 45%;
     --border: 0 0% 80%;
-    --glass: 255 255% 100% / 0.9;
+    --glass: 0 0% 100% / 0.9;
 }
 
 /* Typography */
@@ -181,14 +175,6 @@ h1, h2, h3 { font-family: 'Inter', sans-serif; font-weight: 900; }
     text-decoration: underline;
 }
 
-/* Particles Canvas */
-#particles-canvas {
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    pointer-events: none !important;
-    z-index: -1 !important;
-}
 
 /* Toasts */
 .toast {

@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Find nearest NJ Army National Guard armories. Interactive map with recruiter contacts, drill schedules, directions.">
-    <title>🗺️ NJ Armories & Locations | National Guard</title>
+    <title>NJ Armories & Locations | National Guard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="src/css/style.css">
 </head>
 <body class="bg-black text-white min-h-screen">
     <div id="scroll-progress" class="fixed top-0 left-0 h-1 bg-[#ffd700] z-50 w-0 transition-all duration-300"></div>
@@ -81,14 +81,7 @@
     <!-- Dynamic Footer -->
     <div id="footer-container"></div>
 
-<script src="bootstrap.js"></script>
-<!-- armoriesModule auto-loaded -->
-    <script>
-        // Page-specific armories init
-        document.addEventListener('DOMContentLoaded', async () => {
-            await window.shared.loadArmories?.(); // Load armories.json
-            // Map + ZIP handled by script.js
-        });
-    </script>
-</body data-page="armories">
+<script src="src/js/bootstrap.js"></script>
+<script src="src/js/pages/armories.js"></script>
+</body>
 </html>

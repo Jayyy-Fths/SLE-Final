@@ -7,9 +7,9 @@
     <title>Contact Recruiter | NJ National Guard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="src/css/style.css">
 </head>
-<body class="bg-black text-white min-h-screen" data-page="contact">
+<body class="bg-black text-white min-h-screen">
     <div id="scroll-progress" class="fixed top-0 left-0 h-1 bg-[#ffd700] z-50 w-0 transition-all duration-300"></div>
     
     <!-- Dynamic Nav -->
@@ -78,38 +78,8 @@
     <!-- Dynamic Footer -->
     <div id="footer-container"></div>
 
-    <script src="shared.js"></script>
-    <script>
-        let currentStep = 1;
-        
-        function showStep(step) {
-            document.querySelectorAll('.contact-step').forEach(s => s.classList.add('hidden'));
-            document.getElementById(`contact-form-step-${step}`).classList.remove('hidden');
-            currentStep = step;
-        }
-        
-        function prevStep() {
-            if (currentStep > 1) showStep(currentStep - 1);
-        }
-        
-        document.addEventListener('DOMContentLoaded', () => {
-            // Step 1 submit
-            document.getElementById('contact-personal-form')?.addEventListener('submit', (e) => {
-                e.preventDefault();
-                showStep(2);
-            });
-            
-            // Step 2 submit
-            document.getElementById('contact-interests-form')?.addEventListener('submit', (e) => {
-                e.preventDefault();
-                // Simulate submission
-                window.shared.showToast('✅ Message sent to recruiting team!', 'success');
-                document.getElementById('contact-success').classList.remove('hidden');
-                document.querySelector('.contact-step').classList.add('hidden');
-            });
-        });
-    </script>
-    <script src="bootstrap.js"></script>
-</body data-page="contact">
+    <script src="src/js/bootstrap.js"></script>
+    <script src="src/js/pages/contact.js"></script>
+</body>
 </html>
 
