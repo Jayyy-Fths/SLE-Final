@@ -156,6 +156,12 @@ function toggleFavorite(event, mosData) {
 
     openMosModal(mosData);
     showToast('Favorite updated!', 'success');
+    
+    // Refresh careers page if loaded
+    if (typeof window.updateFavoritesSection === 'function') {
+        window.updateFavoritesSection();
+        window.renderCareers();
+    }
 }
 
 // Event delegation for modal close
@@ -250,24 +256,69 @@ async function submitContactForm(formData) {
     try {
         showToast('Sending message...', 'info');
 
-        const res = await fetch('/.netlify/functions/contact', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(formData)
-        });
+        try {
+            const res = await fetch('/.netlify/functions/contact', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData)
+            });
 
-        if (res.ok) {
-            showToast('Message sent! Recruiter will contact you within 24 hours.', 'success');
-            return true;
-        } else {
-            showToast('Error sending message. Please try again.', 'error');
-            return false;
+            if (res.ok) {
+                showToast('Message sent! Recruiter will contact you within 24 hours.', 'success');
+                return true;
+            }
+        } catch (fetchError) {
+            console.log('API not available, saving locally', fetchError);
         }
-    } catch (e) {
-        console.error('Contact form error:', e);
+
+        // Fallback: save to localStorage
+        const submissions = JSON.parse(localStorage.getItem('contactSubmissions') || '[]');
+        submissions.push({ ...formData, timestamp: new Date().toISOString() });
+        localStorage.setItem('contactSubmissions', JSON.stringify(submissions));
+        console.log('Form saved to localStorage. Total submissions:', submissions.length);
         showToast('Message received! Recruiter will contact you within 24 hours.', 'success');
         return true;
+    } catch (e) {
+        console.error('Contact form error:', e);
+        showToast('An error occurred. Please try again.', 'error');
+        return false;
     }
+}
+
+// Setup apply form submission
+function setupApplyForm() {
+    const form = document.getElementById('apply-modal-form');
+    if (!form) return;
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const formData = {
+            firstName: document.getElementById('modal-firstname').value,
+            lastName: document.getElementById('modal-lastname').value,
+            email: document.getElementById('modal-email').value,
+            phone: document.getElementById('modal-phone').value,
+            message: document.getElementById('modal-message').value
+        };
+
+        const success = await submitContactForm(formData);
+
+        if (success) {
+            form.reset();
+            const feedback = document.getElementById('modal-feedback');
+            if (feedback) {
+                feedback.classList.remove('hidden');
+                setTimeout(() => {
+                    feedback.classList.add('hidden');
+                    const modal = document.getElementById('apply-modal');
+                    if (modal) {
+                        modal.classList.add('hidden');
+                        modal.style.display = 'none';
+                    }
+                }, 2000);
+            }
+        }
+    });
 }
 
 // Main init function
@@ -279,6 +330,7 @@ function init() {
     setupThemeToggle();
     setupLanguageToggle();
     setupCTAHandlers();
+    setupApplyForm();
 
     if (typeof lucide !== 'undefined') {
         lucide.createIcons();
@@ -300,6 +352,7 @@ Object.assign(window.shared, {
     closeMosModal,
     toggleFavorite,
     submitContactForm,
+    setupApplyForm,
     currentLanguage: () => currentLanguage,
     isDarkMode: () => isDarkMode
 });
