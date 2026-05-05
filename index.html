@@ -129,12 +129,19 @@
 <section class="py-24 bg-gradient-to-br from-zinc-900/50 to-black/50 text-center">
     <h2 class="text-4xl md:text-6xl font-black uppercase mb-8">12+ NJ Armories</h2>
     <p class="text-xl text-gray-400 mb-12 max-w-2xl mx-auto">Find recruiter, drill times, directions.</p>
-    <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+    <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto mb-10">
+        <div class="bg-zinc-900/50 border border-white/10 p-10 rounded-3xl text-left">
+            <h3 class="text-2xl font-black uppercase mb-4">Search Nearby Armories</h3>
+            <p class="text-gray-400 mb-6">Type your NJ ZIP code to locate the 3 closest armories and recruiter contacts instantly.</p>
+            <div class="flex flex-col sm:flex-row gap-3">
+                <input id="home-zip-input" type="text" placeholder="NJ ZIP code" maxlength="5" class="input-field flex-1" aria-label="NJ ZIP code">
+                <button id="home-zip-search" class="bg-[#ffd700] text-black px-6 py-3 font-black uppercase rounded-xl hover:bg-white transition-all">Search</button>
+            </div>
+            <p id="home-zip-message" class="text-gray-400 text-sm mt-4">Enter a 5-digit ZIP and tap Search.</p>
+            <div id="home-armory-results" class="grid gap-4 mt-6"></div>
+        </div>
         <a href="armories.html" class="group">
-            <div class="bg-zinc-900/50 border border-white/10 p-10 rounded-3xl hover:border-[#ffd700] hover:shadow-2xl transition-all">
-                <i data-lucide="map-pin" class="w-20 h-20 text-[#ffd700] mx-auto mb-6 group-hover:scale-110 transition-transform"></i>
-                <h3 class="text-2xl font-black uppercase mb-4">Interactive Map</h3>
-                <p class="text-gray-400">ZIP search + recruiter contacts</p>
+            <div class="bg-zinc-900/50 border border-white/10 p-10 rounded-3xl hover:border-[#ffd700] hover:shadow-2xl transition-all h-full">
             </div>
         </a>
     </div>
@@ -171,16 +178,18 @@
 <section id="careers" class="py-24 bg-black text-center reveal">
     <h2 class="text-4xl md:text-6xl font-black uppercase mb-8">150+ MOS Careers</h2>
     <p class="text-xl text-gray-400 mb-12 max-w-2xl mx-auto">Cyber to combat medic – find your specialty.</p>
-    <div class="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-        <a href="careers.html" class="group">
-            <div class="bg-zinc-900/50 border border-white/10 p-8 rounded-3xl hover:border-[#ffd700] hover:shadow-2xl transition-all h-full">
-                <i data-lucide="shield" class="w-16 h-16 text-[#ffd700] mx-auto mb-4 group-hover:rotate-12 transition-transform"></i>
-                <h3 class="text-2xl font-black uppercase mb-3">MOS Explorer</h3>
-                <p class="text-gray-400">Search, filter, compare 150+ careers</p>
-            </div>
-        </a>
+    <div class="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-12" id="featured-mos-list">
+        <!-- Featured MOS cards load here -->
     </div>
     <a href="careers.html" class="mt-12 bg-[#ffd700] text-black px-12 py-6 font-black uppercase rounded-2xl hover:bg-white shadow-2xl transition-all inline-block">Browse All MOS →</a>
+</section>
+
+<section id="favorite-summary" class="py-16 bg-zinc-950 text-center reveal">
+    <div class="max-w-6xl mx-auto px-6">
+        <h2 class="text-3xl md:text-4xl font-black uppercase mb-6">Saved Career Favorites</h2>
+        <p class="text-gray-400 mb-8 max-w-3xl mx-auto">Keep your top MOS cards ready to review or share with your recruiter.</p>
+        <div id="favorite-list" class="grid sm:grid-cols-2 gap-6"></div>
+    </div>
 </section>
 
 <section class="py-24 bg-zinc-950 text-center">
@@ -279,5 +288,6 @@
     </div>
 
     <script src="src/js/shared.js"></script>
+    <script src="src/js/index.js"></script>
 </body>
 </html>
