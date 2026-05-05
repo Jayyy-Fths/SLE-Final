@@ -99,9 +99,24 @@ function setupMissionQuiz(careers) {
             <div id="quiz-result-message" class="text-gray-200 text-lg leading-relaxed mb-8"></div>
             <div id="quiz-result-cards" class="grid md:grid-cols-3 gap-6"></div>
             <div id="quiz-result-actions" class="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"></div>
-                <h3>${question.title}</h3>
-                <div class="quiz-options" data-question="${question.id}"></div>
+        </div>
+    `;
+
+    const quizState = {
+        focus: QUIZ_QUESTIONS[0].options[0].value,
+        training: QUIZ_QUESTIONS[1].options[0].value,
+        environment: QUIZ_QUESTIONS[2].options[0].value
+    };
+
+    const questionsWrapper = document.getElementById('quiz-questions');
+    QUIZ_QUESTIONS.forEach(question => {
+        const block = document.createElement('div');
+        block.className = 'quiz-step';
+        block.innerHTML = `
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="font-black text-xl">${question.title}</h3>
             </div>
+            <div class="quiz-options grid sm:grid-cols-2 gap-3" data-question="${question.id}"></div>
         `;
 
         questionsWrapper.appendChild(block);
@@ -130,7 +145,7 @@ function setupMissionQuiz(careers) {
     });
 
     document.getElementById('quiz-submit')?.addEventListener('click', () => {
-        const asvab = parseInt(asvabInput.value);
+        const asvab = parseInt(asvabInput.value, 10) || 100;
         const match = computeQuizMatch(quizState, asvab, careers);
         displayQuizResults(match);
     });
