@@ -1,78 +1,8 @@
 [
   {
-    "name": "Morristown Armory",
-    "address": "216 South St, Morristown, NJ 07960",
-    "zip": "07960",
-    "lat": 40.7968,
-    "lng": -74.4810,
-    "phone": "(973) 656-9043",
-    "drill": "Sat-Sun 0730",
-    "recruiter": "SSG John Doe"
-  },
-  {
-    "name": "Sea Girt Armory",
-    "address": "1325 Sea Girt Ave, Sea Girt, NJ 08750", 
-    "zip": "08750",
-    "lat": 40.2190,
-    "lng": -74.0428,
-    "phone": "(732) 974-1315",
-    "drill": "Sat 0800",
-    "recruiter": "MSG Jane Smith"
-  },
-  {
-    "name": "Trenton Armory",
-    "address": "200 Pennsylvania Ave, Trenton, NJ 08625",
-    "zip": "08625",
-    "lat": 40.2207,
-    "lng": -74.7644,
-    "phone": "(609) 530-3040",
-    "drill": "Sat-Sun 0700",
-    "recruiter": "1SG Mike Johnson"
-  },
-  {
-    "name": "Vineland Armory",
-    "address": "1000 West Wheat Rd, Vineland, NJ 08360",
-    "zip": "08360",
-    "lat": 39.4743,
-    "lng": -75.0436,
-    "phone": "(856) 405-6505", 
-    "drill": "Sat 0830",
-    "recruiter": "SSG Sarah Lee"
-  },
-  {
-    "name": "Teaneck Armory",
-    "address": "460 Tryon Ave, Teaneck, NJ 07666",
-    "zip": "07666",
-    "lat": 40.8905,
-    "lng": -74.0151,
-    "phone": "(201) 836-0325",
-    "drill": "Sat-Sun 0730",
-    "recruiter": "SFC David Kim"
-  },
-  {
-    "name": "Joint Base McGuire-Dix-Lakehurst",
-    "address": "2903 McGuire Blvd, JBMDL, NJ 08641",
-    "zip": "08641",
-    "lat": 40.0081,
-    "lng": -74.5899,
-    "phone": "(609) 754-3201",
-    "drill": "Sat 0700",
-    "recruiter": "MSG Robert Wilson"
-  },
-  {
-    "name": "Fort Dix Armory",
-    "address": "Main Post, Fort Dix, NJ 08640",
-    "zip": "08640",
-    "lat": 40.0246,
-    "lng": -74.5624,
-    "phone": "(609) 562-2727",
-    "drill": "Fri-Sun 1800",
-    "recruiter": "1SG Lisa Chen"
-  },
-  {
-    "name": "Egg Harbor Township Armory", 
+    "name": "Atlantic City Armory (Egg Harbor Township)",
     "address": "4000 English Creek Ave, Egg Harbor Twp, NJ 08234",
-    "zip": "08234",
+    "unit": "177th Fighter Wing",
     "lat": 39.3719,
     "lng": -74.6330,
     "phone": "(609) 645-0118",
@@ -80,33 +10,203 @@
     "recruiter": "SSG Carlos Rivera"
   },
   {
-    "name": "Flemington Armory",
-    "address": "180 Route 31 North, Flemington, NJ 08822",
-    "zip": "08822",
-    "lat": 40.5055,
-    "lng": -74.8638,
-    "phone": "(908) 788-2375",
-    "drill": "Sat-Sun 0800",
-    "recruiter": "SFC Emily Park"
+    "name": "Blackwood Armory",
+    "address": "500 Turnersville Rd, Blackwood, NJ 08012",
+    "unit": "1st Battalion, 114th Infantry Regiment",
+    "lat": 39.8015,
+    "lng": -75.0657,
+    "phone": "(856) 228-5740",
+    "drill": "Sat-Sun 0730",
+    "recruiter": "SSG Maria Ortiz"
   },
   {
-    "name": "Lakewood Armory", 
-    "address": "1780 Swarthmore Ave, Lakewood, NJ 08701",
-    "zip": "08701",
-    "lat": 40.1459,
-    "lng": -74.1956,
-    "phone": "(732) 367-6000",
-    "drill": "Sat 0730",
+    "name": "Cherry Hill Armory",
+    "address": "500 Mercer St, Cherry Hill, NJ 08002",
+    "unit": "119th Combat Sustainment Support Battalion",
+    "lat": 39.9348,
+    "lng": -75.0243,
+    "phone": "(856) 665-0140",
+    "drill": "Sat 0800",
+    "recruiter": "SFC Thomas Grant"
+  },
+  {
+    "name": "Dover Armory",
+    "address": "30 Warren St, Dover, NJ 07801",
+    "unit": "1st Squadron, 102nd Cavalry Regiment",
+    "lat": 40.8868,
+    "lng": -74.5596,
+    "phone": "(973) 366-1650",
+    "drill": "Sat-Sun 0730",
+    "recruiter": "MSG Brian Holt"
+  },
+  {
+    "name": "Freehold Armory",
+    "address": "98 W Main St, Freehold, NJ 07728",
+    "unit": "1st Battalion, 114th Infantry Regiment",
+    "lat": 40.2615,
+    "lng": -74.2737,
+    "phone": "(732) 431-7060",
+    "drill": "Sat 0800",
     "recruiter": "SSG Amanda Torres"
   },
   {
     "name": "Hackettstown Armory",
     "address": "610 Washington St, Hackettstown, NJ 07840",
-    "zip": "07840",
-    "lat": 40.9957,
-    "lng": -74.7693,
+    "unit": "1st Squadron, 102nd Cavalry Regiment",
+    "lat": 40.8552,
+    "lng": -74.8296,
     "phone": "(908) 850-3155",
     "drill": "Sat-Sun 0830",
     "recruiter": "MSG Kevin Patel"
+  },
+  {
+    "name": "Jersey City Armory",
+    "address": "678 Montgomery St, Jersey City, NJ 07306",
+    "unit": "2nd Battalion, 113th Infantry Regiment",
+    "lat": 40.7282,
+    "lng": -74.0776,
+    "phone": "(201) 432-5670",
+    "drill": "Sat-Sun 0730",
+    "recruiter": "1SG Denise Ramos"
+  },
+  {
+    "name": "Lawrenceville Armory",
+    "address": "1540 Lawrence Rd, Lawrenceville, NJ 08648",
+    "unit": "50th Infantry Brigade Combat Team HQ",
+    "lat": 40.2982,
+    "lng": -74.7295,
+    "phone": "(609) 896-8060",
+    "drill": "Sat-Sun 0700",
+    "recruiter": "1SG Mike Johnson"
+  },
+  {
+    "name": "Manchester Armory",
+    "address": "1 Gun Club Rd, Manchester, NJ 08759",
+    "unit": "250th Brigade Support Battalion",
+    "lat": 39.9706,
+    "lng": -74.3227,
+    "phone": "(732) 657-9300",
+    "drill": "Sat 0830",
+    "recruiter": "SSG Rachel Kim"
+  },
+  {
+    "name": "Morristown Armory",
+    "address": "216 South St, Morristown, NJ 07960",
+    "unit": "250th Brigade Support Battalion",
+    "lat": 40.7968,
+    "lng": -74.4810,
+    "phone": "(973) 656-9043",
+    "drill": "Sat-Sun 0730",
+    "recruiter": "SSG John Doe"
+  },
+  {
+    "name": "Mount Holly Armory",
+    "address": "33 Washington St, Mount Holly, NJ 08060",
+    "unit": "1st Battalion, 114th Infantry Regiment",
+    "lat": 39.9951,
+    "lng": -74.7879,
+    "phone": "(609) 267-4840",
+    "drill": "Sat 0800",
+    "recruiter": "SFC David Kim"
+  },
+  {
+    "name": "Newark Armory",
+    "address": "120 Roseville Ave, Newark, NJ 07107",
+    "unit": "NJ Army National Guard",
+    "lat": 40.7486,
+    "lng": -74.1763,
+    "phone": "(973) 274-0600",
+    "drill": "Sat-Sun 0730",
+    "recruiter": "MSG Robert Wilson"
+  },
+  {
+    "name": "Port Murray Armory",
+    "address": "12 Church St, Port Murray, NJ 07865",
+    "unit": "50th Infantry Brigade Combat Team",
+    "lat": 40.7807,
+    "lng": -74.9040,
+    "phone": "(908) 689-4000",
+    "drill": "Sat-Sun 0800",
+    "recruiter": "SFC Emily Park"
+  },
+  {
+    "name": "Riverdale Armory",
+    "address": "4 Hamburg Turnpike, Riverdale, NJ 07457",
+    "unit": "2nd Battalion, 113th Infantry Regiment",
+    "lat": 40.9973,
+    "lng": -74.3082,
+    "phone": "(973) 835-4150",
+    "drill": "Sat-Sun 0730",
+    "recruiter": "SSG Lisa Chen"
+  },
+  {
+    "name": "Sea Girt National Guard Training Center",
+    "address": "1325 Sea Girt Ave, Sea Girt, NJ 08750",
+    "unit": "254th Regiment",
+    "lat": 40.1334,
+    "lng": -74.0497,
+    "phone": "(732) 974-1315",
+    "drill": "Sat 0800",
+    "recruiter": "MSG Jane Smith"
+  },
+  {
+    "name": "Somerset Armory",
+    "address": "New Brunswick Rd, Somerset, NJ 08873",
+    "unit": "42nd Regional Support Group",
+    "lat": 40.5002,
+    "lng": -74.5008,
+    "phone": "(732) 356-1890",
+    "drill": "Sat-Sun 0800",
+    "recruiter": "SSG Sarah Lee"
+  },
+  {
+    "name": "Teaneck Armory",
+    "address": "460 Tryon Ave, Teaneck, NJ 07666",
+    "unit": "250th Brigade Support Battalion",
+    "lat": 40.8905,
+    "lng": -74.0151,
+    "phone": "(201) 836-0325",
+    "drill": "Sat-Sun 0730",
+    "recruiter": "SFC Daniel Park"
+  },
+  {
+    "name": "West Orange Armory",
+    "address": "571 Eagle Rock Ave, West Orange, NJ 07052",
+    "unit": "104th Brigade Engineer Battalion",
+    "lat": 40.7887,
+    "lng": -74.2652,
+    "phone": "(973) 325-6300",
+    "drill": "Sat-Sun 0800",
+    "recruiter": "SSG Nadia Torres"
+  },
+  {
+    "name": "Westfield Armory",
+    "address": "500 North Ave West, Westfield, NJ 07090",
+    "unit": "1st Squadron, 102nd Cavalry Regiment",
+    "lat": 40.6592,
+    "lng": -74.3529,
+    "phone": "(908) 232-1020",
+    "drill": "Sat 0830",
+    "recruiter": "SFC Carlos Rivera"
+  },
+  {
+    "name": "West Trenton Aviation Support Facility",
+    "address": "3124 Parkway Ave, West Trenton, NJ 08628",
+    "unit": "Aviation Support Facility #1",
+    "lat": 40.2782,
+    "lng": -74.8005,
+    "phone": "(609) 530-3100",
+    "drill": "Sat-Sun 0700",
+    "recruiter": "CW3 James Foster"
+  },
+  {
+    "name": "Woodbury Armory",
+    "address": "101 N Barker Ave, Woodbury, NJ 08096",
+    "unit": "1st Battalion, 114th Infantry Regiment",
+    "lat": 39.8373,
+    "lng": -75.1527,
+    "phone": "(856) 845-3600",
+    "drill": "Sat 0800",
+    "recruiter": "SSG Angela Moore"
   }
 ]
