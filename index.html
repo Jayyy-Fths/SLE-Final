@@ -138,14 +138,29 @@
                 <button id="home-zip-search" class="bg-[#ffd700] text-black px-6 py-3 font-black uppercase rounded-xl hover:bg-white transition-all">Search</button>
             </div>
             <p id="home-zip-message" class="text-gray-400 text-sm mt-4">Enter a 5-digit ZIP and tap Search.</p>
+            <div id="home-zip-recruiter" class="home-zip-recruiter hidden"></div>
             <div id="home-armory-results" class="grid gap-4 mt-6"></div>
         </div>
         <a href="armories.html" class="group">
             <div class="bg-zinc-900/50 border border-white/10 p-10 rounded-3xl hover:border-[#ffd700] hover:shadow-2xl transition-all h-full">
+                <i data-lucide="map-pin" class="w-20 h-20 text-[#ffd700] mx-auto mb-6 group-hover:scale-110 transition-transform"></i>
+                <h3 class="text-2xl font-black uppercase mb-4">Interactive Map</h3>
+                <p class="text-gray-400">Search ZIP codes, preview recruiters, and plan your next visit.</p>
             </div>
         </a>
     </div>
     <a href="armories.html" class="mt-12 bg-[#ffd700] text-black px-12 py-6 font-black uppercase rounded-2xl hover:bg-white shadow-2xl transition-all inline-block">View Map →</a>
+</section>
+
+<section id="events" class="py-24 bg-zinc-950 text-center reveal">
+    <div class="max-w-6xl mx-auto px-6">
+        <div class="mb-12">
+            <span class="text-[#ffd700] uppercase tracking-[0.3em] text-xs font-black">Community Calendar</span>
+            <h2 class="text-4xl md:text-5xl font-black uppercase mt-4">Upcoming NJ Guard Events</h2>
+            <p class="text-gray-400 mt-4 max-w-3xl mx-auto">Open houses, info sessions, and training previews across New Jersey.</p>
+        </div>
+        <div id="event-cards" class="grid md:grid-cols-3 gap-6"></div>
+    </div>
 </section>
 
     <section id="enlistment-path" class="py-20 bg-black reveal" >
@@ -192,6 +207,15 @@
     </div>
 </section>
 
+<section id="saved-match" class="py-16 bg-black text-center reveal">
+    <div class="max-w-6xl mx-auto px-6">
+        <span class="text-[#ffd700] uppercase tracking-[0.3em] text-xs font-black">Your Match</span>
+        <h2 class="text-4xl md:text-5xl font-black uppercase mt-4 mb-6">Saved Quiz Match</h2>
+        <p class="text-gray-400 mb-8 max-w-3xl mx-auto">Save your latest mission score and share it with a recruiter when you're ready.</p>
+        <div id="saved-match-card" class="grid gap-6 sm:grid-cols-2"></div>
+    </div>
+</section>
+
 <section class="py-24 bg-zinc-950 text-center">
     <h2 class="text-4xl md:text-6xl font-black uppercase mb-8">Eligibility Check</h2>
     <p class="text-xl text-gray-400 mb-12 max-w-2xl mx-auto">Age, ASVAB, fitness - get your score.</p>
@@ -202,6 +226,14 @@
             <p class="text-gray-400 mb-8">8 questions → eligibility score + MOS recs</p>
             <a href="eligibility.html" class="bg-[#ffd700] text-black px-8 py-4 font-black uppercase rounded-xl hover:bg-white block w-full transition-all">Start Check →</a>
         </div>
+    </div>
+</section>
+
+<section id="testimonials" class="py-24 bg-black text-center reveal">
+    <div class="max-w-6xl mx-auto px-6">
+        <span class="text-[#ffd700] uppercase tracking-[0.3em] text-xs font-black">Real Citizen Soldiers</span>
+        <h2 class="text-4xl md:text-5xl font-black uppercase mt-4 mb-6">Stories from NJ Guardsmen</h2>
+        <div id="testimonial-cards" class="grid md:grid-cols-3 gap-6"></div>
     </div>
 </section>
 

@@ -216,6 +216,94 @@ h1, h2, h3 { font-family: 'Inter', sans-serif; font-weight: 900; }
     border-top: 1px solid hsla(0,0%,100%,0.08);
 }
 
+.home-zip-recruiter {
+    display: none;
+    gap: 0.75rem;
+    background: hsl(var(--glass));
+    border: 1px solid hsl(var(--border));
+    border-radius: 24px;
+    padding: 1rem 1.25rem;
+    text-align: left;
+}
+
+.home-zip-recruiter strong,
+.home-zip-recruiter span {
+    color: var(--nj-gold);
+}
+
+.event-card,
+.testimonial-card,
+.save-match-card {
+    background: hsl(var(--glass));
+    border: 1px solid hsl(var(--border));
+    border-radius: 24px;
+    padding: 1.75rem;
+    text-align: left;
+    box-shadow: 0 25px 45px rgba(0,0,0,0.18);
+}
+
+.event-card h4,
+.testimonial-card h4 {
+    font-size: 1.25rem;
+    margin-bottom: 0.75rem;
+}
+
+.event-card p,
+.testimonial-card p,
+.save-match-card p {
+    color: hsl(var(--text-secondary));
+}
+
+.testimonial-card .quote {
+    font-size: 0.95rem;
+    line-height: 1.8;
+}
+
+.save-match-card {
+    display: grid;
+    gap: 1rem;
+}
+
+.save-match-meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.save-match-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    background: rgba(255,215,0,0.18);
+    color: black;
+    padding: 0.55rem 0.85rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.save-match-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    background: var(--nj-gold);
+    color: black;
+    padding: 0.95rem 1.25rem;
+    border-radius: 18px;
+    font-weight: 900;
+    text-transform: uppercase;
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.save-match-btn:hover {
+    background: white;
+    transform: translateY(-2px);
+}
+
 .quiz-card {
     background: hsl(var(--glass));
     border: 1px solid hsl(var(--border));

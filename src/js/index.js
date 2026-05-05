@@ -8,11 +8,17 @@ async function initIndexPage() {
     const careers = await window.shared.loadCareers();
 
     setupHomeZipSearch(armories);
+    renderEvents();
+    renderTestimonials();
     renderFeaturedMos(careers);
     renderSavedFavorites(careers);
+    renderSavedMatch();
     setupMissionQuiz(careers);
 
-    window.updateFavoritesSection = () => renderSavedFavorites(careers);
+    window.updateFavoritesSection = () => {
+        renderSavedFavorites(careers);
+        renderSavedMatch();
+    };
     window.renderCareers = () => renderFeaturedMos(careers);
 }
 
@@ -49,6 +55,20 @@ const QUIZ_QUESTIONS = [
     }
 ];
 
+const EVENT_LIST = [
+    { title: 'NJ Guard Open House', date: 'Jun 14', location: 'Jersey City Armory', type: 'Open House', description: 'Meet recruiters, ask questions, and tour the facility with current soldiers.' },
+    { title: 'Recruiting Info Session', date: 'Jun 22', location: 'Newark Armory', type: 'Info Session', description: 'Learn about MOS options, training timelines, and tuition benefits.' },
+    { title: 'Fitness & ASVAB Preview', date: 'Jul 5', location: 'Freehold Armory', type: 'Assessment', description: 'Get a free ASVAB practice session and physical readiness briefing.' }
+];
+
+const TESTIMONIALS = [
+    { name: 'Alyssa M.', role: 'Infantryman · 119th Infantry Regiment', quote: 'Joining the NJ Guard gave me leadership skills, cash for school, and purpose in my community. The recruiters made the process feel personal and real.', location: 'Camden, NJ' },
+    { name: 'Derek P.', role: 'Cyber Operations Specialist', quote: 'I wanted a tech career with real impact. The Guard helped me train in cyber defense while I finished my degree part-time.', location: 'Princeton, NJ' },
+    { name: 'Maria S.', role: 'Health Care Specialist', quote: 'The training was intense but rewarding, and the tuition benefits covered my college classes. My unit supports my civilian job too.', location: 'Atlantic City, NJ' }
+];
+
+const SAVED_MATCH_KEY = 'njng_saved_quiz_match';
+
 function setupMissionQuiz(careers) {
     const container = document.getElementById('quiz-form-container');
     if (!container) return;
@@ -78,19 +98,7 @@ function setupMissionQuiz(careers) {
             </div>
             <div id="quiz-result-message" class="text-gray-200 text-lg leading-relaxed mb-8"></div>
             <div id="quiz-result-cards" class="grid md:grid-cols-3 gap-6"></div>
-            <div class="mt-8 text-left">
-                <a href="eligibility.html" class="inline-block bg-white text-black px-8 py-4 font-black uppercase rounded-2xl hover:bg-gray-100 shadow-2xl transition-all">Check Full Eligibility</a>
-            </div>
-        </div>
-    `;
-
-    const questionsWrapper = document.getElementById('quiz-questions');
-    const quizState = { focus: 'combat', training: 'rapid', environment: 'local' };
-
-    QUIZ_QUESTIONS.forEach(question => {
-        const block = document.createElement('div');
-        block.innerHTML = `
-            <div class="quiz-card">
+            <div id="quiz-result-actions" class="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"></div>
                 <h3>${question.title}</h3>
                 <div class="quiz-options" data-question="${question.id}"></div>
             </div>
@@ -225,6 +233,116 @@ function displayQuizResults(match) {
         card.innerHTML = '<p class="text-gray-400">No MOS recommendations matched your ASVAB score and selected mission type. Try adjusting your ASVAB estimate or answer set.</p>';
         cardsEl.appendChild(card);
     }
+
+    const actions = document.getElementById('quiz-result-actions');
+    if (actions) {
+        actions.innerHTML = '';
+        const saveBtn = document.createElement('button');
+        saveBtn.type = 'button';
+        saveBtn.className = 'save-match-btn';
+        saveBtn.textContent = 'Save This Match';
+        saveBtn.addEventListener('click', () => {
+            saveQuizMatch({
+                category: match.category,
+                score: match.score,
+                message: match.message,
+                recommended: match.recommended,
+                date: new Date().toISOString()
+            });
+            window.shared.showToast('Match saved for later.', 'success');
+        });
+        actions.appendChild(saveBtn);
+    }
+}
+
+function getSavedMatch() {
+    try {
+        return JSON.parse(localStorage.getItem(SAVED_MATCH_KEY) || 'null');
+    } catch (e) {
+        return null;
+    }
+}
+
+function saveQuizMatch(match) {
+    localStorage.setItem(SAVED_MATCH_KEY, JSON.stringify(match));
+    renderSavedMatch();
+}
+
+function renderSavedMatch() {
+    const container = document.getElementById('saved-match-card');
+    if (!container) return;
+
+    const saved = getSavedMatch();
+    if (!saved) {
+        container.innerHTML = `
+            <div class="save-match-card">
+                <h4 class="font-black text-2xl mb-3">No saved match yet</h4>
+                <p class="text-gray-400">Take the mission quiz and save your best fit for easy review with a recruiter.</p>
+                <div class="mt-6">
+                    <a href="#quiz" class="save-match-btn">Go Take the Quiz</a>
+                </div>
+            </div>
+        `;
+        return;
+    }
+
+    const recommendations = saved.recommended || [];
+    container.innerHTML = `
+        <div class="save-match-card">
+            <div class="save-match-meta">
+                <div>
+                    <span class="save-match-pill">${saved.category.toUpperCase()}</span>
+                    <h4 class="font-black text-2xl mt-4">${saved.score}% Match</h4>
+                </div>
+                <div class="text-right text-gray-400">
+                    <p>Saved ${new Date(saved.date).toLocaleDateString()}</p>
+                </div>
+            </div>
+            <p class="text-gray-400">${saved.message}</p>
+            <div class="grid gap-3">
+                ${recommendations.map(mos => `
+                    <div class="bg-zinc-900/50 border border-white/10 p-4 rounded-2xl">
+                        <div class="text-[#ffd700] uppercase text-xs font-black mb-2">${mos.mos}</div>
+                        <div class="font-bold">${mos.title}</div>
+                        <div class="text-gray-400 text-sm mt-1">ASVAB: ${mos.asvab}</div>
+                    </div>
+                `).join('')}
+            </div>
+            <div class="mt-6 flex flex-wrap gap-3 justify-center">
+                <button onclick="saveQuizMatch(getSavedMatch()); window.shared.showToast('Match refreshed', 'success');" class="save-match-btn">Refresh Match</button>
+                <a href="contact.html" class="save-match-btn">Share with Recruiter</a>
+            </div>
+        </div>
+    `;
+}
+
+function renderEvents() {
+    const container = document.getElementById('event-cards');
+    if (!container) return;
+
+    container.innerHTML = EVENT_LIST.map(event => `
+        <article class="event-card">
+            <div class="text-xs uppercase tracking-[0.3em] text-[#ffd700] font-black mb-3">${event.type}</div>
+            <h4 class="font-black mb-2">${event.title}</h4>
+            <p class="text-gray-400 mb-4">${event.description}</p>
+            <div class="text-sm text-[#ffd700] font-bold mb-2">${event.date}</div>
+            <div class="text-gray-400 text-sm">${event.location}</div>
+        </article>
+    `).join('');
+}
+
+function renderTestimonials() {
+    const container = document.getElementById('testimonial-cards');
+    if (!container) return;
+
+    container.innerHTML = TESTIMONIALS.map(testimonial => `
+        <article class="testimonial-card">
+            <p class="quote text-gray-200 mb-6">“${testimonial.quote}”</p>
+            <h4 class="font-black mb-2">${testimonial.name}</h4>
+            <p class="text-[#ffd700] uppercase text-xs tracking-[0.3em] font-black mb-1">${testimonial.role}</p>
+            <p class="text-gray-400 text-sm">${testimonial.location}</p>
+        </article>
+    `).join('');
 }
 
 function zipToLatLng(zip) {
@@ -265,7 +383,21 @@ function showArmoryResults(results, zip) {
     if (!results.length) {
         container.innerHTML = '';
         message.textContent = `No armories found for ZIP ${zip}. Try another NJ ZIP code.`;
+        const recruiterSummary = document.getElementById('home-zip-recruiter');
+        if (recruiterSummary) recruiterSummary.classList.add('hidden');
         return;
+    }
+
+    const nearest = results[0];
+    const recruiterSummary = document.getElementById('home-zip-recruiter');
+    if (recruiterSummary) {
+        recruiterSummary.classList.remove('hidden');
+        recruiterSummary.innerHTML = `
+            <strong>Nearest recruiter:</strong> ${nearest.recruiter} · ${nearest.name}<br>
+            <span>${nearest.address}</span><br>
+            <span class="text-[#ffd700]">${nearest.phone}</span><br>
+            <a href="tel:${nearest.phone.replace(/[^0-9]/g, '')}" class="save-match-btn inline-block mt-3">Call Recruiter</a>
+        `;
     }
 
     message.textContent = `Showing ${results.length} nearest armories to ${zip}.`;
