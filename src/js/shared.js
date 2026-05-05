@@ -7,6 +7,83 @@ const SUPPORTED_LANGUAGES = new Set(['en', 'es']);
 let currentLanguage = localStorage.getItem('language') || 'en';
 let isDarkMode = localStorage.getItem('theme') !== 'light';
 
+const TRANSLATIONS = {
+    en: {
+        'nav.overview':       'Overview',
+        'nav.quiz':           'Mission Quiz',
+        'nav.careers':        'Careers',
+        'nav.armories':       'Armories',
+        'nav.split':          'Split Option',
+        'nav.faq':            'FAQ',
+        'hero.topTag':        'Always Ready • Always There',
+        'hero.heading':       'OWN YOUR <br><span class="text-[#ffd700]">FUTURE.</span>',
+        'hero.subtitle':      'Join the NJ National Guard and keep your civilian life while gaining leadership training, student benefits, and professional skills that last a lifetime.',
+        'hero.cta1':          'Find Your Mission',
+        'hero.cta2':          'Browse MOS List',
+        'hero.badge1':        '100% Tuition Waiver',
+        'hero.badge2':        '$20K Bonus Qualifications',
+        'hero.badge3':        'Part-time service, full-time benefits',
+        'overview.heading':   'One Program, Multiple Futures',
+        'overview.copy':      'The New Jersey National Guard pairs military discipline with civilian career growth. Keep your hometown roots and access national-level training, pay, and educational assistance.',
+        'overview.card1':     'Serve close to home with 12 drills each year and two weeks annual training.',
+        'overview.card2':     'Access tuition waiver, scholarships, and transfer credits at NJ colleges.',
+        'overview.card3':     'Choose from 150+ MOS, from cyber warfare to combat medicine.',
+        'overview.card4':     'Health, retirement, VA benefits, and leadership credentials.',
+        'apply.applyNow':     'Apply Now',
+        'modal.contactTitle': 'Contact Recruiter',
+        'modal.contactDesc':  'Send your information and our recruiting team will follow up promptly.',
+        'career.heading':     'MOS Explorer',
+        'career.description': 'Click cards for full details. Use filters above.',
+        'career.favorites':   'Your Top 5 Favorites',
+    },
+    es: {
+        'nav.overview':       'Resumen',
+        'nav.quiz':           'Quiz de Misión',
+        'nav.careers':        'Carreras',
+        'nav.armories':       'Arsenales',
+        'nav.split':          'Opción Dividida',
+        'nav.faq':            'Preguntas',
+        'hero.topTag':        'Siempre Listo • Siempre Presente',
+        'hero.heading':       'CONSTRUYE TU <br><span class="text-[#ffd700]">FUTURO.</span>',
+        'hero.subtitle':      'Únete a la Guardia Nacional de NJ y mantén tu vida civil mientras adquieres liderazgo, beneficios educativos y habilidades profesionales para toda la vida.',
+        'hero.cta1':          'Encuentra Tu Misión',
+        'hero.cta2':          'Ver Lista de MOS',
+        'hero.badge1':        '100% Matrícula Pagada',
+        'hero.badge2':        'Bonos hasta $20K',
+        'hero.badge3':        'Servicio part-time, beneficios completos',
+        'overview.heading':   'Un Programa, Múltiples Futuros',
+        'overview.copy':      'La Guardia Nacional de Nueva Jersey combina la disciplina militar con el crecimiento profesional civil. Mantén tus raíces y accede a entrenamiento, pago y asistencia educativa a nivel nacional.',
+        'overview.card1':     'Sirve cerca de casa con 12 ejercicios al año y dos semanas de entrenamiento anual.',
+        'overview.card2':     'Accede a exención de matrícula, becas y créditos en universidades de NJ.',
+        'overview.card3':     'Elige entre más de 150 MOS, desde guerra cibernética hasta medicina de combate.',
+        'overview.card4':     'Salud, retiro, beneficios de VA y credenciales de liderazgo.',
+        'apply.applyNow':     'Aplicar Ahora',
+        'modal.contactTitle': 'Contactar Reclutador',
+        'modal.contactDesc':  'Envía tu información y nuestro equipo de reclutamiento te contactará pronto.',
+        'career.heading':     'Explorador de MOS',
+        'career.description': 'Haz clic en las tarjetas para detalles. Usa los filtros.',
+        'career.favorites':   'Tus 5 Favoritos',
+    }
+};
+
+function applyTranslations() {
+    const dict = TRANSLATIONS[currentLanguage] || TRANSLATIONS.en;
+
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.dataset.i18n;
+        if (dict[key] !== undefined) el.textContent = dict[key];
+    });
+
+    document.querySelectorAll('[data-i18n-html]').forEach(el => {
+        const key = el.dataset.i18nHtml;
+        if (dict[key] !== undefined) el.innerHTML = dict[key];
+    });
+
+    document.querySelectorAll('[id*="language-toggle"]').forEach(btn => {
+        btn.textContent = currentLanguage === 'en' ? 'ES' : 'EN';
+    });
+}
+
 // Initialize theme
 function initTheme() {
     if (!isDarkMode) {
@@ -33,7 +110,7 @@ function toggleTheme() {
 function toggleLanguage() {
     currentLanguage = currentLanguage === 'en' ? 'es' : 'en';
     localStorage.setItem('language', currentLanguage);
-    location.reload();
+    applyTranslations();
 }
 
 // Show toast notification
@@ -331,6 +408,7 @@ function init() {
     setupLanguageToggle();
     setupCTAHandlers();
     setupApplyForm();
+    applyTranslations();
 
     if (typeof lucide !== 'undefined') {
         lucide.createIcons();
@@ -353,6 +431,7 @@ Object.assign(window.shared, {
     toggleFavorite,
     submitContactForm,
     setupApplyForm,
+    applyTranslations,
     currentLanguage: () => currentLanguage,
     isDarkMode: () => isDarkMode
 });
