@@ -9,52 +9,180 @@
     <link rel="stylesheet" href="src/css/style.css">
 </head>
 <body class="bg-zinc-950 text-white min-h-screen">
-    <div id="scroll-progress" class="fixed top-0 left-0 h-1 bg-[#ffd700] z-50 w-0"></div>
+    <div id="scroll-progress" class="fixed top-0 left-0 h-1 bg-[#ffd700] z-50 w-0 transition-all duration-300"></div>
     <div id="navbar-container"></div>
-    
+
     <main class="pt-24 pb-12">
-        <header class="text-center py-20 px-6">
+        <header class="text-center py-20 px-6 bg-gradient-to-b from-zinc-900 to-zinc-950">
             <h1 class="text-5xl md:text-7xl font-black uppercase mb-6">About the Guard</h1>
-            <p class="text-xl text-gray-400 max-w-2xl mx-auto">New Jersey Army National Guard - One weekend a month. Two weeks a year. A lifetime of leadership.</p>
-            <a href="index.html" class="mt-8 inline-block bg-[#ffd700] text-black px-8 py-4 font-black uppercase rounded-xl hover:bg-white">← Home</a>
+            <p class="text-xl text-gray-400 max-w-2xl mx-auto">New Jersey Army National Guard — One weekend a month. Two weeks a year. A lifetime of leadership.</p>
+            <a href="index.html" class="mt-8 inline-block bg-[#ffd700] text-black px-8 py-4 font-black uppercase rounded-xl hover:bg-white shadow-xl transition-all">← Home</a>
         </header>
 
-        <section class="max-w-6xl mx-auto px-6">
+        <!-- Why Guard -->
+        <section class="max-w-6xl mx-auto px-6 py-16 reveal">
             <div class="grid md:grid-cols-2 gap-12 items-center mb-20">
                 <div>
-                    <h2 class="text-4xl font-black uppercase mb-8">Why NJ Guard?</h2>
-                    <p class="text-lg text-gray-300 mb-8 leading-relaxed">Serve your community and country part-time while advancing your civilian career. Access tuition assistance, leadership training, and NJ state benefits.</p>
-                    <ul class="space-y-4 text-gray-400">
-                        <li><i data-lucide="map-pin" class="w-6 h-6 inline mr-3 text-[#ffd700]"></i> Serve close to home</li>
-                        <li><i data-lucide="book-open" class="w-6 h-6 inline mr-3 text-[#ffd700]"></i> 100% NJ tuition coverage</li>
-                        <li><i data-lucide="dollar-sign" class="w-6 h-6 inline mr-3 text-[#ffd700]"></i> Up to $20K enlistment bonuses</li>
-                        <li><i data-lucide="shield" class="w-6 h-6 inline mr-3 text-[#ffd700]"></i> Real-world MOS training</li>
+                    <span class="text-[#ffd700] font-black uppercase tracking-widest text-xs">Why NJ Guard?</span>
+                    <h2 class="text-4xl font-black uppercase mt-3 mb-6">Serve Part-Time. Grow Full-Time.</h2>
+                    <p class="text-lg text-gray-300 mb-8 leading-relaxed">Serve your community and country part-time while advancing your civilian career. Access tuition assistance, leadership training, and NJ state benefits that last a lifetime.</p>
+                    <ul class="space-y-4 text-gray-300">
+                        <li class="flex items-center gap-3"><i data-lucide="map-pin" class="w-5 h-5 text-[#ffd700] shrink-0"></i> Serve close to home — 12 NJ armory locations</li>
+                        <li class="flex items-center gap-3"><i data-lucide="book-open" class="w-5 h-5 text-[#ffd700] shrink-0"></i> 100% NJ public college tuition waiver</li>
+                        <li class="flex items-center gap-3"><i data-lucide="dollar-sign" class="w-5 h-5 text-[#ffd700] shrink-0"></i> Up to $20K enlistment bonuses (MOS dependent)</li>
+                        <li class="flex items-center gap-3"><i data-lucide="shield" class="w-5 h-5 text-[#ffd700] shrink-0"></i> Real-world training in 150+ MOS specialties</li>
+                        <li class="flex items-center gap-3"><i data-lucide="briefcase" class="w-5 h-5 text-[#ffd700] shrink-0"></i> USERRA job protection — your employer can't fire you</li>
                     </ul>
                 </div>
-                <div class="relative">
-                    <img src="images/knuckles.jpg" alt="NJ Guard training" class="w-full rounded-3xl shadow-2xl">
+                <div class="grid grid-cols-3 gap-4">
+                    <div class="bg-zinc-900/50 border border-white/10 p-6 rounded-2xl text-center">
+                        <div class="text-3xl font-black text-[#ffd700]" data-count="150" data-count-suffix="+">150+</div>
+                        <div class="text-xs uppercase text-gray-400 mt-1">MOS Careers</div>
+                    </div>
+                    <div class="bg-zinc-900/50 border border-white/10 p-6 rounded-2xl text-center">
+                        <div class="text-3xl font-black text-[#ffd700]" data-count="12" data-count-suffix="+">12+</div>
+                        <div class="text-xs uppercase text-gray-400 mt-1">NJ Armories</div>
+                    </div>
+                    <div class="bg-zinc-900/50 border border-white/10 p-6 rounded-2xl text-center">
+                        <div class="text-3xl font-black text-[#ffd700]">100%</div>
+                        <div class="text-xs uppercase text-gray-400 mt-1">Tuition Covered</div>
+                    </div>
+                    <div class="col-span-3 bg-zinc-900/50 border border-white/10 p-6 rounded-2xl text-center">
+                        <div class="text-3xl font-black text-[#ffd700]">1 Weekend / Month</div>
+                        <div class="text-xs uppercase text-gray-400 mt-1">Service commitment — keep your civilian life</div>
+                    </div>
                 </div>
             </div>
+        </section>
 
+        <!-- Service Comparison Table -->
+        <section class="max-w-6xl mx-auto px-6 pb-20 reveal">
+            <div class="text-center mb-12">
+                <span class="text-[#ffd700] uppercase tracking-[0.3em] text-xs font-black">Know Your Options</span>
+                <h2 class="text-4xl font-black uppercase mt-4 mb-4">Guard vs. Active Duty vs. Reserves</h2>
+                <p class="text-gray-400 max-w-2xl mx-auto">Not sure which path is right for you? Here's a straight side-by-side comparison.</p>
+            </div>
+
+            <div class="overflow-x-auto rounded-2xl border border-white/10">
+                <table class="w-full text-sm">
+                    <thead>
+                        <tr class="bg-zinc-900">
+                            <th class="px-6 py-5 text-left text-xs uppercase tracking-wider text-gray-400 w-40">Feature</th>
+                            <th class="px-6 py-5 text-center bg-[#ffd700]/10 border-x border-[#ffd700]/30">
+                                <div class="text-[#ffd700] font-black text-base uppercase">NJ National Guard</div>
+                                <div class="text-xs text-gray-400 font-normal">Recommended</div>
+                            </th>
+                            <th class="px-6 py-5 text-center">
+                                <div class="text-white font-black text-base uppercase">Active Duty</div>
+                                <div class="text-xs text-gray-400 font-normal">Full-time service</div>
+                            </th>
+                            <th class="px-6 py-5 text-center">
+                                <div class="text-white font-black text-base uppercase">Army Reserve</div>
+                                <div class="text-xs text-gray-400 font-normal">Part-time federal</div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-white/10">
+                        <tr class="hover:bg-white/5 transition-colors">
+                            <td class="px-6 py-4 text-gray-400 font-bold uppercase text-xs">Service Rhythm</td>
+                            <td class="px-6 py-4 text-center bg-[#ffd700]/5 border-x border-[#ffd700]/20 text-white">1 weekend/mo + 2 wks/yr</td>
+                            <td class="px-6 py-4 text-center text-gray-300">Full-time (24/7)</td>
+                            <td class="px-6 py-4 text-center text-gray-300">1 weekend/mo + 2 wks/yr</td>
+                        </tr>
+                        <tr class="hover:bg-white/5 transition-colors">
+                            <td class="px-6 py-4 text-gray-400 font-bold uppercase text-xs">Civilian Job</td>
+                            <td class="px-6 py-4 text-center bg-[#ffd700]/5 border-x border-[#ffd700]/20"><span class="text-green-400 font-bold">✓ Keep it</span></td>
+                            <td class="px-6 py-4 text-center text-gray-500">✗ Full-time military</td>
+                            <td class="px-6 py-4 text-center"><span class="text-green-400 font-bold">✓ Keep it</span></td>
+                        </tr>
+                        <tr class="hover:bg-white/5 transition-colors">
+                            <td class="px-6 py-4 text-gray-400 font-bold uppercase text-xs">Base Location</td>
+                            <td class="px-6 py-4 text-center bg-[#ffd700]/5 border-x border-[#ffd700]/20"><span class="text-green-400 font-bold">✓ Stay in NJ</span></td>
+                            <td class="px-6 py-4 text-center text-gray-500">Assigned anywhere</td>
+                            <td class="px-6 py-4 text-center text-gray-300">Regional unit</td>
+                        </tr>
+                        <tr class="hover:bg-white/5 transition-colors">
+                            <td class="px-6 py-4 text-gray-400 font-bold uppercase text-xs">NJ Tuition Waiver</td>
+                            <td class="px-6 py-4 text-center bg-[#ffd700]/5 border-x border-[#ffd700]/20"><span class="text-green-400 font-bold">✓ 100% covered</span></td>
+                            <td class="px-6 py-4 text-center text-gray-500">✗ Not available</td>
+                            <td class="px-6 py-4 text-center text-gray-500">✗ Not available</td>
+                        </tr>
+                        <tr class="hover:bg-white/5 transition-colors">
+                            <td class="px-6 py-4 text-gray-400 font-bold uppercase text-xs">GI Bill (Education)</td>
+                            <td class="px-6 py-4 text-center bg-[#ffd700]/5 border-x border-[#ffd700]/20"><span class="text-yellow-300 font-bold">Chapter 1606</span></td>
+                            <td class="px-6 py-4 text-center"><span class="text-green-400 font-bold">Full Ch. 33</span></td>
+                            <td class="px-6 py-4 text-center text-yellow-300 font-bold">Chapter 1606</td>
+                        </tr>
+                        <tr class="hover:bg-white/5 transition-colors">
+                            <td class="px-6 py-4 text-gray-400 font-bold uppercase text-xs">Monthly Pay</td>
+                            <td class="px-6 py-4 text-center bg-[#ffd700]/5 border-x border-[#ffd700]/20 text-white">Drill pay (~$286–$435+)</td>
+                            <td class="px-6 py-4 text-center"><span class="text-green-400 font-bold">Full salary + BAH</span></td>
+                            <td class="px-6 py-4 text-center text-white">Drill pay only</td>
+                        </tr>
+                        <tr class="hover:bg-white/5 transition-colors">
+                            <td class="px-6 py-4 text-gray-400 font-bold uppercase text-xs">Health Insurance</td>
+                            <td class="px-6 py-4 text-center bg-[#ffd700]/5 border-x border-[#ffd700]/20 text-white">TRICARE Reserve Select</td>
+                            <td class="px-6 py-4 text-center"><span class="text-green-400 font-bold">Full TRICARE</span></td>
+                            <td class="px-6 py-4 text-center text-white">TRICARE Reserve Select</td>
+                        </tr>
+                        <tr class="hover:bg-white/5 transition-colors">
+                            <td class="px-6 py-4 text-gray-400 font-bold uppercase text-xs">Enlistment Bonus</td>
+                            <td class="px-6 py-4 text-center bg-[#ffd700]/5 border-x border-[#ffd700]/20"><span class="text-green-400 font-bold">Up to $20K</span></td>
+                            <td class="px-6 py-4 text-center text-white">Varies by MOS</td>
+                            <td class="px-6 py-4 text-center text-white">Varies by MOS</td>
+                        </tr>
+                        <tr class="hover:bg-white/5 transition-colors">
+                            <td class="px-6 py-4 text-gray-400 font-bold uppercase text-xs">Deployment Risk</td>
+                            <td class="px-6 py-4 text-center bg-[#ffd700]/5 border-x border-[#ffd700]/20 text-white">Lower (state focus)</td>
+                            <td class="px-6 py-4 text-center text-red-400 font-bold">Higher (global)</td>
+                            <td class="px-6 py-4 text-center text-yellow-300">Moderate</td>
+                        </tr>
+                        <tr class="hover:bg-white/5 transition-colors">
+                            <td class="px-6 py-4 text-gray-400 font-bold uppercase text-xs">State Benefits (NJ)</td>
+                            <td class="px-6 py-4 text-center bg-[#ffd700]/5 border-x border-[#ffd700]/20"><span class="text-green-400 font-bold">✓ Yes</span></td>
+                            <td class="px-6 py-4 text-center text-gray-500">✗ No</td>
+                            <td class="px-6 py-4 text-center text-gray-500">✗ No</td>
+                        </tr>
+                        <tr class="bg-zinc-900/50">
+                            <td class="px-6 py-5 font-black uppercase text-xs text-white">Best For</td>
+                            <td class="px-6 py-5 text-center bg-[#ffd700]/10 border-x border-[#ffd700]/30 text-[#ffd700] font-bold">Students, career builders, families in NJ</td>
+                            <td class="px-6 py-5 text-center text-gray-300">Those wanting full military career</td>
+                            <td class="px-6 py-5 text-center text-gray-300">Part-time federal service</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="mt-8 text-center">
+                <a href="contact.html" class="bg-[#ffd700] text-black px-10 py-5 font-black uppercase rounded-2xl hover:bg-white shadow-2xl transition-all inline-block text-lg">
+                    Talk to a Recruiter About Your Options →
+                </a>
+            </div>
+        </section>
+
+        <!-- Three pillars -->
+        <section class="max-w-6xl mx-auto px-6 pb-20 reveal">
             <div class="grid md:grid-cols-3 gap-8">
-                <article class="bg-zinc-900/50 border border-white/10 p-8 rounded-3xl">
+                <article class="bg-zinc-900/50 border border-white/10 p-8 rounded-3xl hover:border-[#ffd700]/50 transition-all">
+                    <i data-lucide="calendar" class="w-10 h-10 text-[#ffd700] mb-4"></i>
                     <h3 class="text-2xl font-black uppercase mb-4">One Weekend a Month</h3>
-                    <p class="text-gray-300">12 drill weekends + 2 weeks annual training. Compatible with full-time civilian careers.</p>
+                    <p class="text-gray-300">12 drill weekends + 2 weeks annual training. The rest of the year you keep your civilian schedule, job, and education.</p>
                 </article>
-                <article class="bg-zinc-900/50 border border-white/10 p-8 rounded-3xl">
-                    <h3 class="text-2xl font-black uppercase mb-4">NJ Benefits</h3>
-                    <p class="text-gray-300">Free NJ college tuition + priority state hiring for veterans.</p>
+                <article class="bg-zinc-900/50 border border-white/10 p-8 rounded-3xl hover:border-[#ffd700]/50 transition-all">
+                    <i data-lucide="graduation-cap" class="w-10 h-10 text-[#ffd700] mb-4"></i>
+                    <h3 class="text-2xl font-black uppercase mb-4">NJ Education Benefits</h3>
+                    <p class="text-gray-300">Free NJ college tuition + priority state hiring for veterans. Add federal GI Bill on top for living stipends during school.</p>
                 </article>
-                <article class="bg-zinc-900/50 border border-white/10 p-8 rounded-3xl">
+                <article class="bg-zinc-900/50 border border-white/10 p-8 rounded-3xl hover:border-[#ffd700]/50 transition-all">
+                    <i data-lucide="globe" class="w-10 h-10 text-[#ffd700] mb-4"></i>
                     <h3 class="text-2xl font-black uppercase mb-4">Federal Support</h3>
-                    <p class="text-gray-300">GI Bill, VA loan, TRICARE health + retirement matching.</p>
+                    <p class="text-gray-300">GI Bill, VA home loan, TRICARE health coverage, and retirement matching — all the federal benefits, part-time commitment.</p>
                 </article>
             </div>
         </section>
     </main>
-    
+
     <div id="footer-container"></div>
-    
     <script src="src/js/shared.js"></script>
 </body>
 </html>

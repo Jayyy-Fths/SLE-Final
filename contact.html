@@ -11,10 +11,8 @@
 </head>
 <body class="bg-black text-white min-h-screen">
     <div id="scroll-progress" class="fixed top-0 left-0 h-1 bg-[#ffd700] z-50 w-0 transition-all duration-300"></div>
-    
-    <!-- Dynamic Nav -->
     <div id="navbar-container"></div>
-    
+
     <main class="pt-24 pb-12">
         <header class="text-center py-20 px-6">
             <h1 class="text-5xl md:text-7xl font-black uppercase mb-6 bg-gradient-to-r from-[#ffd700] to-orange-500 bg-clip-text text-transparent">
@@ -27,19 +25,50 @@
         </header>
 
         <section class="max-w-2xl mx-auto px-6">
-            <div class="bg-zinc-900/50 backdrop-blur-xl border border-white/10 rounded-3xl p-10 mb-8">
+
+            <!-- Step progress bar -->
+            <div id="step-progress" class="mb-8">
+                <div class="flex items-center justify-center gap-0 mb-4">
+                    <div class="step-dot active" id="dot-1">1</div>
+                    <div class="step-line" id="line-1"></div>
+                    <div class="step-dot" id="dot-2">2</div>
+                </div>
+                <div class="flex justify-center gap-0">
+                    <span class="step-label active text-center" style="width:120px" id="label-1">Your Info</span>
+                    <span style="width:80px"></span>
+                    <span class="step-label text-center" style="width:120px" id="label-2">Interests</span>
+                </div>
+            </div>
+
+            <div class="bg-zinc-900/50 backdrop-blur-xl border border-white/10 rounded-3xl p-10 mb-4">
+
+                <!-- Recruiter suggestion (shown after ZIP entered) -->
+                <div id="recruiter-suggestion" class="hidden mb-8 p-5 bg-[#ffd700]/10 border border-[#ffd700]/40 rounded-2xl">
+                    <div class="flex items-start gap-3">
+                        <i data-lucide="map-pin" class="w-5 h-5 text-[#ffd700] mt-0.5 shrink-0"></i>
+                        <div>
+                            <p class="text-xs uppercase tracking-wider text-[#ffd700] font-black mb-1">Nearest Armory to your ZIP</p>
+                            <p id="recruiter-name" class="font-bold text-white"></p>
+                            <p id="recruiter-address" class="text-gray-400 text-sm"></p>
+                            <p id="recruiter-phone" class="text-[#ffd700] text-sm font-bold mt-1"></p>
+                            <p id="recruiter-contact" class="text-gray-400 text-xs mt-0.5"></p>
+                        </div>
+                    </div>
+                </div>
+
                 <div id="contact-form-step-1" class="contact-step">
                     <h2 class="text-2xl font-black uppercase mb-6">Step 1: Your Info</h2>
                     <form id="contact-personal-form">
-                        <input type="text" id="contact-firstname" placeholder="First Name *" class="input-field w-full mb-4" required>
-                        <input type="text" id="contact-lastname" placeholder="Last Name *" class="input-field w-full mb-4" required>
+                        <div class="grid sm:grid-cols-2 gap-4 mb-4">
+                            <input type="text" id="contact-firstname" placeholder="First Name *" class="input-field w-full" required>
+                            <input type="text" id="contact-lastname" placeholder="Last Name *" class="input-field w-full" required>
+                        </div>
                         <input type="email" id="contact-email" placeholder="Email *" class="input-field w-full mb-4" required>
                         <input type="tel" id="contact-phone" placeholder="Phone *" class="input-field w-full mb-4" required>
-                        <input type="text" id="contact-zip" placeholder="ZIP Code" class="input-field w-full mb-6" maxlength="5">
-                        <div class="flex gap-4">
-                            <button type="button" onclick="prevStep()" class="flex-1 bg-gray-800 text-gray-300 py-4 rounded-xl hover:bg-gray-700 transition-all hidden">← Previous</button>
-                            <button type="submit" class="flex-1 bg-[#ffd700] text-black font-black py-4 uppercase rounded-xl hover:bg-white shadow-lg transition-all">Next: Interests →</button>
-                        </div>
+                        <input type="text" id="contact-zip" placeholder="ZIP Code (to find your nearest recruiter)" class="input-field w-full mb-6" maxlength="5" inputmode="numeric">
+                        <button type="submit" class="w-full bg-[#ffd700] text-black font-black py-4 uppercase rounded-xl hover:bg-white shadow-lg transition-all">
+                            Next: Your Interests →
+                        </button>
                     </form>
                 </div>
 
@@ -48,19 +77,19 @@
                     <form id="contact-interests-form">
                         <label class="block mb-4">
                             <span class="text-sm font-bold uppercase mb-2 block text-gray-300">What interests you?</span>
-                            <select id="contact-interest" class="input-field" required>
-                                <option value="">Select...</option>
-                                <option value="careers">Specific MOS/Career</option>
+                            <select id="contact-interest" class="input-field w-full" required>
+                                <option value="">Select one...</option>
+                                <option value="careers">Specific MOS / Career Path</option>
                                 <option value="eligibility">Eligibility Questions</option>
-                                <option value="benefits">Benefits/Tuition/Bonus</option>
+                                <option value="benefits">Benefits / Tuition / Bonus</option>
                                 <option value="training">Split Training Option</option>
-                                <option value="general">General Info</option>
+                                <option value="general">General Information</option>
                             </select>
                         </label>
-                        <textarea id="contact-message" placeholder="Tell us more (MOS codes, questions, goals)..." rows="5" class="input-field w-full mb-6" required></textarea>
+                        <textarea id="contact-message" placeholder="Tell us more — MOS codes, questions, goals, timeline..." rows="5" class="input-field w-full mb-6" required></textarea>
                         <div class="flex gap-4">
-                            <button type="button" onclick="prevStep()" class="flex-1 bg-gray-800 text-gray-300 py-4 rounded-xl hover:bg-gray-700 transition-all">← Previous</button>
-                            <button type="submit" class="flex-1 bg-[#ffd700] text-black font-black py-4 uppercase rounded-xl hover:bg-white shadow-lg transition-all">Send Message</button>
+                            <button type="button" id="prev-step-btn" class="flex-1 bg-gray-800 text-gray-300 py-4 rounded-xl hover:bg-gray-700 transition-all">← Previous</button>
+                            <button type="submit" class="flex-1 bg-[#ffd700] text-black font-black py-4 uppercase rounded-xl hover:bg-white shadow-lg transition-all">Send Message →</button>
                         </div>
                     </form>
                 </div>
@@ -69,17 +98,18 @@
             <div id="contact-success" class="hidden text-center p-12 rounded-3xl bg-green-500/20 border-2 border-green-400/50">
                 <i data-lucide="check-circle" class="w-24 h-24 text-green-400 mx-auto mb-6"></i>
                 <h2 class="text-3xl font-black uppercase mb-4 text-green-300">Message Sent!</h2>
-                <p class="text-xl text-green-200 mb-8 max-w-md mx-auto">Your recruiter will contact you within 24 hours. Check your email/spam folder.</p>
-                <a href="index.html" class="inline-block bg-green-500 text-white px-8 py-4 font-black uppercase rounded-2xl hover:bg-green-600 shadow-xl transition-all">← Continue Exploring</a>
+                <p class="text-xl text-green-200 mb-8 max-w-md mx-auto">Your recruiter will contact you within 24 hours. Check your email for confirmation.</p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="index.html" class="bg-green-500 text-white px-8 py-4 font-black uppercase rounded-2xl hover:bg-green-600 shadow-xl transition-all">← Keep Exploring</a>
+                    <a href="careers.html" class="border-2 border-green-400/50 text-green-200 px-8 py-4 font-black uppercase rounded-2xl hover:bg-green-500/20 transition-all">Browse MOS Careers</a>
+                </div>
             </div>
         </section>
     </main>
-    
-    <!-- Dynamic Footer -->
+
     <div id="footer-container"></div>
 
     <script src="src/js/shared.js"></script>
     <script src="src/js/pages/contact.js"></script>
 </body>
 </html>
-

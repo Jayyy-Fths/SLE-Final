@@ -122,6 +122,39 @@
         </div>
     </div>
 
+    <!-- Compare bottom bar -->
+    <div id="compare-bar" class="hidden fixed bottom-0 inset-x-0 z-50 bg-zinc-900/98 backdrop-blur-xl border-t border-[#ffd700]/40 px-6 py-4 shadow-2xl">
+        <div class="max-w-4xl mx-auto flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <span class="text-[#ffd700] font-black uppercase text-sm tracking-wider">Compare:</span>
+                <div id="compare-slots" class="flex gap-2"></div>
+            </div>
+            <div class="flex gap-3">
+                <button id="compare-now-btn" onclick="openCompareModal()" class="bg-[#ffd700] text-black px-6 py-2.5 font-black uppercase rounded-xl hover:bg-white transition-all text-sm shadow-lg">
+                    Compare Now →
+                </button>
+                <button onclick="clearCompare()" class="border border-white/20 px-4 py-2.5 font-bold uppercase rounded-xl hover:border-[#ffd700] hover:text-[#ffd700] transition-all text-sm">
+                    Clear
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Compare full modal -->
+    <div id="compare-modal" class="hidden fixed inset-0 z-50 bg-black/90 backdrop-blur-sm flex items-start justify-center p-4 overflow-y-auto pt-10">
+        <div class="bg-zinc-900 rounded-3xl border border-white/20 shadow-2xl w-full max-w-5xl">
+            <div class="flex justify-between items-center p-8 border-b border-white/10">
+                <h2 class="text-2xl font-black uppercase tracking-tight">MOS Comparison</h2>
+                <button onclick="document.getElementById('compare-modal').classList.add('hidden');document.getElementById('compare-modal').style.display='none';" class="text-3xl hover:text-[#ffd700] transition-colors">&times;</button>
+            </div>
+            <div id="compare-table-wrap" class="p-8 overflow-x-auto"></div>
+            <div class="px-8 pb-8 flex gap-3 flex-wrap">
+                <a href="contact.html" class="bg-[#ffd700] text-black px-6 py-3 font-black uppercase rounded-xl hover:bg-white transition-all">Contact Recruiter</a>
+                <button onclick="clearCompare();document.getElementById('compare-modal').classList.add('hidden');document.getElementById('compare-modal').style.display='none';" class="border border-white/20 px-6 py-3 font-bold uppercase rounded-xl hover:border-[#ffd700] transition-all">Close</button>
+            </div>
+        </div>
+    </div>
+
     <script src="src/js/shared.js"></script>
     <script src="src/js/pages/careers.js"></script>
 </body>

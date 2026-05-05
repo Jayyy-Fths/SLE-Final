@@ -319,6 +319,71 @@ function toggleFavorite(event, mosData) {
     }
 }
 
+// Scroll-reveal: animate elements with class .reveal when they enter the viewport
+function initScrollReveal() {
+    const els = document.querySelectorAll('.reveal');
+    if (!els.length) return;
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.12 });
+    els.forEach(el => observer.observe(el));
+}
+
+// Animated counters: elements with data-count="150" data-count-suffix="+"
+function initCounters() {
+    const els = document.querySelectorAll('[data-count]');
+    if (!els.length) return;
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+            const el = entry.target;
+            const target = parseInt(el.dataset.count);
+            const suffix = el.dataset.countSuffix || '';
+            const prefix = el.dataset.countPrefix || '';
+            const duration = 1400;
+            const start = Date.now();
+            const tick = () => {
+                const p = Math.min((Date.now() - start) / duration, 1);
+                const eased = 1 - Math.pow(1 - p, 3);
+                el.textContent = prefix + Math.round(target * eased) + suffix;
+                if (p < 1) requestAnimationFrame(tick);
+            };
+            requestAnimationFrame(tick);
+            observer.unobserve(el);
+        });
+    }, { threshold: 0.5 });
+    els.forEach(el => observer.observe(el));
+}
+
+// Back-to-top button: appears after scrolling 400px
+function initBackToTop() {
+    const btn = document.createElement('button');
+    btn.id = 'back-to-top';
+    btn.setAttribute('aria-label', 'Back to top');
+    btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>`;
+    btn.style.cssText = 'position:fixed;bottom:80px;right:24px;z-index:40;width:48px;height:48px;border-radius:50%;background:#ffd700;color:black;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 25px rgba(255,215,0,0.4);opacity:0;pointer-events:none;transition:opacity 0.3s,transform 0.3s;';
+    document.body.appendChild(btn);
+
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 400) {
+            btn.style.opacity = '1';
+            btn.style.pointerEvents = 'auto';
+        } else {
+            btn.style.opacity = '0';
+            btn.style.pointerEvents = 'none';
+        }
+    }, { passive: true });
+
+    btn.addEventListener('mouseenter', () => { btn.style.transform = 'scale(1.1)'; btn.style.background = '#fff'; });
+    btn.addEventListener('mouseleave', () => { btn.style.transform = 'scale(1)'; btn.style.background = '#ffd700'; });
+    btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+}
+
 // Event delegation for modal close
 document.addEventListener('click', (e) => {
     const mosModal = document.getElementById('mos-modal');
@@ -472,12 +537,31 @@ function setupApplyForm() {
     });
 }
 
+// Escape key closes any open modal
+document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    closeMosModal();
+    const applyModal = document.getElementById('apply-modal');
+    if (applyModal && applyModal.style.display !== 'none') {
+        applyModal.classList.add('hidden');
+        applyModal.style.display = 'none';
+    }
+    const compareModal = document.getElementById('compare-modal');
+    if (compareModal && compareModal.style.display !== 'none') {
+        compareModal.classList.add('hidden');
+        compareModal.style.display = 'none';
+    }
+});
+
 // Main init function
 function init() {
     injectNavbar();   // must be first so setup fns find the injected elements
     injectFooter();
     initTheme();
     initScrollProgress();
+    initScrollReveal();
+    initCounters();
+    initBackToTop();
     setupNavbarScroll();
     setupMobileMenu();
     setupThemeToggle();
@@ -510,6 +594,8 @@ Object.assign(window.shared, {
     applyTranslations,
     injectNavbar,
     injectFooter,
+    initScrollReveal,
+    initCounters,
     currentLanguage: () => currentLanguage,
     isDarkMode: () => isDarkMode
 });
