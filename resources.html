@@ -8,36 +8,193 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <link rel="stylesheet" href="src/css/style.css">
 </head>
-<body class="bg-black text-white">
+<body class="bg-black text-white min-h-screen">
+    <div id="scroll-progress" class="fixed top-0 left-0 h-1 bg-[#ffd700] z-50 w-0 transition-all duration-300"></div>
     <div id="navbar-container"></div>
-    
-    <main class="pt-24">
-        <section class="max-w-4xl mx-auto px-6 py-20">
-            <h1 class="text-5xl font-black uppercase text-center mb-20">Resources</h1>
-            
-            <div class="space-y-16">
-                <!-- Benefits Calculator -->
-                <section id="benefits-calc">
-                    <h2 class="text-3xl font-black uppercase mb-12">Benefits Calculator</h2>
-                    <!-- Calculator from index.html -->
-                </section>
-                
-                <!-- FAQ -->
-                <section id="faq">
-                    <h2 class="text-3xl font-black uppercase mb-12">FAQ</h2>
-                    <div class="space-y-4">
-                        <details class="faq-item bg-zinc-900/50 border border-white/10 rounded-xl p-6">
-                            <summary class="font-bold uppercase cursor-pointer pb-4">Can I join with tattoos?</summary>
-                            <p class="text-gray-300 mt-4">Yes, with restrictions on size/location. Recruiter review required.</p>
-                        </details>
-                        <!-- More FAQs -->
+
+    <main class="pt-24 pb-12">
+        <header class="text-center py-20 px-6 bg-gradient-to-b from-zinc-900 to-black">
+            <h1 class="text-5xl md:text-7xl font-black uppercase mb-6">Resources & FAQ</h1>
+            <p class="text-xl text-gray-400 max-w-2xl mx-auto">Benefits info, pay estimator, and answers to the most common questions about the NJ National Guard.</p>
+            <a href="index.html" class="mt-8 inline-block bg-[#ffd700] text-black px-8 py-4 font-black uppercase rounded-xl hover:bg-white shadow-xl transition-all">← Back to Home</a>
+        </header>
+
+        <section class="max-w-4xl mx-auto px-6 py-16 space-y-20">
+
+            <!-- Benefits Calculator -->
+            <div id="benefits-calc">
+                <h2 class="text-3xl font-black uppercase mb-2 text-center">Benefits Estimator</h2>
+                <p class="text-gray-400 text-center mb-10">Estimate your monthly pay and annual benefits as an NJ Guard member.</p>
+
+                <div class="bg-zinc-900/60 border border-white/10 rounded-3xl p-8">
+                    <div class="grid md:grid-cols-2 gap-6 mb-6">
+                        <label class="block">
+                            <span class="text-xs uppercase tracking-wider text-gray-400 block mb-2">Rank</span>
+                            <select id="calc-rank" class="input-field w-full">
+                                <option value="E1">E-1 Private — $243/mo drill</option>
+                                <option value="E2">E-2 Private 2nd Class — $272/mo drill</option>
+                                <option value="E3" selected>E-3 Private 1st Class — $286/mo drill</option>
+                                <option value="E4">E-4 Specialist/Corporal — $317/mo drill</option>
+                                <option value="E5">E-5 Sergeant — $346/mo drill</option>
+                                <option value="E6">E-6 Staff Sergeant — $378/mo drill</option>
+                                <option value="E7">E-7 Sergeant First Class — $435/mo drill</option>
+                            </select>
+                        </label>
+                        <label class="block">
+                            <span class="text-xs uppercase tracking-wider text-gray-400 block mb-2">Education Goal</span>
+                            <select id="calc-education" class="input-field w-full">
+                                <option value="none">None / Already have degree</option>
+                                <option value="cc" selected>Community College (2yr, ~$6k/yr)</option>
+                                <option value="state">NJ State University (4yr, ~$14k/yr)</option>
+                                <option value="private">Private College (4yr, ~$40k/yr)</option>
+                            </select>
+                        </label>
                     </div>
-                </section>
+                    <label class="block mb-6">
+                        <span class="text-xs uppercase tracking-wider text-gray-400 block mb-2">Bonus-Eligible MOS?</span>
+                        <div class="flex gap-4">
+                            <button type="button" id="bonus-yes" onclick="setBonus(true)" class="eligibility-btn active px-6 py-3">Yes ($15K–$20K)</button>
+                            <button type="button" id="bonus-no" onclick="setBonus(false)" class="eligibility-btn px-6 py-3">No Bonus</button>
+                        </div>
+                    </label>
+                    <button onclick="calcBenefits()" class="w-full bg-[#ffd700] text-black font-black py-4 uppercase rounded-2xl hover:bg-white shadow-2xl transition-all text-lg">
+                        Calculate My Benefits →
+                    </button>
+                </div>
+
+                <div id="calc-results" class="hidden mt-8 space-y-3">
+                    <div class="calc-row"><span>Monthly Drill Pay</span><strong id="r-drill" class="text-[#ffd700]">—</strong></div>
+                    <div class="calc-row"><span>Annual Training Pay (2 wks)</span><strong id="r-at" class="text-[#ffd700]">—</strong></div>
+                    <div class="calc-row"><span>NJ Tuition Waiver (per year)</span><strong id="r-tuition" class="text-green-400">—</strong></div>
+                    <div class="calc-row"><span>Enlistment Bonus (one-time)</span><strong id="r-bonus" class="text-green-400">—</strong></div>
+                    <div class="calc-total"><span class="uppercase font-black">Est. 1st-Year Value</span><strong id="r-total" class="text-2xl text-[#ffd700]">—</strong></div>
+                </div>
+            </div>
+
+            <!-- FAQ -->
+            <div id="faq">
+                <h2 class="text-3xl font-black uppercase mb-2 text-center">Frequently Asked Questions</h2>
+                <p class="text-gray-400 text-center mb-10">Can't find your answer? <a href="contact.html" class="text-[#ffd700] hover:underline">Contact a recruiter.</a></p>
+
+                <div class="space-y-3">
+                    <details class="faq-item">
+                        <summary>Can I join with tattoos?</summary>
+                        <p>Yes. Tattoos are allowed with restrictions — no tattoos on the face, neck, or hands (ring finger tattoos are allowed). Extremist, indecent, or gang-related tattoos disqualify. A recruiter will review during the screening process.</p>
+                    </details>
+                    <details class="faq-item">
+                        <summary>What is the minimum ASVAB score?</summary>
+                        <p>The minimum AFQT (Armed Forces Qualification Test) score for the Army National Guard is <strong>31</strong>. However, most technical MOS require composite scores of 85–110. Higher scores unlock more career options. Practice tests are available free at <a href="https://www.asvabprogram.com" target="_blank" class="text-[#ffd700] hover:underline">asvabprogram.com</a>.</p>
+                    </details>
+                    <details class="faq-item">
+                        <summary>What is the Split Training Option?</summary>
+                        <p>The Split Training Option (STO) lets you complete Basic Combat Training one summer and Advanced Individual Training (AIT) the following summer — so you never miss more than one school year. Perfect for high school seniors and college students.</p>
+                    </details>
+                    <details class="faq-item">
+                        <summary>Will I be deployed overseas?</summary>
+                        <p>Possibly. NJ Guard units can be federally mobilized for overseas deployments, but most members serve domestically — responding to natural disasters, state emergencies, and homeland security missions. Deployment frequency varies by unit.</p>
+                    </details>
+                    <details class="faq-item">
+                        <summary>Does the NJ Guard cover college tuition?</summary>
+                        <p>Yes — the <strong>NJ National Guard Tuition Waiver</strong> covers 100% of tuition at any New Jersey public college or university (Rutgers, NJIT, Rowan, community colleges, etc.). This is in addition to federal education benefits like the GI Bill and federal tuition assistance.</p>
+                    </details>
+                    <details class="faq-item">
+                        <summary>Can I keep my current job?</summary>
+                        <p>Absolutely. The Guard is designed for part-time service. Your civilian employer cannot legally fire you for Guard duties — you're protected by <strong>USERRA</strong> (Uniformed Services Employment and Re-employment Rights Act). Most employers are Guard-friendly.</p>
+                    </details>
+                    <details class="faq-item">
+                        <summary>What are the age requirements?</summary>
+                        <p>You must be between <strong>17 and 35 years old</strong> to enlist. Prior-service members may be able to join up to age 59. Age waivers are possible — speak with a recruiter to explore your options.</p>
+                    </details>
+                    <details class="faq-item">
+                        <summary>What health benefits are included?</summary>
+                        <p>Guard members have access to <strong>TRICARE Reserve Select</strong> — affordable health and dental coverage for yourself and your family. Full TRICARE coverage activates automatically when deployed or on active orders.</p>
+                    </details>
+                    <details class="faq-item">
+                        <summary>How long is the commitment?</summary>
+                        <p>The standard enlistment is <strong>8 years total</strong> — typically 3–6 years of active Guard service, with remaining time in the Individual Ready Reserve (IRR). Many members re-enlist. Your specific contract depends on your MOS and any bonus agreement.</p>
+                    </details>
+                    <details class="faq-item">
+                        <summary>Can non-citizens join?</summary>
+                        <p>Permanent Residents (Green Card holders) can enlist in most MOS. U.S. Citizenship is required for some intelligence and security clearance roles. You must have lived in the U.S. for at least 2 years and speak proficient English.</p>
+                    </details>
+                </div>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="text-center">
+                <h2 class="text-3xl font-black uppercase mb-8">Useful Links</h2>
+                <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
+                    <a href="https://www.nationalguard.com" target="_blank" class="bg-zinc-900/50 border border-white/10 p-6 rounded-2xl hover:border-[#ffd700] transition-all">
+                        <i data-lucide="external-link" class="w-8 h-8 text-[#ffd700] mx-auto mb-3"></i>
+                        <h3 class="font-black uppercase text-sm">NationalGuard.com</h3>
+                        <p class="text-gray-400 text-xs mt-1">Official Guard website</p>
+                    </a>
+                    <a href="https://www.asvabprogram.com" target="_blank" class="bg-zinc-900/50 border border-white/10 p-6 rounded-2xl hover:border-[#ffd700] transition-all">
+                        <i data-lucide="book-open" class="w-8 h-8 text-[#ffd700] mx-auto mb-3"></i>
+                        <h3 class="font-black uppercase text-sm">ASVAB Practice</h3>
+                        <p class="text-gray-400 text-xs mt-1">Free test prep</p>
+                    </a>
+                    <a href="https://www.gibill.va.gov" target="_blank" class="bg-zinc-900/50 border border-white/10 p-6 rounded-2xl hover:border-[#ffd700] transition-all">
+                        <i data-lucide="graduation-cap" class="w-8 h-8 text-[#ffd700] mx-auto mb-3"></i>
+                        <h3 class="font-black uppercase text-sm">GI Bill Info</h3>
+                        <p class="text-gray-400 text-xs mt-1">VA education benefits</p>
+                    </a>
+                    <a href="eligibility.html" class="bg-zinc-900/50 border border-white/10 p-6 rounded-2xl hover:border-[#ffd700] transition-all">
+                        <i data-lucide="clipboard-list" class="w-8 h-8 text-[#ffd700] mx-auto mb-3"></i>
+                        <h3 class="font-black uppercase text-sm">Eligibility Checker</h3>
+                        <p class="text-gray-400 text-xs mt-1">8-question pre-screen</p>
+                    </a>
+                    <a href="careers.html" class="bg-zinc-900/50 border border-white/10 p-6 rounded-2xl hover:border-[#ffd700] transition-all">
+                        <i data-lucide="shield" class="w-8 h-8 text-[#ffd700] mx-auto mb-3"></i>
+                        <h3 class="font-black uppercase text-sm">MOS Explorer</h3>
+                        <p class="text-gray-400 text-xs mt-1">150+ career paths</p>
+                    </a>
+                    <a href="contact.html" class="bg-zinc-900/50 border border-white/10 p-6 rounded-2xl hover:border-[#ffd700] transition-all">
+                        <i data-lucide="phone" class="w-8 h-8 text-[#ffd700] mx-auto mb-3"></i>
+                        <h3 class="font-black uppercase text-sm">Talk to a Recruiter</h3>
+                        <p class="text-gray-400 text-xs mt-1">24hr response</p>
+                    </a>
+                </div>
             </div>
         </section>
     </main>
-    
+
     <div id="footer-container"></div>
-    <script src="src/js/bootstrap.js"></script>
+
+    <script>
+        let bonusEligible = true;
+
+        function setBonus(val) {
+            bonusEligible = val;
+            document.getElementById('bonus-yes').classList.toggle('active', val);
+            document.getElementById('bonus-no').classList.toggle('active', !val);
+        }
+
+        function calcBenefits() {
+            const rankPay = {
+                E1: 243, E2: 272, E3: 286, E4: 317, E5: 346, E6: 378, E7: 435
+            };
+            const tuitionMap = { none: 0, cc: 6000, state: 14000, private: 40000 };
+
+            const rank = document.getElementById('calc-rank').value;
+            const edu = document.getElementById('calc-education').value;
+
+            const drillPay = rankPay[rank] || 286;
+            const atPay = Math.round(drillPay * 10 / 4);   // 10 drill days ≈ 2 weeks AT
+            const tuition = tuitionMap[edu] || 0;
+            const bonus = bonusEligible ? 17500 : 0;
+            const total = (drillPay * 12) + atPay + tuition + bonus;
+
+            const fmt = n => '$' + n.toLocaleString();
+            document.getElementById('r-drill').textContent = fmt(drillPay) + '/mo';
+            document.getElementById('r-at').textContent = fmt(atPay);
+            document.getElementById('r-tuition').textContent = tuition ? fmt(tuition) : 'N/A';
+            document.getElementById('r-bonus').textContent = bonus ? fmt(bonus) : 'N/A';
+            document.getElementById('r-total').textContent = fmt(total);
+            document.getElementById('calc-results').classList.remove('hidden');
+        }
+    </script>
+
+    <script src="src/js/shared.js"></script>
 </body>
 </html>

@@ -31,11 +31,11 @@
                 <div id="contact-form-step-1" class="contact-step">
                     <h2 class="text-2xl font-black uppercase mb-6">Step 1: Your Info</h2>
                     <form id="contact-personal-form">
-                        <input type="text" id="contact-firstname" placeholder="First Name *" class="input-field mb-4" required>
-                        <input type="text" id="contact-lastname" placeholder="Last Name *" class="input-field mb-4" required>
-                        <input type="email" id="contact-email" placeholder="Email *" class="input-field mb-4" required>
-                        <input type="tel" id="contact-phone" placeholder="Phone *" class="input-field mb-4" required>
-                        <input type="text" id="contact-zip" placeholder="ZIP Code" class="input-field mb-6" maxlength="5">
+                        <input type="text" id="contact-firstname" placeholder="First Name *" class="input-field w-full mb-4" required>
+                        <input type="text" id="contact-lastname" placeholder="Last Name *" class="input-field w-full mb-4" required>
+                        <input type="email" id="contact-email" placeholder="Email *" class="input-field w-full mb-4" required>
+                        <input type="tel" id="contact-phone" placeholder="Phone *" class="input-field w-full mb-4" required>
+                        <input type="text" id="contact-zip" placeholder="ZIP Code" class="input-field w-full mb-6" maxlength="5">
                         <div class="flex gap-4">
                             <button type="button" onclick="prevStep()" class="flex-1 bg-gray-800 text-gray-300 py-4 rounded-xl hover:bg-gray-700 transition-all hidden">← Previous</button>
                             <button type="submit" class="flex-1 bg-[#ffd700] text-black font-black py-4 uppercase rounded-xl hover:bg-white shadow-lg transition-all">Next: Interests →</button>
@@ -57,7 +57,7 @@
                                 <option value="general">General Info</option>
                             </select>
                         </label>
-                        <textarea id="contact-message" placeholder="Tell us more (MOS codes, questions, goals)..." rows="5" class="input-field mb-6" required></textarea>
+                        <textarea id="contact-message" placeholder="Tell us more (MOS codes, questions, goals)..." rows="5" class="input-field w-full mb-6" required></textarea>
                         <div class="flex gap-4">
                             <button type="button" onclick="prevStep()" class="flex-1 bg-gray-800 text-gray-300 py-4 rounded-xl hover:bg-gray-700 transition-all">← Previous</button>
                             <button type="submit" class="flex-1 bg-[#ffd700] text-black font-black py-4 uppercase rounded-xl hover:bg-white shadow-lg transition-all">Send Message</button>
@@ -78,7 +78,7 @@
     <!-- Dynamic Footer -->
     <div id="footer-container"></div>
 
-    <script src="src/js/bootstrap.js"></script>
+    <script src="src/js/shared.js"></script>
     <script src="src/js/pages/contact.js"></script>
 </body>
 </html>

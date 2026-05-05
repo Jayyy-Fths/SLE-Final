@@ -358,6 +358,66 @@ h1, h2, h3 { font-family: 'Inter', sans-serif; font-weight: 900; }
     color: hsl(var(--text-secondary));
 }
 
+.info-card {
+    background: hsl(var(--glass));
+    border: 1px solid hsl(var(--border));
+    border-radius: 20px;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.info-card h3 {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.faq-item {
+    background: hsl(var(--glass));
+    border: 1px solid hsl(var(--border));
+    border-radius: 16px;
+    padding: 1.25rem 1.5rem;
+    cursor: pointer;
+    transition: border-color 0.2s ease;
+}
+
+.faq-item:hover {
+    border-color: var(--nj-gold);
+}
+
+.faq-item summary {
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-size: 0.9rem;
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.faq-item summary::after {
+    content: '+';
+    font-size: 1.4rem;
+    color: var(--nj-gold);
+    font-weight: 900;
+    transition: transform 0.2s ease;
+}
+
+.faq-item[open] summary::after {
+    transform: rotate(45deg);
+}
+
+.faq-item p {
+    color: hsl(var(--text-secondary));
+    font-size: 0.9rem;
+    line-height: 1.7;
+    margin-top: 0.75rem;
+}
+
 .armory-nearest-card {
     border: 1px solid hsl(var(--border));
     border-radius: 16px;
