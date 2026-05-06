@@ -8,6 +8,9 @@ async function initIndexPage() {
     const careers = await window.shared.loadCareers();
 
     setupHomeZipSearch(armories);
+    renderCareerFilters(careers);
+    setupHomeFAQ();
+    setupEligibilityChecklist();
     renderEvents();
     renderTestimonials();
     renderFeaturedMos(careers);
@@ -52,6 +55,29 @@ const QUIZ_QUESTIONS = [
             { value: 'indoors', label: 'Tech, command center' },
             { value: 'outdoors', label: 'Field, tactical, operations' }
         ]
+    }
+];
+
+const HOME_FAQ_ITEMS = [
+    {
+        question: 'Can I join with tattoos?',
+        answer: 'Yes, tattoos are allowed with restrictions — no tattoos on the face, neck, or hands. A recruiter will review your specific situation during screening.',
+        category: 'Fitness'
+    },
+    {
+        question: 'What is the minimum ASVAB score?',
+        answer: 'Most Army Guard MOS require a score of 31 or higher on the AFQT. Technical roles typically need 85–110 composite scores.',
+        category: 'Testing'
+    },
+    {
+        question: 'Can I keep my civilian job?',
+        answer: 'Yes. The Guard is designed for part-time service, and USERRA protects your civilian employment during military duties.',
+        category: 'Commitment'
+    },
+    {
+        question: 'How long is the enlistment commitment?',
+        answer: 'Standard enlistment is eight years, usually a mix of active Guard service and Individual Ready Reserve time. Many members choose to re-enlist.',
+        category: 'Contract'
     }
 ];
 
@@ -283,6 +309,86 @@ function saveQuizMatch(match) {
     renderSavedMatch();
 }
 
+function renderCareerFilters(careers) {
+    const container = document.getElementById('career-filter-bar');
+    if (!container) return;
+
+    const categories = ['all', ...new Set(careers.map(item => item.cat))];
+    const labels = {
+        all: 'All',
+        combat: 'Combat',
+        intel: 'Intel',
+        engineer: 'Engineer',
+        aviation: 'Aviation',
+        medical: 'Medical',
+        logistics: 'Logistics'
+    };
+
+    container.innerHTML = categories.map(key => `
+        <button type="button" class="filter-btn ${key === 'all' ? 'active' : ''}" data-filter="${key}">${labels[key] || key}</button>
+    `).join('');
+
+    container.querySelectorAll('button').forEach(button => {
+        button.addEventListener('click', () => {
+            container.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+            const selected = button.dataset.filter;
+            renderFeaturedMos(window.cachedCareers || [], selected);
+        });
+    });
+}
+
+function setupHomeFAQ() {
+    const input = document.getElementById('home-faq-search');
+    if (!input) return;
+    input.addEventListener('input', () => renderHomeFAQ(input.value));
+    renderHomeFAQ('');
+}
+
+function renderHomeFAQ(query = '') {
+    const container = document.getElementById('home-faq-list');
+    const count = document.getElementById('home-faq-count');
+    if (!container || !count) return;
+
+    const normalized = query.trim().toLowerCase();
+    const visible = HOME_FAQ_ITEMS.filter(item => {
+        return item.question.toLowerCase().includes(normalized) || item.answer.toLowerCase().includes(normalized) || !normalized;
+    });
+
+    count.textContent = `${visible.length} Qs`;
+    container.innerHTML = visible.length
+        ? visible.map(item => `
+            <details class="faq-item bg-zinc-900/50 border border-white/10 rounded-3xl p-6 text-left">
+                <summary class="font-bold cursor-pointer">${item.question}</summary>
+                <p class="text-gray-400 mt-4">${item.answer}</p>
+            </details>
+        `).join('')
+        : '<p class="text-gray-400">No matching questions found. Try another keyword.</p>';
+}
+
+function setupEligibilityChecklist() {
+    const button = document.getElementById('eligibility-check-btn');
+    if (!button) return;
+    button.addEventListener('click', () => {
+        const checks = [
+            document.getElementById('eligibility-age')?.checked,
+            document.getElementById('eligibility-asvab')?.checked,
+            document.getElementById('eligibility-citizen')?.checked,
+            document.getElementById('eligibility-fitness')?.checked
+        ];
+        const passed = checks.filter(Boolean).length;
+        const summary = document.getElementById('eligibility-summary');
+        if (!summary) return;
+        if (passed === 4) {
+            summary.textContent = 'Great news — you meet the core pre-screen eligibility items. Contact a recruiter to confirm your path.';
+            window.shared.showToast('You look ready to serve!', 'success');
+        } else {
+            summary.textContent = `You matched ${passed}/4 basic items. A recruiter can help confirm eligibility and guide your next step.`;
+            window.shared.showToast('Eligibility checklist updated.', 'info');
+        }
+    });
+}
+
 function renderSavedMatch() {
     const container = document.getElementById('saved-match-card');
     if (!container) return;
@@ -380,7 +486,10 @@ function haversine(lat1, lng1, lat2, lng2) {
 function formatArmoryCard(armory) {
     return `
         <div class="home-armory-card">
-            <h4>${armory.name}</h4>
+            <div class="flex items-center justify-between gap-4">
+                <h4>${armory.name}</h4>
+                ${armory.dist ? `<span class="text-sm uppercase tracking-[0.2em] text-[#ffd700]">${armory.dist.toFixed(1)} mi</span>` : ''}
+            </div>
             <p class="text-gray-400">${armory.address}</p>
             <p class="text-gray-400 text-sm mt-2">Drill: ${armory.drill}</p>
             <p class="text-[#ffd700] text-sm mt-3">📞 ${armory.phone}</p>
@@ -480,17 +589,18 @@ function createMosFeatureCard(mosData) {
     return card;
 }
 
-function renderFeaturedMos(careers) {
+function renderFeaturedMos(careers, category = 'all') {
     const container = document.getElementById('featured-mos-list');
     if (!container) return;
 
     window.cachedCareers = careers;
-    const featured = careers
-        .filter(item => item.bonus)
-        .slice(0, 3);
+    const filtered = category === 'all' ? careers : careers.filter(item => item.cat === category);
+    const featured = filtered
+        .sort((a, b) => (b.bonus === true) - (a.bonus === true) || (a.asvab || '').localeCompare(b.asvab || ''))
+        .slice(0, 4);
 
     if (!featured.length) {
-        container.innerHTML = '<p class="text-gray-400">No featured MOS are available right now.</p>';
+        container.innerHTML = '<p class="text-gray-400">No MOS match that specialty right now. Try another filter or browse the full list.</p>';
         return;
     }
 
