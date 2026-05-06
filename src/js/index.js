@@ -8,12 +8,16 @@ async function initIndexPage() {
     const careers = await window.shared.loadCareers();
 
     setupHomeZipSearch(armories);
+    initArmoriesMap(armories);
     renderCareerFilters(careers);
+    setupCareerSearch();
     setupHomeFAQ();
+    setupCompareTable();
     setupEligibilityChecklist();
     renderEvents();
     renderTestimonials();
-    renderFeaturedMos(careers);
+    setupTestimonialCarousel();
+    renderFeaturedMos(careers, window.cachedCareerFilter || 'all', window.cachedCareerQuery || '');
     renderSavedFavorites(careers);
     renderSavedMatch();
     setupMissionQuiz(careers);
@@ -324,6 +328,8 @@ function renderCareerFilters(careers) {
         logistics: 'Logistics'
     };
 
+    window.cachedCareerFilter = 'all';
+    window.cachedCareerQuery = '';
     container.innerHTML = categories.map(key => `
         <button type="button" class="filter-btn ${key === 'all' ? 'active' : ''}" data-filter="${key}">${labels[key] || key}</button>
     `).join('');
@@ -333,8 +339,34 @@ function renderCareerFilters(careers) {
             container.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
             button.classList.add('active');
             const selected = button.dataset.filter;
-            renderFeaturedMos(window.cachedCareers || [], selected);
+            window.cachedCareerFilter = selected;
+            renderFeaturedMos(window.cachedCareers || [], selected, window.cachedCareerQuery || '');
         });
+    });
+}
+
+function setupCareerSearch() {
+    const input = document.getElementById('career-search-input');
+    if (!input) return;
+
+    input.addEventListener('input', () => {
+        const query = input.value.trim();
+        window.cachedCareerQuery = query;
+        renderFeaturedMos(window.cachedCareers || [], window.cachedCareerFilter || 'all', query);
+    });
+}
+
+function setupTestimonialCarousel() {
+    const container = document.getElementById('testimonial-cards');
+    const prev = document.getElementById('testimonial-prev');
+    const next = document.getElementById('testimonial-next');
+    if (!container || !prev || !next) return;
+
+    prev.addEventListener('click', () => {
+        container.scrollBy({ left: -360, behavior: 'smooth' });
+    });
+    next.addEventListener('click', () => {
+        container.scrollBy({ left: 360, behavior: 'smooth' });
     });
 }
 
@@ -343,6 +375,68 @@ function setupHomeFAQ() {
     if (!input) return;
     input.addEventListener('input', () => renderHomeFAQ(input.value));
     renderHomeFAQ('');
+}
+
+const COMPARE_TOP_PATHS = [
+    {
+        name: 'Cyber Operations Specialist',
+        category: 'Cyber',
+        asvab: '95+',
+        training: 'Advanced cyber school',
+        civilian: 'Cybersecurity, IT, network defense',
+        fit: 'Tech-minded, problem solving'
+    },
+    {
+        name: 'Health Care Specialist',
+        category: 'Medical',
+        asvab: '31+',
+        training: 'Medical and trauma care',
+        civilian: 'EMT, nursing support, healthcare tech',
+        fit: 'Caring, people-focused, detail-oriented'
+    },
+    {
+        name: 'Combat Vehicle Repairer',
+        category: 'Mechanic',
+        asvab: '50+',
+        training: 'Mechanics and vehicle systems',
+        civilian: 'Automotive, diesel, heavy equipment repair',
+        fit: 'Hands-on, mechanical, field work'
+    }
+];
+
+function setupCompareTable() {
+    const buttons = document.querySelectorAll('#compare button[data-compare]');
+    const tableBody = document.getElementById('compare-table-body');
+    if (!buttons.length || !tableBody) return;
+
+    buttons.forEach(button => {
+        button.addEventListener('click', () => {
+            buttons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+            renderCompareRows(button.dataset.compare);
+        });
+    });
+
+    renderCompareRows('all');
+}
+
+function renderCompareRows(filter = 'all') {
+    const tableBody = document.getElementById('compare-table-body');
+    if (!tableBody) return;
+
+    const rows = COMPARE_TOP_PATHS
+        .filter(item => filter === 'all' || item.category === filter)
+        .map(item => `
+            <tr class="bg-zinc-900/80 rounded-3xl border border-white/10">
+                <td class="py-4 pr-6 font-bold text-white">${item.name}</td>
+                <td class="py-4 pr-6 text-gray-400">${item.asvab}</td>
+                <td class="py-4 pr-6 text-gray-400">${item.training}</td>
+                <td class="py-4 pr-6 text-gray-400">${item.civilian}</td>
+                <td class="py-4 text-gray-400">${item.fit}</td>
+            </tr>
+        `).join('');
+
+    tableBody.innerHTML = rows || '<tr><td colspan="5" class="py-8 text-center text-gray-400">No paths match this filter.</td></tr>';
 }
 
 function renderHomeFAQ(query = '') {
@@ -549,6 +643,7 @@ function setupHomeZipSearch(armories) {
             .slice(0, 3);
 
         showArmoryResults(sorted, zip);
+        highlightNearestArmories(sorted);
         window.shared.showToast(`Nearest armories loaded for ${zip}.`, 'success');
     };
 
@@ -559,6 +654,53 @@ function setupHomeZipSearch(armories) {
             search();
         }
     });
+}
+
+function initArmoriesMap(armories) {
+    if (!window.L) return;
+
+    window.cachedArmories = armories;
+    const map = L.map('armories-map', { scrollWheelZoom: false }).setView([40.1, -74.5], 8);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors',
+        maxZoom: 18,
+    }).addTo(map);
+
+    const markerMap = new Map();
+    const markers = armories
+        .filter(a => Number.isFinite(a.lat) && Number.isFinite(a.lng))
+        .map((armory) => {
+            const marker = L.marker([armory.lat, armory.lng]).addTo(map);
+            const popupContent = `
+                <strong>${armory.name}</strong><br />
+                ${armory.address}<br />
+                Drill: ${armory.drill}<br />
+                <span style="color:#ffd700">${armory.phone}</span><br />
+                Recruiter: ${armory.recruiter}
+            `;
+            marker.bindPopup(popupContent);
+            markerMap.set(armory.name, marker);
+            return marker;
+        });
+
+    if (markers.length) {
+        const group = L.featureGroup(markers);
+        map.fitBounds(group.getBounds().pad(0.2));
+    }
+
+    window.armoriesMap = map;
+    window.armoryMarkerMap = markerMap;
+}
+
+function highlightNearestArmories(results) {
+    if (!window.armoriesMap || !results.length) return;
+    const closest = results[0];
+    if (!closest || !Number.isFinite(closest.lat) || !Number.isFinite(closest.lng)) return;
+
+    window.armoriesMap.setView([closest.lat, closest.lng], 11, { animate: true });
+    const marker = window.armoryMarkerMap && window.armoryMarkerMap.get(closest.name);
+    if (marker) marker.openPopup();
 }
 
 function createMosFeatureCard(mosData) {
@@ -589,12 +731,21 @@ function createMosFeatureCard(mosData) {
     return card;
 }
 
-function renderFeaturedMos(careers, category = 'all') {
+function renderFeaturedMos(careers, category = 'all', query = '') {
     const container = document.getElementById('featured-mos-list');
     if (!container) return;
 
     window.cachedCareers = careers;
-    const filtered = category === 'all' ? careers : careers.filter(item => item.cat === category);
+    window.cachedCareerFilter = category;
+    window.cachedCareerQuery = query;
+    const normalized = query.trim().toLowerCase();
+    const filtered = (category === 'all' ? careers : careers.filter(item => item.cat === category))
+        .filter(item => {
+            if (!normalized) return true;
+            return item.title.toLowerCase().includes(normalized)
+                || item.mos.toLowerCase().includes(normalized)
+                || item.desc.toLowerCase().includes(normalized);
+        });
     const featured = filtered
         .sort((a, b) => (b.bonus === true) - (a.bonus === true) || (a.asvab || '').localeCompare(b.asvab || ''))
         .slice(0, 4);

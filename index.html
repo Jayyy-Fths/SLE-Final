@@ -10,6 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <link rel="stylesheet" href="src/css/style.css">
 </head>
 <body class="bg-black text-white selection:bg-[#ffd700] selection:text-black">
@@ -150,6 +151,10 @@
         </a>
     </div>
     <a href="armories.html" class="mt-12 bg-[#ffd700] text-black px-12 py-6 font-black uppercase rounded-2xl hover:bg-white shadow-2xl transition-all inline-block">View Map →</a>
+    <div div id="armories-map" class="w-full h-96"></div>
+        <p class="text-gray-400 text-sm p-4">Live NJ armories map with recruiter locations. Use the ZIP search above to zoom in on your nearest site
+        <p class="text-gray-400 text-sm p-4">Live NJ armories map with recruiter locations. Use the ZIP search above to zoom in on your nearest sites.</p>
+    </div>
 </section>
 
 <section id="events" class="py-24 bg-zinc-950 text-center reveal">
@@ -203,6 +208,36 @@
         <!-- Featured MOS cards load here -->
     </div>
     <a href="careers.html" class="mt-12 bg-[#ffd700] text-black px-12 py-6 font-black uppercase rounded-2xl hover:bg-white shadow-2xl transition-all inline-block">Browse All MOS →</a>
+</section>
+
+<section id="compare" class="py-24 bg-zinc-950 text-center reveal">
+    <div class="max-w-6xl mx-auto px-6">
+        <div class="mb-12">
+            <span class="text-[#ffd700] uppercase tracking-[0.3em] text-xs font-black">Compare</span>
+            <h2 class="text-4xl md:text-5xl font-black uppercase mt-4">Compare Top MOS Paths</h2>
+            <p class="text-gray-400 mt-4 max-w-3xl mx-auto">See how three high-demand Guard career paths compare across training, civilian value, and eligibility.</p>
+        </div>
+        <div class="flex flex-col gap-4 sm:flex-row sm:justify-center mb-8">
+            <button type="button" class="filter-btn active" data-compare="all">All</button>
+            <button type="button" class="filter-btn" data-compare="Cyber">Cyber</button>
+            <button type="button" class="filter-btn" data-compare="Medical">Medical</button>
+            <button type="button" class="filter-btn" data-compare="Mechanic">Mechanic</button>
+        </div>
+        <div class="overflow-x-auto rounded-3xl border border-white/10 bg-zinc-950 p-4">
+            <table class="w-full text-left border-separate border-spacing-y-4">
+                <thead>
+                    <tr class="text-sm uppercase tracking-[0.3em] text-gray-400">
+                        <th class="pb-4">Path</th>
+                        <th class="pb-4">ASVAB</th>
+                        <th class="pb-4">Training</th>
+                        <th class="pb-4">Civilian Value</th>
+                        <th class="pb-4">Best fit</th>
+                    </tr>
+                </thead>
+                <tbody id="compare-table-body"></tbody>
+            </table>
+        </div>
+    </div>
 </section>
 
 <section id="home-faq" class="py-24 bg-zinc-950 text-center reveal">
@@ -301,11 +336,30 @@
     </div>
 </section>
 
+<section id="recruiter-checklist" class="py-24 bg-black text-center reveal">
+    <div class="max-w-6xl mx-auto px-6">
+        <div class="bg-zinc-900/50 border border-white/10 p-10 rounded-3xl hover:border-[#ffd700] hover:shadow-2xl transition-all">
+            <span class="text-[#ffd700] uppercase tracking-[0.3em] text-xs font-black">Recruiter Ready</span>
+            <h2 class="text-4xl md:text-5xl font-black uppercase mt-4 mb-4">Recruiter Ready Checklist</h2>
+            <p class="text-gray-400 mb-8 max-w-3xl mx-auto">Download a quick checklist with the documents and conversation points recruiters want to see.</p>
+            <a href="recruitment-checklist.txt" download class="bg-[#ffd700] text-black px-10 py-5 font-black uppercase rounded-2xl hover:bg-white transition-all">Download Checklist</a>
+        </div>
+    </div>
+</section>
+
 <section id="testimonials" class="py-24 bg-black text-center reveal">
     <div class="max-w-6xl mx-auto px-6">
-        <span class="text-[#ffd700] uppercase tracking-[0.3em] text-xs font-black">Real Citizen Soldiers</span>
-        <h2 class="text-4xl md:text-5xl font-black uppercase mt-4 mb-6">Stories from NJ Guardsmen</h2>
-        <div id="testimonial-cards" class="grid md:grid-cols-3 gap-6"></div>
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+            <div>
+                <span class="text-[#ffd700] uppercase tracking-[0.3em] text-xs font-black">Real Citizen Soldiers</span>
+                <h2 class="text-4xl md:text-5xl font-black uppercase mt-4">Stories from NJ Guardsmen</h2>
+            </div>
+            <div class="flex items-center justify-center gap-3">
+                <button id="testimonial-prev" class="filter-btn">Prev</button>
+                <button id="testimonial-next" class="filter-btn">Next</button>
+            </div>
+        </div>
+        <div id="testimonial-cards" class="testimonial-carousel"></div>
     </div>
 </section>
 
@@ -315,6 +369,7 @@
     <div class="flex flex-col lg:flex-row gap-8 items-center justify-center">
         <a href="contact.html" class="bg-[#ffd700] text-black px-12 py-6 font-black uppercase rounded-2xl hover:bg-white shadow-2xl text-xl transition-all">Contact Recruiter</a>
         <a href="careers.html" class="border-2 border-white/30 backdrop-blur px-12 py-6 font-black uppercase rounded-2xl hover:bg-white hover:text-black transition-all text-xl">Browse Careers</a>
+        <a href="contact.html" class="bg-white text-black px-12 py-6 font-black uppercase rounded-2xl hover:bg-gray-100 transition-all text-xl">Schedule a Visit</a>
     </div>
 </section>
 
@@ -391,6 +446,7 @@
         </div>
     </div>
 
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script src="src/js/shared.js"></script>
     <script src="src/js/index.js"></script>
 </body>
