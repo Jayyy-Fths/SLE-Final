@@ -20,11 +20,17 @@
 
     <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 py-6 px-6" role="navigation" aria-label="Main navigation">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <div class="flex items-center gap-2">
-                <div class="w-8 h-8 bg-[#ffd700] rotate-45 flex items-center justify-center">
-                    <i data-lucide="shield" class="text-black -rotate-45 w-5 h-5"></i>
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-[#ffd700] grid place-items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" class="w-6 h-6 text-black" fill="currentColor" aria-hidden="true">
+                        <path d="M32 6l18 10v18c0 11-7 20-18 24-11-4-18-13-18-24V16l18-10z" />
+                        <path d="M32 16l10 6v12l-10 6-10-6V22l10-6zm0 6.5L25 24v3.5L32 29l7-1.5V24l-7-1.5z" fill="#000" />
+                    </svg>
                 </div>
-                <span class="text-xl font-black italic tracking-tighter uppercase">NJ National Guard</span>
+                <div class="text-left leading-tight">
+                    <span class="block text-[10px] tracking-[0.35em] uppercase font-black text-[#ffd700]">NJ Army</span>
+                    <span class="block text-xl font-black uppercase tracking-tighter">National Guard</span>
+                </div>
             </div>
             <div class="hidden md:flex items-center gap-8 text-xs font-bold uppercase tracking-widest">
                 <a href="#overview" class="hover:text-[#ffd700]" data-i18n="nav.overview">Overview</a>
@@ -126,6 +132,39 @@
         </div>
     </section>
 
+    <section id="showcase" class="py-24 bg-black text-center reveal">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="mb-12">
+                <span class="text-[#ffd700] uppercase tracking-[0.3em] text-xs font-black">Service in Action</span>
+                <h2 class="text-4xl md:text-5xl font-black uppercase mt-4">Guard Life in Focus</h2>
+                <p class="text-gray-400 mt-4 max-w-3xl mx-auto">A gallery of Guard training, mentoring, and community missions across New Jersey.</p>
+            </div>
+            <div class="grid gap-6 md:grid-cols-3">
+                <article class="overflow-hidden rounded-3xl border border-white/10 bg-zinc-950 shadow-2xl">
+                    <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=900&q=80" loading="lazy" alt="Guard team training" class="w-full h-64 object-cover transition-transform duration-700 hover:scale-105">
+                    <div class="p-6 text-left">
+                        <h3 class="font-black text-xl mb-3">Team Training</h3>
+                        <p class="text-gray-400">Units practice coordination, field skills, and leadership together.</p>
+                    </div>
+                </article>
+                <article class="overflow-hidden rounded-3xl border border-white/10 bg-zinc-950 shadow-2xl">
+                    <img src="https://images.unsplash.com/photo-1525286116112-b59af11adad1?auto=format&fit=crop&w=900&q=80" loading="lazy" alt="Soldiers mentoring new recruits" class="w-full h-64 object-cover transition-transform duration-700 hover:scale-105">
+                    <div class="p-6 text-left">
+                        <h3 class="font-black text-xl mb-3">Mentor Support</h3>
+                        <p class="text-gray-400">Experienced leaders guide recruits through every mission milestone.</p>
+                    </div>
+                </article>
+                <article class="overflow-hidden rounded-3xl border border-white/10 bg-zinc-950 shadow-2xl">
+                    <img src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=900&q=80" loading="lazy" alt="Community outreach event" class="w-full h-64 object-cover transition-transform duration-700 hover:scale-105">
+                    <div class="p-6 text-left">
+                        <h3 class="font-black text-xl mb-3">Community Service</h3>
+                        <p class="text-gray-400">Guard members support NJ communities with outreach and volunteer action.</p>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
     <!-- NEW: NJANG ARMORIES MAP SECTION -->
 <section id="armories" class="py-24 bg-gradient-to-br from-zinc-900/50 to-black/50 text-center">
     <h2 class="text-4xl md:text-6xl font-black uppercase mb-8">12+ NJ Armories</h2>
@@ -151,8 +190,8 @@
         </a>
     </div>
     <a href="armories.html" class="mt-12 bg-[#ffd700] text-black px-12 py-6 font-black uppercase rounded-2xl hover:bg-white shadow-2xl transition-all inline-block">View Map →</a>
-    <div div id="armories-map" class="w-full h-96"></div>
-        <p class="text-gray-400 text-sm p-4">Live NJ armories map with recruiter locations. Use the ZIP search above to zoom in on your nearest site
+    <div class="max-w-5xl mx-auto mt-12 overflow-hidden rounded-3xl border border-white/10 shadow-2xl">
+        <div id="armories-map" class="w-full h-96"></div>
         <p class="text-gray-400 text-sm p-4">Live NJ armories map with recruiter locations. Use the ZIP search above to zoom in on your nearest sites.</p>
     </div>
 </section>

@@ -21,6 +21,7 @@
 
 ### Phase 4: Finalize & Test (1 step)
 - [ ] 12. Test all functionality, update README.md, cleanup
+- [ ] 13. Add homepage gallery and NJ Army National Guard logo to navbar
 
 **Next step: Phase 1.1 - Backup**
 
