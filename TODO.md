@@ -1,6 +1,6 @@
 # SLE-Final Website Restructure TODO
 
-## Status: In progress
+## Status: Completed
 
 ### Phase 1: Review current structure
 - [x] 1. Confirm current repo layout and compare against planned migrate-to-src structure

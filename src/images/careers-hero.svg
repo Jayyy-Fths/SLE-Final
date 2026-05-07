@@ -1,0 +1,16 @@
+<svg viewBox="0 0 1200 900" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">MOS careers illustration</title>
+  <desc id="desc">Abstract MOS career planning shapes and checklist.</desc>
+  <rect width="1200" height="900" rx="40" fill="#0f172a" />
+  <circle cx="320" cy="260" r="120" fill="#111827" />
+  <circle cx="840" cy="300" r="110" fill="#111827" />
+  <path d="M260 580 C340 420 520 420 600 580" stroke="#ffd700" stroke-width="32" fill="none" stroke-linecap="round" />
+  <path d="M720 520 L840 520 L840 640 L720 640 Z" fill="#38bdf8" opacity="0.8" />
+  <path d="M460 560 L540 660 L660 520" stroke="#fbbf24" stroke-width="24" fill="none" stroke-linecap="round" />
+  <path d="M280 360 h320" stroke="#f59e0b" stroke-width="20" stroke-linecap="round" />
+  <path d="M280 420 h240" stroke="#38bdf8" stroke-width="20" stroke-linecap="round" />
+  <path d="M280 480 h160" stroke="#ffffff" stroke-width="20" stroke-linecap="round" />
+  <circle cx="840" cy="240" r="28" fill="#ffd700" />
+  <circle cx="840" cy="360" r="18" fill="#38bdf8" />
+  <circle cx="840" cy="450" r="14" fill="#ffffff" />
+</svg>

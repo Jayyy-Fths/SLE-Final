@@ -1,0 +1,15 @@
+<svg viewBox="0 0 1200 900" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Resources illustration</title>
+  <desc id="desc">Illustration of resources, FAQs and benefit planning tools.</desc>
+  <rect width="1200" height="900" rx="40" fill="#111827" />
+  <rect x="180" y="220" width="320" height="420" rx="40" fill="#0f172a" />
+  <rect x="720" y="240" width="320" height="360" rx="40" fill="#0f172a" />
+  <path d="M260 320 h200" stroke="#ffd700" stroke-width="24" stroke-linecap="round" />
+  <path d="M260 400 h160" stroke="#38bdf8" stroke-width="24" stroke-linecap="round" />
+  <path d="M760 340 h220" stroke="#fbbf24" stroke-width="24" stroke-linecap="round" />
+  <path d="M760 420 h180" stroke="#ffffff" stroke-width="24" stroke-linecap="round" />
+  <circle cx="540" cy="610" r="70" fill="#38bdf8" opacity="0.18" />
+  <path d="M520 620 l35 -80 l40 60" stroke="#ffd700" stroke-width="28" fill="none" stroke-linecap="round" />
+  <circle cx="340" cy="720" r="30" fill="#ffffff" opacity="0.9" />
+  <circle cx="840" cy="740" r="26" fill="#fbbf24" opacity="0.9" />
+</svg>

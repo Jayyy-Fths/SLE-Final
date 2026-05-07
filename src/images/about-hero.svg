@@ -1,0 +1,12 @@
+<svg viewBox="0 0 1200 900" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">About illustration</title>
+  <desc id="desc">Illustration showing community and leadership in the Guard.</desc>
+  <rect width="1200" height="900" rx="40" fill="#0f172a" />
+  <path d="M220 280 q120 -160 280 0 t280 0" fill="#111827" />
+  <circle cx="300" cy="360" r="92" fill="#ffd700" opacity="0.7" />
+  <circle cx="760" cy="340" r="100" fill="#38bdf8" opacity="0.5" />
+  <path d="M220 500 l180 -240 l240 250" stroke="#ffffff" stroke-width="24" fill="none" stroke-linecap="round" />
+  <path d="M600 620 c120 -120 180 -80 260 -100" stroke="#fbbf24" stroke-width="30" fill="none" opacity="0.75" />
+  <rect x="780" y="520" width="220" height="260" rx="40" fill="#111827" />
+  <circle cx="900" cy="610" r="24" fill="#ffd700" />
+</svg>

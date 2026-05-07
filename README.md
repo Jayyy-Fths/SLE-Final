@@ -6,6 +6,7 @@ A small static web app with pages for careers, eligibility, and a central landin
 ## Current Features
 - Structured content under `src/pages/` with a root `index.html` redirect to `src/pages/index.html`
 - Local data files: `src/data/careers.json` and `src/data/armories.json`
+- Local hero and gallery illustrations in `src/images/`
 - Shared UI components in `src/components/` for navbar/footer injection
 - NJ-specific landing page copy with strong state branding and local recruiter outreach
 - Home hero CTA for mission matching and recruiter contact

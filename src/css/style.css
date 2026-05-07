@@ -157,6 +157,23 @@ h1, h2, h3 { font-family: 'Inter', sans-serif; font-weight: 900; }
     transform: translateY(-1px);
 }
 
+.page-illustration {
+    width: 100%;
+    max-width: 640px;
+    margin: 0 auto;
+    border-radius: 32px;
+    overflow: hidden;
+    box-shadow: 0 40px 80px rgba(0, 0, 0, 0.32);
+    background: rgba(15, 23, 42, 0.85);
+}
+
+.page-illustration img,
+.page-illustration svg {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
 button:focus-visible,
 a:focus-visible,
 input:focus-visible,

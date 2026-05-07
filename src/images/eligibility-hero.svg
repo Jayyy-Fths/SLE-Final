@@ -1,0 +1,14 @@
+<svg viewBox="0 0 1200 900" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Eligibility checker illustration</title>
+  <desc id="desc">Illustration of eligibility scoring and checklist for applicants.</desc>
+  <rect width="1200" height="900" rx="40" fill="#121827" />
+  <circle cx="260" cy="280" r="110" fill="#0f172a" />
+  <circle cx="860" cy="320" r="140" fill="#111827" />
+  <path d="M300 420 l140 -180 l220 160" stroke="#ffd700" stroke-width="30" fill="none" stroke-linecap="round" />
+  <path d="M380 520 h260" stroke="#38bdf8" stroke-width="24" stroke-linecap="round" />
+  <path d="M380 580 h180" stroke="#ffffff" stroke-width="24" stroke-linecap="round" />
+  <path d="M380 640 h120" stroke="#fbbf24" stroke-width="24" stroke-linecap="round" />
+  <circle cx="820" cy="560" r="18" fill="#38bdf8" />
+  <circle cx="860" cy="620" r="22" fill="#ffd700" />
+  <path d="M200 680 q160 -160 320 0" stroke="#4ade80" stroke-width="32" fill="none" opacity="0.6" />
+</svg>
