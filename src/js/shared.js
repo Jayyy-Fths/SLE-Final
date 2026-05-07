@@ -85,10 +85,11 @@ function applyTranslations() {
 }
 
 // Inject shared navbar into #navbar-container (subpages only)
-function injectNavbar() {
+async function injectNavbar() {
     const container = document.getElementById('navbar-container');
     if (!container) return;
-    container.innerHTML = `
+
+    const fallbackMarkup = await Promise.resolve(`
         <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 py-6 px-6" role="navigation" aria-label="Main navigation">
             <div class="max-w-7xl mx-auto flex justify-between items-center">
                 <a href="index.html" class="flex items-center gap-2">
@@ -125,14 +126,36 @@ function injectNavbar() {
                 <a href="contact.html" class="hover:text-[#ffd700]" data-i18n="apply.applyNow">Apply Now</a>
             </div>
         </div>
-    `;
+    `);
+
+    try {
+        const response = await fetch(resolveSitePath('src/components/navbar.html'));
+        if (response.ok) {
+            container.innerHTML = await response.text();
+        } else {
+            container.innerHTML = fallbackMarkup;
+        }
+    } catch (error) {
+        console.warn('Navbar component failed to load, using fallback.', error);
+        container.innerHTML = fallbackMarkup;
+    }
 }
 
 // Inject shared footer into #footer-container (subpages only)
-function injectFooter() {
+async function injectFooter() {
     const container = document.getElementById('footer-container');
     if (!container) return;
-    container.innerHTML = `
+
+    try {
+        const response = await fetch(resolveSitePath('src/components/footer.html'));
+        if (response.ok) {
+            container.innerHTML = await response.text();
+            return;
+        }
+        throw new Error('Footer fetch returned non-ok status');
+    } catch (error) {
+        console.warn('Footer component failed to load, using fallback.', error);
+        container.innerHTML = `
         <footer class="bg-zinc-950 border-t border-white/10 py-12 px-6 mt-12">
             <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
                 <a href="index.html" class="flex items-center gap-2">
@@ -150,10 +173,11 @@ function injectFooter() {
                     <a href="resources.html" class="hover:text-[#ffd700]">Resources</a>
                     <a href="about.html" class="hover:text-[#ffd700]">About</a>
                 </nav>
-                <p class="text-gray-500 text-xs text-center">© 2025 NJ Army National Guard.<br>Educational portal. Not official DoD.</p>
+                <p class="text-gray-500 text-xs text-center">© 2026 NJ Army National Guard.<br>Educational portal. Not official DoD.</p>
             </div>
         </footer>
     `;
+    }
 }
 
 // Initialize theme
@@ -201,6 +225,13 @@ function showToast(message, type = 'success') {
     }, 4000);
 }
 
+function resolveSitePath(resourcePath) {
+    if (window.location.pathname.includes('/src/pages/')) {
+        return resourcePath.replace(/^src\//, '../');
+    }
+    return resourcePath;
+}
+
 // Load and display scroll progress
 function initScrollProgress() {
     const progressBar = document.getElementById('scroll-progress');
@@ -216,20 +247,20 @@ function initScrollProgress() {
 // Load JSON data (careers, armories)
 async function loadCareers() {
     try {
-        const res = await fetch('careers.json');
+        const res = await fetch(resolveSitePath('src/data/careers.json'));
         return await res.json();
     } catch (e) {
-        console.error('Failed to load careers.json:', e);
+        console.error('Failed to load careers data:', e);
         return [];
     }
 }
 
 async function loadArmories() {
     try {
-        const res = await fetch('armories.json');
+        const res = await fetch(resolveSitePath('src/data/armories.json'));
         return await res.json();
     } catch (e) {
-        console.error('Failed to load armories.json:', e);
+        console.error('Failed to load armories data:', e);
         return [];
     }
 }
@@ -405,7 +436,7 @@ document.addEventListener('click', (e) => {
 
 // Mobile sticky CTA handlers
 function setupCTAHandlers() {
-    const applyBtns = document.querySelectorAll('[id*="open-apply-modal"]');
+    const applyBtns = document.querySelectorAll('[id*="open-apply-modal"], [data-open-apply-modal]');
     applyBtns.forEach(btn => {
         btn.addEventListener('click', (e) => {
             e.preventDefault();
@@ -554,9 +585,9 @@ document.addEventListener('keydown', (e) => {
 });
 
 // Main init function
-function init() {
-    injectNavbar();   // must be first so setup fns find the injected elements
-    injectFooter();
+async function init() {
+    await injectNavbar();   // must be first so setup fns find the injected elements
+    await injectFooter();
     initTheme();
     initScrollProgress();
     initScrollReveal();

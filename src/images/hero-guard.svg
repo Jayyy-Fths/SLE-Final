@@ -1,0 +1,23 @@
+<svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">New Jersey National Guard shield</title>
+  <desc id="desc">Stylized shield and star representing NJ Guard service and community.</desc>
+  <defs>
+    <linearGradient id="bg-grad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#111827" />
+    </linearGradient>
+    <linearGradient id="shield-grad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffd700" />
+      <stop offset="100%" stop-color="#fbbf24" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="800" rx="80" fill="url(#bg-grad)" />
+  <g transform="translate(300 120)">
+    <path d="M300 0c-90 0-180 90-180 215c0 125 90 333 180 385c90-52 180-260 180-385C480 90 390 0 300 0Z" fill="url(#shield-grad)" stroke="#f8f32b" stroke-width="24" />
+    <path d="M300 140l44 94 104 15-75 73 18 104-93-49-93 49 18-104-75-73 104-15z" fill="#111827" opacity="0.92" />
+    <text x="300" y="650" text-anchor="middle" font-family="sans-serif" font-size="68" font-weight="800" fill="#ffffff">NJ Guard</text>
+  </g>
+  <circle cx="900" cy="220" r="85" fill="#ffffff" opacity="0.08" />
+  <circle cx="820" cy="620" r="42" fill="#ffd700" opacity="0.18" />
+  <circle cx="160" cy="560" r="68" fill="#38bdf8" opacity="0.14" />
+</svg>

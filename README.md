@@ -4,11 +4,14 @@
 A small static web app with pages for careers, eligibility, and a central landing page. Includes a JSON data store and JavaScript logic for form handling and interactivity.
 
 ## Current Features
-- Structured pages: `index.html`, `careers.html`, `eligibility.html`
-- Local data file: `careers.json` for managing careers and eligibility info
-- Interactive behavior in `script.js` (form handling, dynamic UI updates)
-- Styling in `style.css` (layout, responsive design, hover/focus states)
-- Simple navigation and UX polish
+- Structured content under `src/pages/` with a root `index.html` redirect to `src/pages/index.html`
+- Local data files: `src/data/careers.json` and `src/data/armories.json`
+- Shared UI components in `src/components/` for navbar/footer injection
+- NJ-specific landing page copy with strong state branding and local recruiter outreach
+- Home hero CTA for mission matching and recruiter contact
+- Recruiter contact modal, sticky mobile CTA, FAQ preview, eligibility checklist, testimonials, and armory search experience
+- Interactive behavior in `src/js/shared.js` and page-specific logic in `src/js/index.js`
+- Styling in `src/css/style.css` (layout, responsive design, hover/focus states)
 
 ## Planned Additions
 - Interactive job filtering by department/location

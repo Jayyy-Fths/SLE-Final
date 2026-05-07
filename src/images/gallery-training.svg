@@ -1,0 +1,10 @@
+<svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Team training illustration</title>
+  <desc id="desc">Abstract team training shapes for NJ Guard.</desc>
+  <rect width="1200" height="800" rx="40" fill="#0f172a" />
+  <circle cx="320" cy="380" r="150" fill="#111827" />
+  <circle cx="880" cy="300" r="120" fill="#111827" />
+  <path d="M220 420 Q320 180 520 380 T820 420" fill="none" stroke="#f59e0b" stroke-width="28" stroke-linecap="round" />
+  <path d="M280 540 C360 420 520 420 600 540" fill="none" stroke="#4ade80" stroke-width="24" stroke-linecap="round" />
+  <path d="M700 220 L780 340 L720 320 L700 380 L660 320 L620 360" fill="none" stroke="#38bdf8" stroke-width="22" stroke-linecap="round" stroke-linejoin="round" />
+</svg>

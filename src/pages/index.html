@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Explore careers, armories, and mission paths with the New Jersey National Guard Citizen Soldier Portal.">
+    <meta name="theme-color" content="#000000">
+    <title>NJ National Guard | Citizen Soldier Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="bg-black text-white selection:bg-[#ffd700] selection:text-black">
+    <a href="#overview" class="skip-link">Skip to main content</a>
+    <div id="toast-notification" class="toast toast-success" role="status" aria-live="polite"></div>
+    <div id="scroll-progress" class="fixed top-0 left-0 h-1 bg-[#ffd700] z-50 w-0 transition-all duration-300"></div>
+
+    <div id="navbar-container"></div>
+
+    <header class="relative h-screen flex items-center justify-center overflow-hidden">
+        <div class="absolute inset-0 z-0">
+            <img src="../images/hero-guard.svg" 
+                 class="w-full h-full object-cover opacity-50 scale-105 animate-slow-zoom" alt="NJ Guard shield illustration"
+                 loading="eager">
+            <div class="absolute inset-0 bg-gradient-to-b from-black/80 via-transparent to-black"></div>
+        </div>
+        <div class="relative z-10 text-center px-6" >
+            <div class="inline-block px-4 py-1 border border-[#ffd700]/30 rounded-full bg-black/50 backdrop-blur-sm mb-6">
+                <span id="hero-top-tag" class="text-[#ffd700] text-[10px] font-bold tracking-[0.4em] uppercase" data-i18n="hero.topTag">Always Ready • Always There</span>
+            </div>
+            <h1 id="hero-heading" class="text-6xl md:text-8xl font-black mb-8 tracking-tighter leading-[0.85]" data-i18n-html="hero.heading">OWN YOUR <br><span class="text-[#ffd700]">FUTURE.</span></h1>
+            <p id="hero-subtitle" class="text-gray-300 max-w-xl mx-auto mb-10 text-lg" data-i18n="hero.subtitle">Join the NJ National Guard and keep your civilian life while gaining leadership training, student benefits, and professional skills that last a lifetime.</p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="#quiz" class="bg-[#ffd700] text-black px-10 py-5 font-black hover:bg-white transition-all uppercase" data-i18n="hero.cta1">Find Your Mission</a>
+                <button id="open-hero-apply" type="button" class="border border-white/20 backdrop-blur-md px-10 py-5 font-black hover:bg-white hover:text-black transition-all uppercase" data-open-apply-modal>Talk to Recruiter</button>
+            </div>
+            <div class="mt-10 flex flex-wrap justify-center gap-3 text-xs uppercase tracking-[0.25em] text-gray-300">
+                <span class="hero-pill">Serving 21 NJ armories statewide</span>
+                <span class="hero-pill">Local recruiter support in every region</span>
+                <span class="hero-pill">Choose a path that fits work, school, and family</span>
+            </div>
+            <div class="mt-12 flex flex-wrap justify-center gap-4 text-xs uppercase tracking-widest">
+                <span class="badge" data-i18n="hero.badge1"><i data-lucide="award" class="w-4 h-4"></i> 100% Tuition Waiver</span>
+                <span class="badge" data-i18n="hero.badge2"><i data-lucide="dollar-sign" class="w-4 h-4"></i> $20K Bonus Qualifications</span>
+                <span class="badge" data-i18n="hero.badge3"><i data-lucide="users" class="w-4 h-4"></i> Part-time service, full-time benefits</span>
+            </div>
+        </div>
+    </header>
+
+    <section id="trust-metrics" class="py-10 bg-black/80 border-y border-white/10" >
+        <div class="max-w-6xl mx-auto px-6 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="metric-card reveal"><strong data-count="150" data-count-suffix="+">150+</strong><span>MOS Career Paths</span></div>
+            <div class="metric-card reveal"><strong data-count="21" data-count-suffix="">21</strong><span>NJ Armory Locations</span></div>
+            <div class="metric-card reveal"><strong>1 Weekend</strong><span>Per Month Service Rhythm</span></div>
+            <div class="metric-card reveal"><strong data-count="24" data-count-suffix="h">24h</strong><span>Target Recruiter Follow-up</span></div>
+        </div>
+    </section>
+
+<section id="overview" class="py-20 bg-zinc-950 reveal" >
+        <div class="max-w-6xl mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center">
+            <div>
+                <span class="text-[#ffd700] uppercase font-black tracking-wider text-[11px]">Why NJ Guard</span>
+                <h2 id="overview-heading" class="text-4xl md:text-5xl font-black uppercase mt-4 mb-6" data-i18n="overview.heading">One Program, Multiple Futures</h2>
+                <p id="overview-copy" class="text-gray-300 leading-relaxed mb-8" data-i18n="overview.copy">The New Jersey National Guard pairs military discipline with civilian career growth. Keep your hometown roots and access national-level training, pay, and educational assistance.</p>
+                <div class="grid sm:grid-cols-2 gap-4">
+                    <article class="info-card" >
+                        <i data-lucide="map-pin" class="w-5 h-5 text-[#ffd700]"></i>
+                        <h3 class="font-black uppercase">Local Support</h3>
+                        <p class="text-gray-400 text-sm" data-i18n="overview.card1">Serve close to home with 12 drills each year and two weeks annual training.</p>
+                    </article>
+                    <article class="info-card" >
+                        <i data-lucide="book-open" class="w-5 h-5 text-[#ffd700]"></i>
+                        <h3 class="font-black uppercase">Education</h3>
+                        <p class="text-gray-400 text-sm" data-i18n="overview.card2">Access tuition waiver, scholarships, and transfer credits at NJ colleges.</p>
+                    </article>
+                    <article class="info-card" >
+                        <i data-lucide="cpu" class="w-5 h-5 text-[#ffd700]"></i>
+                        <h3 class="font-black uppercase">Career Training</h3>
+                        <p class="text-gray-400 text-sm" data-i18n="overview.card3">Choose from 150+ MOS, from cyber warfare to combat medicine.</p>
+                    </article>
+                    <article class="info-card" >
+                        <i data-lucide="heart-pulse" class="w-5 h-5 text-[#ffd700]"></i>
+                        <h3 class="font-black uppercase">Benefits</h3>
+                        <p class="text-gray-400 text-sm" data-i18n="overview.card4">Health, retirement, VA benefits, and leadership credentials.</p>
+                    </article>
+                </div>
+            </div>
+            <div class="text-center" >
+                <img src="../images/hero-guard.svg" loading="lazy" class="w-full rounded-3xl shadow-xl" alt="NJ Guard unit illustration">
+            </div>
+        </div>
+    </section>
+
+    <section id="showcase" class="py-24 bg-black text-center reveal">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="mb-12">
+                <span class="text-[#ffd700] uppercase tracking-[0.3em] text-xs font-black">Service in Action</span>
+                <h2 class="text-4xl md:text-5xl font-black uppercase mt-4">Guard Life in Focus</h2>
+                <p class="text-gray-400 mt-4 max-w-3xl mx-auto">A gallery of Guard training, mentoring, and community missions across New Jersey.</p>
+            </div>
+            <div class="grid gap-6 md:grid-cols-3">
+                <article class="overflow-hidden rounded-3xl border border-white/10 bg-zinc-950 shadow-2xl">
+                    <img src="../images/gallery-training.svg" loading="lazy" alt="Guard team training illustration" class="w-full h-64 object-cover transition-transform duration-700 hover:scale-105">
+                    <div class="p-6 text-left">
+                        <h3 class="font-black text-xl mb-3">Team Training</h3>
+                        <p class="text-gray-400">Units practice coordination, field skills, and leadership together.</p>
+                    </div>
+                </article>
+                <article class="overflow-hidden rounded-3xl border border-white/10 bg-zinc-950 shadow-2xl">
+                    <img src="../images/gallery-mentor.svg" loading="lazy" alt="Soldiers mentoring new recruits illustration" class="w-full h-64 object-cover transition-transform duration-700 hover:scale-105">
+                    <div class="p-6 text-left">
+                        <h3 class="font-black text-xl mb-3">Mentor Support</h3>
+                        <p class="text-gray-400">Experienced leaders guide recruits through every mission milestone.</p>
+                    </div>
+                </article>
+                <article class="overflow-hidden rounded-3xl border border-white/10 bg-zinc-950 shadow-2xl">
+                    <img src="../images/gallery-community.svg" loading="lazy" alt="Community outreach illustration" class="w-full h-64 object-cover transition-transform duration-700 hover:scale-105">
+                    <div class="p-6 text-left">
+                        <h3 class="font-black text-xl mb-3">Community Service</h3>
+                        <p class="text-gray-400">Guard members support NJ communities with outreach and volunteer action.</p>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- NEW: NJANG ARMORIES MAP SECTION -->
+<section id="armories" class="py-24 bg-gradient-to-br from-zinc-900/50 to-black/50 text-center">
+    <h2 class="text-4xl md:text-6xl font-black uppercase mb-8">12+ NJ Armories</h2>
+    <p class="text-xl text-gray-400 mb-12 max-w-2xl mx-auto">Find recruiter, drill times, directions.</p>
+    <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto mb-10">
+        <div class="bg-zinc-900/50 border border-white/10 p-10 rounded-3xl text-left">
+            <h3 class="text-2xl font-black uppercase mb-4">Search Nearby Armories</h3>
+            <p class="text-gray-400 mb-6">Type your NJ ZIP code to locate the 3 closest armories and recruiter contacts instantly.</p>
+            <div class="flex flex-col sm:flex-row gap-3">
+                <input id="home-zip-input" type="text" placeholder="NJ ZIP code" maxlength="5" class="input-field flex-1" aria-label="NJ ZIP code">
+                <button id="home-zip-search" class="bg-[#ffd700] text-black px-6 py-3 font-black uppercase rounded-xl hover:bg-white transition-all">Search</button>
+            </div>
+            <p id="home-zip-message" class="text-gray-400 text-sm mt-4">Enter a 5-digit ZIP and tap Search.</p>
+            <div id="home-zip-recruiter" class="home-zip-recruiter hidden"></div>
+            <div id="home-armory-results" class="grid gap-4 mt-6"></div>
+        </div>
+        <a href="armories.html" class="group">
+            <div class="bg-zinc-900/50 border border-white/10 p-10 rounded-3xl hover:border-[#ffd700] hover:shadow-2xl transition-all h-full">
+                <i data-lucide="map-pin" class="w-20 h-20 text-[#ffd700] mx-auto mb-6 group-hover:scale-110 transition-transform"></i>
+                <h3 class="text-2xl font-black uppercase mb-4">Interactive Map</h3>
+                <p class="text-gray-400">Search ZIP codes, preview recruiters, and plan your next visit.</p>
+            </div>
+        </a>
+    </div>
+    <a href="armories.html" class="mt-12 bg-[#ffd700] text-black px-12 py-6 font-black uppercase rounded-2xl hover:bg-white shadow-2xl transition-all inline-block">View Map →</a>
+    <div class="max-w-5xl mx-auto mt-12 overflow-hidden rounded-3xl border border-white/10 shadow-2xl">
+        <div id="armories-map" class="w-full h-96"></div>
+        <p class="text-gray-400 text-sm p-4">Live NJ armories map with recruiter locations. Use the ZIP search above to zoom in on your nearest sites.</p>
+    </div>
+</section>
+
+<section id="events" class="py-24 bg-zinc-950 text-center reveal">
+    <div class="max-w-6xl mx-auto px-6">
+        <div class="mb-12">
+            <span class="text-[#ffd700] uppercase tracking-[0.3em] text-xs font-black">Community Calendar</span>
+            <h2 class="text-4xl md:text-5xl font-black uppercase mt-4">Upcoming NJ Guard Events</h2>
+            <p class="text-gray-400 mt-4 max-w-3xl mx-auto">Open houses, info sessions, and training previews across New Jersey.</p>
+        </div>
+        <div id="event-cards" class="grid md:grid-cols-3 gap-6"></div>
+    </div>
+</section>
+
+    <section id="enlistment-path" class="py-20 bg-black reveal" >
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-12">
+                <span class="text-[#ffd700] uppercase tracking-[0.3em] text-xs font-black">Roadmap</span>
+                <h2 class="text-4xl md:text-5xl font-black uppercase mt-4">Your Path to Enlistment</h2>
+                <p class="text-gray-400 mt-4 max-w-2xl mx-auto">See exactly what happens next, from first recruiter conversation to initial training.</p>
+            </div>
+            <div class="grid md:grid-cols-5 gap-4">
+                <article class="path-step"><span class="path-number">1</span><h3>Talk to Recruiter</h3><p>Get your questions answered and pick the right path.</p></article>
+                <article class="path-step"><span class="path-number">2</span><h3>Practice ASVAB</h3><p>Take a diagnostic and get MOS options that fit your scores.</p></article>
+                <article class="path-step"><span class="path-number">3</span><h3>Medical + MEPS</h3><p>Complete physical and qualification screening.</p></article>
+                <article class="path-step"><span class="path-number">4</span><h3>Choose MOS</h3><p>Select a role aligned to your goals and civilian interests.</p></article>
+                <article class="path-step"><span class="path-number">5</span><h3>Ship to Training</h3><p>Begin Basic and AIT with a clear mission and support team.</p></article>
+            </div>
+        </div>
+    </section>
+
+
+
+<section id="quiz" class="py-24 bg-zinc-900 text-center reveal">
+    <h2 class="text-4xl md:text-6xl font-black uppercase mb-8">Mission Quiz</h2>
+    <p class="text-xl text-gray-400 mb-12 max-w-2xl mx-auto">Answer 4 quick questions to get a tailored MOS recommendation in seconds.</p>
+    <div class="max-w-5xl mx-auto px-4">
+        <div id="quiz-form-container" class="grid gap-6"></div>
+    </div>
+</section>
+
+<section id="careers" class="py-24 bg-black text-center reveal">
+    <h2 class="text-4xl md:text-6xl font-black uppercase mb-8">150+ MOS Careers</h2>
+    <p class="text-xl text-gray-400 mb-6 max-w-2xl mx-auto">Cyber to combat medic – find your specialty.</p>
+    <div class="max-w-4xl mx-auto mb-10 px-6">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+            <p class="text-gray-400">Filter career paths by specialty and explore top MOS matching your goals.</p>
+            <div id="career-filter-bar" class="flex flex-wrap justify-center gap-2"></div>
+        </div>
+    </div>
+    <div class="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-12" id="featured-mos-list">
+        <!-- Featured MOS cards load here -->
+    </div>
+    <a href="careers.html" class="mt-12 bg-[#ffd700] text-black px-12 py-6 font-black uppercase rounded-2xl hover:bg-white shadow-2xl transition-all inline-block">Browse All MOS →</a>
+</section>
+
+<section id="compare" class="py-24 bg-zinc-950 text-center reveal">
+    <div class="max-w-6xl mx-auto px-6">
+        <div class="mb-12">
+            <span class="text-[#ffd700] uppercase tracking-[0.3em] text-xs font-black">Compare</span>
+            <h2 class="text-4xl md:text-5xl font-black uppercase mt-4">Compare Top MOS Paths</h2>
+            <p class="text-gray-400 mt-4 max-w-3xl mx-auto">See how three high-demand Guard career paths compare across training, civilian value, and eligibility.</p>
+        </div>
+        <div class="flex flex-col gap-4 sm:flex-row sm:justify-center mb-8">
+            <button type="button" class="filter-btn active" data-compare="all">All</button>
+            <button type="button" class="filter-btn" data-compare="Cyber">Cyber</button>
+            <button type="button" class="filter-btn" data-compare="Medical">Medical</button>
+            <button type="button" class="filter-btn" data-compare="Mechanic">Mechanic</button>
+        </div>
+        <div class="overflow-x-auto rounded-3xl border border-white/10 bg-zinc-950 p-4">
+            <table class="w-full text-left border-separate border-spacing-y-4">
+                <thead>
+                    <tr class="text-sm uppercase tracking-[0.3em] text-gray-400">
+                        <th class="pb-4">Path</th>
+                        <th class="pb-4">ASVAB</th>
+                        <th class="pb-4">Training</th>
+                        <th class="pb-4">Civilian Value</th>
+                        <th class="pb-4">Best fit</th>
+                    </tr>
+                </thead>
+                <tbody id="compare-table-body"></tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<section id="home-faq" class="py-24 bg-zinc-950 text-center reveal">
+    <div class="max-w-6xl mx-auto px-6">
+        <div class="mb-12">
+            <span class="text-[#ffd700] uppercase tracking-[0.3em] text-xs font-black">Quick Answers</span>
+            <h2 class="text-4xl md:text-5xl font-black uppercase mt-4">Need a fast FAQ?</h2>
+            <p class="text-gray-400 mt-4 max-w-3xl mx-auto">Search common questions, preview answers, or jump to the full FAQ page.</p>
+        </div>
+        <div class="max-w-3xl mx-auto">
+            <div class="relative mb-8">
+                <input id="home-faq-search" type="text" placeholder="Search common questions..." class="input-field w-full py-4 pl-5 text-base">
+                <span id="home-faq-count" class="absolute right-4 top-1/2 -translate-y-1/2 text-xs text-gray-500 font-bold uppercase tracking-wider">4 Qs</span>
+            </div>
+            <div id="home-faq-list" class="space-y-4"></div>
+            <div class="mt-10">
+                <a href="resources.html#faq" class="bg-[#ffd700] text-black px-8 py-4 font-black uppercase rounded-xl hover:bg-white transition-all">View Full FAQ</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="how-it-works" class="py-24 bg-black text-center reveal">
+    <div class="max-w-6xl mx-auto px-6">
+        <div class="mb-12">
+            <span class="text-[#ffd700] uppercase tracking-[0.3em] text-xs font-black">How It Works</span>
+            <h2 class="text-4xl md:text-5xl font-black uppercase mt-4">Your NJ Guard Journey</h2>
+            <p class="text-gray-400 mt-4 max-w-3xl mx-auto">A clear step-by-step path from first recruiter talk to your first drill weekend.</p>
+        </div>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="event-card">
+                <span class="text-[#ffd700] uppercase text-xs font-black">Step 1</span>
+                <h3 class="font-black text-2xl mt-4 mb-3">Connect with Recruiter</h3>
+                <p class="text-gray-400">Ask questions, compare MOS, and confirm your next move with expert support.</p>
+            </div>
+            <div class="event-card">
+                <span class="text-[#ffd700] uppercase text-xs font-black">Step 2</span>
+                <h3 class="font-black text-2xl mt-4 mb-3">Assess Your Fit</h3>
+                <p class="text-gray-400">Review ASVAB, physical readiness, and career goals before you enlist.</p>
+            </div>
+            <div class="event-card">
+                <span class="text-[#ffd700] uppercase text-xs font-black">Step 3</span>
+                <h3 class="font-black text-2xl mt-4 mb-3">Finish Paperwork</h3>
+                <p class="text-gray-400">Complete enlistment, medical screening, and paperwork so you’re ready for training.</p>
+            </div>
+            <div class="event-card">
+                <span class="text-[#ffd700] uppercase text-xs font-black">Step 4</span>
+                <h3 class="font-black text-2xl mt-4 mb-3">Start Training</h3>
+                <p class="text-gray-400">Begin your first drill weekend and follow the path that fits your civilian life.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="favorite-summary" class="py-16 bg-zinc-950 text-center reveal">
+    <div class="max-w-6xl mx-auto px-6">
+        <h2 class="text-3xl md:text-4xl font-black uppercase mb-6">Saved Career Favorites</h2>
+        <p class="text-gray-400 mb-8 max-w-3xl mx-auto">Keep your top MOS cards ready to review or share with your recruiter.</p>
+        <div id="favorite-list" class="grid sm:grid-cols-2 gap-6"></div>
+    </div>
+</section>
+
+<section id="saved-match" class="py-16 bg-black text-center reveal">
+    <div class="max-w-6xl mx-auto px-6">
+        <span class="text-[#ffd700] uppercase tracking-[0.3em] text-xs font-black">Your Match</span>
+        <h2 class="text-4xl md:text-5xl font-black uppercase mt-4 mb-6">Saved Quiz Match</h2>
+        <p class="text-gray-400 mb-8 max-w-3xl mx-auto">Save your latest mission score and share it with a recruiter when you're ready.</p>
+        <div id="saved-match-card" class="grid gap-6 sm:grid-cols-2"></div>
+    </div>
+</section>
+
+<section id="eligibility-check" class="py-24 bg-zinc-950 text-center">
+    <h2 class="text-4xl md:text-6xl font-black uppercase mb-8">Eligibility Check</h2>
+    <p class="text-xl text-gray-400 mb-12 max-w-2xl mx-auto">Age, ASVAB, fitness - get your score.</p>
+    <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+        <div class="bg-zinc-900/50 border border-white/10 p-10 rounded-3xl hover:border-[#ffd700] hover:shadow-2xl transition-all">
+            <i data-lucide="clipboard-list" class="w-20 h-20 text-[#ffd700] mx-auto mb-6"></i>
+            <h3 class="text-2xl font-black uppercase mb-4">Pre-Screen Tool</h3>
+            <p class="text-gray-400 mb-8">8 questions → eligibility score + MOS recs</p>
+            <a href="eligibility.html" class="bg-[#ffd700] text-black px-8 py-4 font-black uppercase rounded-xl hover:bg-white block w-full transition-all">Start Check →</a>
+        </div>
+        <div class="bg-zinc-900/50 border border-white/10 p-10 rounded-3xl hover:border-[#ffd700] hover:shadow-2xl transition-all text-left">
+            <i data-lucide="clipboard-check" class="w-20 h-20 text-[#ffd700] mx-auto mb-6"></i>
+            <h3 class="text-2xl font-black uppercase mb-4">Quick Eligibility Checklist</h3>
+            <p class="text-gray-400 mb-8">Select the items that match your profile to see if you meet basic NJ Guard requirements.</p>
+            <div class="space-y-3 text-sm text-gray-300 mb-6">
+                <label class="flex items-center gap-4"><input type="checkbox" id="eligibility-age" class="accent-[#ffd700] h-5 w-5"> 17-35 years old (59 with prior service)</label>
+                <label class="flex items-center gap-4"><input type="checkbox" id="eligibility-asvab" class="accent-[#ffd700] h-5 w-5"> ASVAB score of 31 or higher</label>
+                <label class="flex items-center gap-4"><input type="checkbox" id="eligibility-citizen" class="accent-[#ffd700] h-5 w-5"> U.S. citizen or permanent resident</label>
+                <label class="flex items-center gap-4"><input type="checkbox" id="eligibility-fitness" class="accent-[#ffd700] h-5 w-5"> Fit for physical training and active duty</label>
+            </div>
+            <p id="eligibility-summary" class="text-gray-400">Complete the checklist and tap "Check My Fit."</p>
+            <button id="eligibility-check-btn" class="mt-6 bg-[#ffd700] text-black px-8 py-4 font-black uppercase rounded-xl hover:bg-white block w-full transition-all">Check My Fit</button>
+            <a href="#" id="open-apply-modal-request" class="mt-4 inline-block text-center bg-white text-black px-8 py-4 font-black uppercase rounded-xl hover:bg-gray-100 w-full transition-all">Request Callback</a>
+        </div>
+    </div>
+</section>
+
+<section id="recruiter-checklist" class="py-24 bg-black text-center reveal">
+    <div class="max-w-6xl mx-auto px-6">
+        <div class="bg-zinc-900/50 border border-white/10 p-10 rounded-3xl hover:border-[#ffd700] hover:shadow-2xl transition-all">
+            <span class="text-[#ffd700] uppercase tracking-[0.3em] text-xs font-black">Recruiter Ready</span>
+            <h2 class="text-4xl md:text-5xl font-black uppercase mt-4 mb-4">Recruiter Ready Checklist</h2>
+            <p class="text-gray-400 mb-8 max-w-3xl mx-auto">Download a quick checklist with the documents and conversation points recruiters want to see.</p>
+            <a href="recruitment-checklist.txt" download class="bg-[#ffd700] text-black px-10 py-5 font-black uppercase rounded-2xl hover:bg-white transition-all">Download Checklist</a>
+        </div>
+    </div>
+</section>
+
+<section id="testimonials" class="py-24 bg-black text-center reveal">
+    <div class="max-w-6xl mx-auto px-6">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+            <div>
+                <span class="text-[#ffd700] uppercase tracking-[0.3em] text-xs font-black">Real Citizen Soldiers</span>
+                <h2 class="text-4xl md:text-5xl font-black uppercase mt-4">Stories from NJ Guardsmen</h2>
+            </div>
+            <div class="flex items-center justify-center gap-3">
+                <button id="testimonial-prev" class="filter-btn">Prev</button>
+                <button id="testimonial-next" class="filter-btn">Next</button>
+            </div>
+        </div>
+        <div id="testimonial-cards" class="testimonial-carousel"></div>
+    </div>
+</section>
+
+<section class="py-24 bg-black text-center">
+    <h2 class="text-4xl md:text-5xl font-black uppercase mb-12">Ready to Serve?</h2>
+    <p class="text-xl text-gray-400 mb-12 max-w-2xl mx-auto">Join thousands of NJ citizens serving part-time with full-time benefits.</p>
+    <div class="flex flex-col lg:flex-row gap-8 items-center justify-center">
+        <a href="contact.html" class="bg-[#ffd700] text-black px-12 py-6 font-black uppercase rounded-2xl hover:bg-white shadow-2xl text-xl transition-all">Contact Recruiter</a>
+        <a href="careers.html" class="border-2 border-white/30 backdrop-blur px-12 py-6 font-black uppercase rounded-2xl hover:bg-white hover:text-black transition-all text-xl">Browse Careers</a>
+        <a href="contact.html" class="bg-white text-black px-12 py-6 font-black uppercase rounded-2xl hover:bg-gray-100 transition-all text-xl">Schedule a Visit</a>
+    </div>
+</section>
+
+
+    <!-- Apply Modal (existing) -->
+    <div id="apply-modal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="apply-modal-title" aria-describedby="apply-modal-desc">
+        <div class="bg-zinc-900/95 rounded-3xl p-8 max-w-md w-full border border-white/20 shadow-2xl">
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <h3 id="apply-modal-title" class="text-2xl font-black uppercase tracking-tight" data-i18n="modal.contactTitle">Contact Recruiter</h3>
+                    <p id="apply-modal-desc" class="text-gray-400 text-sm mt-2" data-i18n="modal.contactDesc">Send your information and our recruiting team will follow up promptly.</p>
+                </div>
+                <button id="close-apply-modal" class="text-2xl hover:text-[#ffd700] transition-colors" aria-label="Close contact form">&times;</button>
+            </div>
+            <form id="apply-modal-form" class="space-y-4">
+                <input type="text" id="modal-firstname" placeholder="First Name *" class="input-field" required>
+                <input type="text" id="modal-lastname" placeholder="Last Name *" class="input-field" required>
+                <input type="email" id="modal-email" placeholder="Email *" class="input-field" required>
+                <input type="tel" id="modal-phone" placeholder="Phone *" class="input-field" required>
+                <textarea id="modal-message" placeholder="Tell us about your goals..." rows="3" class="input-field" required></textarea>
+                <button type="submit" class="w-full bg-[#ffd700] text-black font-black py-4 uppercase rounded-xl hover:bg-white shadow-lg transition-all">Send Message</button>
+            </form>
+            <p id="modal-feedback" class="text-green-400 text-sm mt-4 hidden text-center font-medium" role="status" aria-live="polite">✅ Message sent to recruiting team!</p>
+        </div>
+    </div>
+
+    <!-- NEW MOS POPUP MODAL -->
+    <div id="mos-modal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in" role="dialog" aria-modal="true" aria-labelledby="mos-modal-title" aria-describedby="mos-modal-desc">
+        <div class="bg-zinc-900/95 backdrop-blur-xl rounded-3xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto border border-white/20 shadow-2xl">
+            <div class="flex justify-between items-start mb-6">
+                <div>
+                    <h2 id="mos-modal-title" class="text-3xl font-black uppercase tracking-tighter mb-1"></h2>
+                    <div id="mos-modal-cat" class="text-[#ffd700] font-mono text-sm uppercase font-bold tracking-wider"></div>
+                </div>
+                <button onclick="closeMosModal()" class="text-3xl hover:text-[#ffd700] transition-colors ml-4">&times;</button>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-8 mb-8">
+                <div>
+                    <h4 class="font-black uppercase text-sm mb-3 text-gray-400 tracking-wider">Description</h4>
+                    <p id="mos-modal-desc" class="text-gray-200 leading-relaxed text-lg"></p>
+                </div>
+                <div class="space-y-4">
+                    <div class="bg-zinc-800/50 p-5 rounded-xl border border-[#ffd700]/30">
+                        <h5 class="font-bold uppercase text-xs mb-2 text-[#ffd700]">ASVAB Requirement</h5>
+                        <p id="mos-modal-asvab" class="text-2xl font-mono font-bold"></p>
+                    </div>
+                    <div class="bg-zinc-800/50 p-5 rounded-xl border border-white/20">
+                        <h5 class="font-bold uppercase text-xs mb-2">Training Length</h5>
+                        <p id="mos-modal-training" class="text-xl font-bold"></p>
+                    </div>
+                    <div id="mos-modal-bonus" class="bg-green-500/20 border border-green-400/50 p-4 rounded-xl">
+                        <h5 class="font-bold uppercase text-xs mb-1 text-green-400">Bonus Eligible</h5>
+                        <p class="text-green-300 font-bold uppercase">Special enlistment incentives available</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex flex-wrap gap-3 pt-4 border-t border-white/10">
+                <button type="button" onclick="toggleFavorite(event,window.currentMosModal)" 
+                        class="bg-[#ffd700] text-black px-6 py-3 font-black uppercase rounded-xl hover:bg-white transition-all flex items-center gap-2">
+                    <i data-lucide="star" class="w-4 h-4"></i> Add to Favorites
+                </button>
+                <a href="#contact" class="bg-white text-black px-6 py-3 font-black uppercase rounded-xl hover:bg-gray-100 transition-all">Contact Recruiter</a>
+                <button onclick="closeMosModal()" class="border border-white/30 px-6 py-3 font-bold uppercase rounded-xl hover:border-[#ffd700] hover:text-[#ffd700] transition-all">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="mobile-sticky-cta" class="md:hidden fixed bottom-0 inset-x-0 z-50 bg-black/95 border-t border-white/10 p-3">
+        <div class="flex gap-2">
+            <a href="#eligibility-check" class="flex-1 text-center bg-white text-black font-black uppercase text-xs py-3 rounded-xl">Check Eligibility</a>
+            <a href="#" id="open-apply-modal-sticky" class="flex-1 text-center bg-[#ffd700] text-black font-black uppercase text-xs py-3 rounded-xl">Talk to Recruiter</a>
+        </div>
+    </div>
+
+    <div id="footer-container"></div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="../js/shared.js"></script>
+    <script src="../js/index.js"></script>
+</body>
+</html>
